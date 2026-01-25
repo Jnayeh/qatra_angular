@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <circle cx="100" cy="100" r="95" fill="#cc0000" opacity="0.1" stroke="#cc0000" stroke-width="2"/>
+  <path d="M100 30 C100 30 60 80 60 110 C60 132 78 150 100 150 C122 150 140 132 140 110 C140 80 100 30 100 30Z" fill="#cc0000"/>
+  <text x="100" y="175" text-anchor="middle" font-family="Inter, sans-serif" font-weight="700" font-size="24" fill="#cc0000">QATRA</text>
+</svg>
