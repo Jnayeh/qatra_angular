@@ -1,1 +1,23 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+@source "./app";
+
+@theme {
+  --color-primary-50: #fce4e4;
+  --color-primary-100: #f8baba;
+  --color-primary-200: #f28b8b;
+  --color-primary-300: #eb5c5c;
+  --color-primary-400: #e63939;
+  --color-primary-500: #cc0000;
+  --color-primary-600: #b30000;
+  --color-primary-700: #990000;
+  --color-primary-800: #7a0000;
+  --color-primary-900: #5c0000;
+}
+
+@import "primeicons/primeicons.css" layer(primeng);
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
