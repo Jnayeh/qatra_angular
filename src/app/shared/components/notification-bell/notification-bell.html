@@ -1,0 +1,52 @@
+<div class="relative">
+  <p-button
+    icon="pi pi-bell"
+    severity="secondary"
+    [rounded]="true"
+    [text]="true"
+    ariaLabel="Notifications"
+    (click)="panelOpen = !panelOpen; togglePanel($event)"
+  />
+  @if (store.unreadCount() > 0) {
+    <p-badge [value]="store.unreadCount()" severity="danger" class="absolute -top-1 -right-1 pointer-events-none" />
+  }
+
+  @if (panelOpen) {
+    <div class="absolute right-0 top-full mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-lg border border-gray-200 z-50 overflow-hidden">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+        <span class="text-sm font-semibold text-gray-900">Notifications</span>
+        @if (store.unreadCount() > 0) {
+          <button type="button" class="text-xs text-primary-500 hover:text-primary-600" (click)="markAllRead($event)">
+            Mark all read
+          </button>
+        }
+      </div>
+
+      <div class="max-h-80 overflow-y-auto">
+        @if (store.recentUnread().length === 0 && store.notifications().length === 0) {
+          <p class="px-4 py-6 text-sm text-gray-500 text-center">No notifications</p>
+        } @else {
+          @for (n of store.notifications().slice(0, 5); track n.id) {
+            <button
+              type="button"
+              class="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-50 transition-colors"
+              [class.bg-primary-50]="n.status !== 'READ'"
+              (click)="openNotification(n); panelOpen = false"
+            >
+              <p class="text-sm font-medium text-gray-900 truncate">{{ n.title }}</p>
+              <p class="text-xs text-gray-500 line-clamp-2 mt-0.5">{{ n.body }}</p>
+            </button>
+          }
+        }
+      </div>
+
+      <a
+        routerLink="/notifications"
+        class="block text-center px-4 py-3 text-sm text-primary-500 hover:bg-gray-50 border-t border-gray-100"
+        (click)="panelOpen = false"
+      >
+        View all
+      </a>
+    </div>
+  }
+</div>
