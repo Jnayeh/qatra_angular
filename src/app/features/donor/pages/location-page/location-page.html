@@ -1,0 +1,59 @@
+<div class="max-w-2xl mx-auto space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">My Location</h1>
+    <p class="text-sm text-gray-500 mt-1">Set your location to find nearby donation centers and receive relevant emergency alerts.</p>
+  </div>
+
+  <p-card>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-medium text-gray-700">Use GPS location</span>
+        <p-toggleswitch formControlName="useGps" (onChange)="onUseGpsChange()" />
+      </div>
+
+      @if (!form.get('useGps')?.value) {
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label for="latitude" class="text-sm font-medium text-gray-700">Latitude</label>
+            <p-inputnumber formControlName="latitude" inputId="latitude" mode="decimal" [min]="-90" [max]="90" styleClass="w-full" />
+            @if (form.get('latitude')?.invalid && form.get('latitude')?.touched) {
+              <small class="text-red-500">Invalid latitude (-90 to 90)</small>
+            }
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label for="longitude" class="text-sm font-medium text-gray-700">Longitude</label>
+            <p-inputnumber formControlName="longitude" inputId="longitude" mode="decimal" [min]="-180" [max]="180" styleClass="w-full" />
+            @if (form.get('longitude')?.invalid && form.get('longitude')?.touched) {
+              <small class="text-red-500">Invalid longitude (-180 to 180)</small>
+            }
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label for="city" class="text-sm font-medium text-gray-700">City</label>
+            <input pInputText id="city" formControlName="city" class="w-full" />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label for="country" class="text-sm font-medium text-gray-700">Country</label>
+            <input pInputText id="country" formControlName="country" class="w-full" />
+          </div>
+        </div>
+      }
+
+      @if (error()) {
+        <p-message severity="error" variant="simple" size="small">{{ error() }}</p-message>
+      }
+
+      <p-button severity="primary" type="submit" [disabled]="form.invalid" class="mt-1">
+        @if (form.get('useGps')?.value) {
+          Get GPS Location
+        } @else {
+          Save Location
+        }
+      </p-button>
+    </form>
+  </p-card>
+</div>
