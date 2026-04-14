@@ -1,0 +1,31 @@
+<div class="max-w-4xl mx-auto space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Donation Certificates</h1>
+    <p class="text-sm text-gray-500 mt-1">Download and view your donation certificates.</p>
+  </div>
+
+  @if (store.certificates().length === 0) {
+    <app-empty-state
+      icon="id-card"
+      title="No certificates yet"
+      message="Your donation certificates will appear here after your first donation."
+    />
+  }
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    @for (cert of store.certificates(); track cert.donationDate) {
+      <p-card>
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="font-medium text-gray-900">{{ cert.centerName }}</p>
+            <p class="text-sm text-gray-500">{{ cert.donationDate }}</p>
+            <p class="text-sm text-gray-500">{{ cert.mlCollected }} ml donated</p>
+          </div>
+          <a [href]="cert.downloadUrl" target="_blank">
+            <p-button icon="pi pi-download" severity="primary" variant="outlined" />
+          </a>
+        </div>
+      </p-card>
+    }
+  </div>
+</div>
