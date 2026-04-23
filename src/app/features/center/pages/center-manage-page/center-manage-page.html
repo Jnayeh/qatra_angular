@@ -1,0 +1,40 @@
+<div class="max-w-4xl mx-auto space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Manage Center</h1>
+    <p class="text-sm text-gray-500 mt-1">View and manage your center settings and capacity.</p>
+  </div>
+
+  @if (store.isLoading()) {
+    <app-loading-spinner />
+  } @else if (store.selectedCenter(); as c) {
+    <p-card>
+      <ng-template pTemplate="title">{{ c.name }}</ng-template>
+      <ng-template pTemplate="subtitle">Center ID: {{ c.id }}</ng-template>
+      <ng-template pTemplate="content">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-gray-500">Status</span>
+            <app-status-badge [status]="c.status" />
+          </div>
+          <p-divider />
+          <div class="flex items-center justify-between">
+            <span class="text-gray-500">Total Capacity</span>
+            <span class="text-gray-900 font-medium">{{ c.totalCapacity }}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-gray-500">Max Regular</span>
+            <span class="text-gray-900 font-medium">{{ c.maxRegular }}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-gray-500">Slot Period</span>
+            <span class="text-gray-900 font-medium">{{ c.slotPeriod }} min</span>
+          </div>
+          <p-divider />
+          <div class="flex gap-2">
+            <p-button label="Back" severity="secondary" styleClass="p-button-outlined" routerLink="/centers"></p-button>
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+  }
+</div>
