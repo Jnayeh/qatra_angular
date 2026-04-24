@@ -1,0 +1,146 @@
+<div class="max-w-6xl mx-auto space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Schedule & Slots</h1>
+    <p class="text-sm text-gray-500 mt-1">Manage your center's weekly schedule and appointment slots.</p>
+  </div>
+
+  @if (isLoading()) {
+    <app-loading-spinner />
+  } @else {
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 space-y-4">
+        <p-card styleClass="!shadow-sm">
+          <ng-template pTemplate="content">
+            <div class="flex items-center justify-between mb-4">
+              <p-datepicker [(ngModel)]="selectedDate" (onSelect)="onWeekChange($event)" dateFormat="yy-mm-dd" styleClass="w-48" placeholder="Select week" />
+              <p-button label="Block Day" severity="danger" size="small" styleClass="p-button-outlined" (click)="openClosureDialog()" />
+            </div>
+
+            <div class="flex gap-1 mb-4 overflow-x-auto pb-1">
+              @for (day of weekDays; track day; let i = $index) {
+                <button
+                  class="flex flex-col items-center px-3 py-2 rounded-lg text-sm whitespace-nowrap transition-colors"
+                  [class]="activeDay() === i ? 'bg-primary-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                  (click)="onDayChange(i)"
+                >
+                  <span class="font-medium">{{ day.substring(0, 3) }}</span>
+                  <span class="text-[10px] mt-0.5" [class]="activeDay() === i ? 'text-white/80' : 'text-gray-500'">{{ dayAvailableSlots(i) }} slots</span>
+                </button>
+              }
+            </div>
+
+            @if (daySchedule(); as sched) {
+              <div class="mb-4 p-3 rounded-xl bg-gray-50">
+                <p class="text-sm text-gray-700">
+                  <span class="font-medium">Hours:</span> {{ sched.opens }} ÔÇô {{ sched.closes }}
+                </p>
+              </div>
+            } @else {
+              <div class="mb-4 p-3 rounded-xl bg-gray-50">
+                <p class="text-sm text-gray-400 italic">Closed</p>
+              </div>
+            }
+
+            @if (filteredSlots().length === 0) {
+              <app-empty-state icon="calendar-times" title="No slots" message="No slots configured for this day." />
+            } @else {
+              <div class="space-y-2">
+                @for (slot of filteredSlots(); track slot.id) {
+                  <div class="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-gray-200 transition-colors"
+                       [class.opacity-50]="slot.isBlocked">
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center gap-2">
+                        <span class="text-sm font-medium text-gray-900">{{ formatTime(slot.startTime) }} ÔÇô {{ formatTime(slot.endTime) }}</span>
+                        @if (slot.isBlocked) {
+                          <p-tag value="Blocked" severity="danger" styleClass="text-xs" />
+                        }
+                      </div>
+                      <p class="text-xs text-gray-500 mt-0.5">
+                        {{ slot.bookedCount }}/{{ slot.maxBookings }} booked
+                        ┬À {{ slot.regularBookedCount }}/{{ slot.maxRegularBookings }} regular
+                      </p>
+                    </div>
+                    <p-button
+                      [label]="slot.isBlocked ? 'Unblock' : 'Block'"
+                      [severity]="slot.isBlocked ? 'success' : 'warn'"
+                      size="small"
+                      styleClass="p-button-text"
+                      (click)="toggleBlock(slot)"
+                    />
+                  </div>
+                }
+              </div>
+            }
+          </ng-template>
+        </p-card>
+      </div>
+
+      <div class="space-y-4">
+        <p-card styleClass="!shadow-sm">
+          <ng-template pTemplate="title">
+            <span class="text-gray-900 font-semibold">Operating Hours</span>
+          </ng-template>
+          <ng-template pTemplate="content">
+            @if (operatingHours(); as hours) {
+              <div class="space-y-2">
+                @for (day of weekDays; track day; let i = $index) {
+                  <div class="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0">
+                    <span class="text-sm text-gray-700">{{ day }}</span>
+                    @if (hours[weekDayKeys[i]]; as sched) {
+                      <span class="text-sm text-gray-900 font-medium">{{ sched.opens }} ÔÇô {{ sched.closes }}</span>
+                    } @else {
+                      <span class="text-sm text-gray-400 italic">Closed</span>
+                    }
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="text-sm text-gray-400">No schedule configured.</p>
+            }
+          </ng-template>
+        </p-card>
+
+        <p-card styleClass="!shadow-sm">
+          <ng-template pTemplate="title">
+            <span class="text-gray-900 font-semibold">Center Info</span>
+          </ng-template>
+          <ng-template pTemplate="content">
+            @if (center(); as c) {
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-gray-500">Capacity</span>
+                  <span class="text-gray-900 font-medium">{{ c.totalCapacity }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-500">Max Regular</span>
+                  <span class="text-gray-900 font-medium">{{ c.maxRegular }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-500">Slot Period</span>
+                  <span class="text-gray-900 font-medium">{{ c.slotPeriod }} min</span>
+                </div>
+              </div>
+            }
+          </ng-template>
+        </p-card>
+      </div>
+    </div>
+  }
+
+  <p-dialog header="Block Day" [(visible)]="closureDialogOpen" [modal]="true" [style]="{ width: '400px' }">
+    <div class="space-y-4">
+      <div class="flex items-center gap-2">
+        <input type="checkbox" id="allDay" [checked]="closureAllDay()" (change)="closureAllDay.set(!closureAllDay())" class="rounded" />
+        <label for="allDay" class="text-sm text-gray-700">Block entire day</label>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Reason</label>
+        <p-textarea [ngModel]="closureReason()" (ngModelChange)="closureReason.set($event)" rows="3" class="w-full" placeholder="Enter reason..." />
+      </div>
+    </div>
+    <ng-template #footer>
+      <p-button label="Cancel" severity="secondary" styleClass="p-button-text" (click)="closureDialogOpen.set(false)" />
+      <p-button label="Block" severity="danger" [disabled]="!closureReason() || isSaving()" [loading]="isSaving()" (click)="submitClosure()" />
+    </ng-template>
+  </p-dialog>
+</div>
