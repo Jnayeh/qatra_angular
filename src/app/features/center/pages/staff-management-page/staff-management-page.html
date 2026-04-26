@@ -1,0 +1,73 @@
+<div class="max-w-4xl mx-auto space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Staff Management</h1>
+      <p class="text-sm text-gray-500 mt-1">Manage staff members assigned to this center.</p>
+    </div>
+    <p-button label="Add Staff" icon="pi pi-plus" (click)="showAddDialog.set(true)" />
+  </div>
+
+  @if (loading()) {
+    <app-loading-spinner />
+  } @else if (staff().length === 0) {
+    <app-empty-state
+      icon="pi-users"
+      title="No staff members"
+      message="There are no staff members assigned to this center yet."
+      (action)="showAddDialog.set(true)"
+      actionLabel="Add Staff Member"
+    />
+  } @else {
+    <p-card>
+      <ng-template pTemplate="content">
+        <ul class="divide-y divide-gray-100">
+          @for (member of staff(); track member.userId) {
+            <li class="flex items-center justify-between py-3">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-primary-50 flex items-center justify-center">
+                  <span class="text-primary-500 font-semibold text-sm">{{ member.userId }}</span>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-900">Staff #{{ member.userId }}</p>
+                  <p class="text-xs text-gray-500">Center #{{ member.centerId }}</p>
+                </div>
+              </div>
+              <p-button
+                label="Remove"
+                severity="danger"
+                styleClass="p-button-text p-button-sm"
+                (click)="removeStaff(member.userId)"
+              />
+            </li>
+          }
+        </ul>
+      </ng-template>
+    </p-card>
+  }
+
+  <p-dialog
+    header="Add Staff Member"
+    [visible]="showAddDialog()"
+    (visibleChange)="showAddDialog.set($event)"
+    [modal]="true"
+    [style]="{ width: '24rem' }"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <div class="flex flex-col gap-2">
+      <label for="userId" class="text-sm font-medium text-gray-700">User ID</label>
+      <input
+        pInputText
+        id="userId"
+        placeholder="Enter user ID"
+        [ngModel]="newUserId()"
+        (ngModelChange)="newUserId.set($event)"
+        class="w-full"
+      />
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" severity="secondary" styleClass="p-button-text" (click)="showAddDialog.set(false)" />
+      <p-button label="Add" [loading]="adding()" (click)="addStaff()" />
+    </ng-template>
+  </p-dialog>
+</div>
