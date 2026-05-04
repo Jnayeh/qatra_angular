@@ -1,0 +1,191 @@
+<div class="space-y-6">
+  <div>
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Book Appointment</h1>
+    <p class="mt-1 text-sm text-gray-500">Choose a center, date, and time slot for your donation.</p>
+  </div>
+
+  <!-- Stepper -->
+  <div class="flex items-center gap-2 overflow-x-auto pb-2">
+    @for (label of steps; track label; let i = $index) {
+      <button
+        type="button"
+        class="flex items-center gap-2 shrink-0"
+        [disabled]="i + 1 > step()"
+        (click)="goToStep(i + 1)"
+      >
+        <span
+          class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors"
+          [class.bg-primary-500]="step() >= i + 1"
+          [class.text-white]="step() >= i + 1"
+          [class.bg-gray-200]="step() < i + 1"
+          [class.text-gray-500]="step() < i + 1"
+        >
+          {{ i + 1 }}
+        </span>
+        <span class="text-sm font-medium hidden sm:inline" [class.text-primary-500]="step() === i + 1" [class.text-gray-500]="step() !== i + 1">
+          {{ label }}
+        </span>
+      </button>
+      @if (i < steps.length - 1) {
+        <div class="h-px w-6 sm:w-10 bg-gray-200 shrink-0"></div>
+      }
+    }
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-4">
+      @if (step() === 1) {
+        <p-card>
+          <ng-template pTemplate="title">Select a Donation Center</ng-template>
+          <ng-template pTemplate="content">
+            <div class="flex flex-col sm:flex-row gap-2 mb-4">
+              <input pInputText [formControl]="searchControl" placeholder="Search by city..." class="flex-1" />
+              <p-button label="Search" icon="pi pi-search" (onClick)="searchCenters()" />
+            </div>
+
+            @if (centerStore.isLoading()) {
+              <app-loading-spinner />
+            } @else if (centerStore.centers().length === 0) {
+              <app-empty-state icon="map-marker" title="No centers found" message="Try a different city or check back later." />
+            } @else {
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                @for (center of centerStore.centers(); track center.id) {
+                  <button
+                    type="button"
+                    class="text-left rounded-2xl border p-4 transition-all hover:shadow-md hover:border-primary-300"
+                    [class.border-primary-500]="selectedCenter()?.id === center.id"
+                    [class.bg-primary-50]="selectedCenter()?.id === center.id"
+                    [class.border-gray-200]="selectedCenter()?.id !== center.id"
+                    (click)="selectCenter(center)"
+                  >
+                    <div class="flex items-start justify-between gap-2">
+                      <div>
+                        <p class="font-semibold text-gray-900">{{ center.name }}</p>
+                        <p class="text-sm text-gray-500">{{ center.city }}, {{ center.country }}</p>
+                      </div>
+                      <app-status-badge [status]="center.status" />
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2">{{ center.status === 'ACTIVE' ? 'Available' : 'N/A' }}</p>
+                  </button>
+                }
+              </div>
+            }
+          </ng-template>
+        </p-card>
+      }
+
+      @if (step() === 2) {
+        <p-card>
+          <ng-template pTemplate="title">Select a Date</ng-template>
+          <ng-template pTemplate="subtitle">{{ selectedCenter()?.name }}</ng-template>
+          <ng-template pTemplate="content">
+            <div class="flex flex-col items-center gap-4">
+              <p-datepicker
+                (onSelect)="onDateChange($event)"
+                [minDate]="minDate"
+                [showIcon]="true"
+                inline
+              />
+              @if (selectedDate()) {
+                <p-button label="Continue to Time Slots" icon="pi pi-arrow-right" iconPos="right" (onClick)="step.set(3)" />
+              }
+            </div>
+          </ng-template>
+        </p-card>
+      }
+
+      @if (step() === 3) {
+        <p-card>
+          <ng-template pTemplate="title">Select a Time Slot</ng-template>
+          <ng-template pTemplate="subtitle">{{ formatDate(selectedDate()!.toISOString().split('T')[0]) }}</ng-template>
+          <ng-template pTemplate="content">
+            @if (centerStore.isLoading()) {
+              <app-loading-spinner />
+            } @else if (availableSlots().length === 0) {
+              <app-empty-state icon="calendar-times" title="No slots available" message="Try a different date." actionLabel="Change date" (action)="step.set(2)" />
+            } @else {
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                @for (slot of availableSlots(); track slot.id) {
+                  <button
+                    type="button"
+                    class="rounded-xl border p-4 text-center transition-all hover:border-primary-400 hover:shadow-sm"
+                    [class.border-primary-500]="selectedSlot()?.id === slot.id"
+                    [class.bg-primary-50]="selectedSlot()?.id === slot.id"
+                    [class.border-gray-200]="selectedSlot()?.id !== slot.id"
+                    (click)="selectSlot(slot)"
+                  >
+                    <p class="font-semibold text-gray-900">{{ formatTime(slot.startTime) }} ÔÇô {{ formatTime(slot.endTime) }}</p>
+                    <p class="text-xs text-gray-500 mt-1">{{ slot.maxBookings - slot.bookedCount }} / {{ slot.maxBookings }} available</p>
+                  </button>
+                }
+              </div>
+            }
+          </ng-template>
+        </p-card>
+      }
+
+      @if (step() === 4) {
+        <p-card>
+          <ng-template pTemplate="title">Confirm Your Booking</ng-template>
+          <ng-template pTemplate="content">
+            <dl class="space-y-3 text-sm">
+              <div class="flex justify-between"><dt class="text-gray-500">Center</dt><dd class="font-medium text-gray-900">{{ selectedCenter()?.name }}</dd></div>
+              <div class="flex justify-between"><dt class="text-gray-500">Date</dt><dd class="font-medium text-gray-900">{{ formatDate(selectedDate()!.toISOString().split('T')[0]) }}</dd></div>
+              <div class="flex justify-between"><dt class="text-gray-500">Time</dt><dd class="font-medium text-gray-900">{{ formatTime(selectedSlot()!.startTime) }} ÔÇô {{ formatTime(selectedSlot()!.endTime) }}</dd></div>
+              <div class="flex justify-between"><dt class="text-gray-500">Type</dt><dd class="font-medium text-gray-900">Regular Donation</dd></div>
+            </dl>
+
+            @if (bookingError()) {
+              <p class="text-red-500 text-sm mt-4">{{ bookingError() }}</p>
+            }
+
+            <div class="flex flex-col sm:flex-row gap-2 mt-6">
+              <p-button label="Back" severity="secondary" [outlined]="true" (onClick)="step.set(3)" />
+              <p-button
+                label="Confirm Booking"
+                icon="pi pi-check"
+                [loading]="isBooking()"
+                (onClick)="confirmBooking()"
+                class="flex-1"
+              />
+            </div>
+          </ng-template>
+        </p-card>
+      }
+    </div>
+
+    <!-- Summary panel -->
+    <div class="hidden lg:block">
+      <p-card styleClass="sticky top-24">
+        <ng-template pTemplate="title">Your Selection</ng-template>
+        <ng-template pTemplate="content">
+          <dl class="space-y-2 text-sm">
+            <div><dt class="text-gray-400">Center</dt><dd class="font-medium">{{ selectedCenter()?.name ?? 'ÔÇö' }}</dd></div>
+            <div><dt class="text-gray-400">Date</dt><dd class="font-medium">{{ selectedDate() ? formatDate(selectedDate()!.toISOString().split('T')[0]) : 'ÔÇö' }}</dd></div>
+            <div><dt class="text-gray-400">Time</dt><dd class="font-medium">{{ selectedSlot() ? formatTime(selectedSlot()!.startTime) + ' ÔÇô ' + formatTime(selectedSlot()!.endTime) : 'ÔÇö' }}</dd></div>
+          </dl>
+        </ng-template>
+      </p-card>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  header="Booking Confirmed!"
+  [visible]="showQrDialog()"
+  (visibleChange)="showQrDialog.set($event)"
+  [modal]="true"
+  [closable]="false"
+  styleClass="max-w-md w-full"
+>
+  <div class="text-center space-y-4 py-2">
+    <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto">
+      <i class="pi pi-check text-3xl text-green-600"></i>
+    </div>
+    <p class="text-gray-600">Your appointment has been booked. Show this QR code at the center.</p>
+    <div class="bg-gray-50 rounded-xl p-6 font-mono text-lg font-bold text-primary-600 tracking-wider">
+      {{ lastQrCode() }}
+    </div>
+    <p-button label="View My Appointments" (onClick)="closeQrDialog()" class="w-full" />
+  </div>
+</p-dialog>
