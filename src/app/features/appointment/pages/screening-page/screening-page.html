@@ -1,0 +1,72 @@
+<div class="max-w-2xl mx-auto space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Health Screening</h1>
+    <p class="text-sm text-gray-500 mt-1">Complete the pre-donation health screening for the donor.</p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+    <p-card>
+      <ng-template pTemplate="content">
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label for="temperature" class="text-sm font-medium text-gray-700">Temperature (┬░C)</label>
+              <p-inputNumber formControlName="temperature" inputId="temperature" placeholder="36.5" class="w-full" [step]="0.1" [min]="34" [max]="42" />
+              @if (form.get('temperature')?.invalid && form.get('temperature')?.touched) {
+                @if (form.get('temperature')?.hasError('min')) { <small class="text-red-500">Too low</small> }
+                @if (form.get('temperature')?.hasError('max')) { <small class="text-red-500">Too high</small> }
+              }
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label for="hemoglobin" class="text-sm font-medium text-gray-700">Hemoglobin (g/dL)</label>
+              <p-inputNumber formControlName="hemoglobin" inputId="hemoglobin" placeholder="13.5" class="w-full" [step]="0.1" [min]="5" [max]="20" />
+              @if (form.get('hemoglobin')?.invalid && form.get('hemoglobin')?.touched) {
+                @if (form.get('hemoglobin')?.hasError('min')) { <small class="text-red-500">Too low</small> }
+                @if (form.get('hemoglobin')?.hasError('max')) { <small class="text-red-500">Too high</small> }
+              }
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label for="bloodPressure" class="text-sm font-medium text-gray-700">Blood Pressure</label>
+              <input pInputText id="bloodPressure" formControlName="bloodPressure" placeholder="120/80" class="w-full" />
+              @if (form.get('bloodPressure')?.invalid && form.get('bloodPressure')?.touched) {
+                @if (form.get('bloodPressure')?.hasError('pattern')) { <small class="text-red-500">Format: 120/80</small> }
+              }
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label for="weight" class="text-sm font-medium text-gray-700">Weight (kg)</label>
+              <p-inputNumber formControlName="weight" inputId="weight" placeholder="70" class="w-full" [min]="30" [max]="200" />
+              @if (form.get('weight')?.invalid && form.get('weight')?.touched) {
+                @if (form.get('weight')?.hasError('min')) { <small class="text-red-500">Too low</small> }
+                @if (form.get('weight')?.hasError('max')) { <small class="text-red-500">Too high</small> }
+              }
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 py-2">
+            <label for="eligible" class="text-sm font-medium text-gray-700">Eligible</label>
+            <p-toggleSwitch formControlName="eligible" inputId="eligible" />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label for="notes" class="text-sm font-medium text-gray-700">Notes</label>
+            <textarea pTextarea id="notes" formControlName="notes" rows="3" placeholder="Optional notes..." class="w-full"></textarea>
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancel" severity="secondary" [outlined]="true" type="button" routerLink="/appointments/staff-queue" />
+      <p-button label="Submit Screening" severity="primary" type="submit" [disabled]="form.invalid || submitting()" [loading]="submitting()" />
+    </div>
+  </form>
+
+  @if (error()) {
+    <p class="text-red-500 text-sm">{{ error() }}</p>
+  }
+</div>
