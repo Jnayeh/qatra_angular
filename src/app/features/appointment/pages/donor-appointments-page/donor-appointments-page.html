@@ -1,0 +1,97 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">My Appointments</h1>
+      <p class="mt-1 text-sm text-gray-500">Manage your upcoming and past donation appointments.</p>
+    </div>
+    <a pButton label="Book New" icon="pi pi-plus" routerLink="/appointments/book" class="shrink-0"></a>
+  </div>
+
+  @if (store.isLoading()) {
+    <app-loading-spinner />
+  } @else {
+    <p-tabs value="0">
+      <p-tablist>
+        <p-tab value="0">Upcoming ({{ store.upcoming().length }})</p-tab>
+        <p-tab value="1">Past ({{ store.past().length }})</p-tab>
+        <p-tab value="2">Cancelled ({{ store.cancelled().length }})</p-tab>
+      </p-tablist>
+
+      <p-tabpanel value="0">
+        @if (store.upcoming().length === 0) {
+          <app-empty-state
+            icon="calendar"
+            title="No upcoming appointments"
+            message="Book your next donation at a center near you."
+            actionLabel="Book Appointment"
+            (action)="bookAppointment()"
+          />
+        } @else {
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            @for (appt of store.upcoming(); track appt.id) {
+              <app-appointment-card
+                [appointment]="appt"
+                (viewQr)="showQr($event)"
+                (cancel)="requestCancel($event)"
+                (reschedule)="rescheduleAppointment($event)"
+              />
+            }
+          </div>
+        }
+      </p-tabpanel>
+
+      <p-tabpanel value="1">
+        @if (store.past().length === 0) {
+          <app-empty-state icon="history" title="No past appointments" message="Your donation history will appear here." />
+        } @else {
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            @for (appt of store.past(); track appt.id) {
+              <app-appointment-card [appointment]="appt" [showActions]="false" />
+            }
+          </div>
+        }
+      </p-tabpanel>
+
+      <p-tabpanel value="2">
+        @if (store.cancelled().length === 0) {
+          <app-empty-state icon="times-circle" title="No cancelled appointments" message="Cancelled appointments will appear here." />
+        } @else {
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            @for (appt of store.cancelled(); track appt.id) {
+              <app-appointment-card [appointment]="appt" [showActions]="false" />
+            }
+          </div>
+        }
+      </p-tabpanel>
+    </p-tabs>
+  }
+</div>
+
+<p-dialog
+  header="Appointment QR Code"
+  [visible]="qrDialogVisible()"
+  (visibleChange)="qrDialogVisible.set($event)"
+  [modal]="true"
+  styleClass="max-w-sm w-full"
+>
+  <div class="text-center py-4">
+    <p class="text-sm text-gray-500 mb-4">Show this code at the donation center for check-in.</p>
+    <div class="bg-gray-50 rounded-xl p-6 font-mono text-xl font-bold text-primary-600 tracking-wider">
+      {{ qrCode() }}
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog
+  header="Cancel Appointment"
+  [visible]="cancelTarget() !== null"
+  (visibleChange)="!$event && cancelTarget.set(null)"
+  [modal]="true"
+  styleClass="max-w-sm w-full"
+>
+  <p class="text-gray-600 mb-4">Are you sure you want to cancel your appointment #{{ cancelTarget()?.id }}?</p>
+  <div class="flex gap-2 justify-end">
+    <p-button label="Keep" severity="secondary" [outlined]="true" (onClick)="cancelTarget.set(null)" />
+    <p-button label="Cancel Appointment" severity="danger" (onClick)="confirmCancel()" />
+  </div>
+</p-dialog>
