@@ -1,0 +1,88 @@
+<div class="max-w-4xl mx-auto space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Staff Queue</h1>
+    <p class="text-sm text-gray-500 mt-1">Manage today's donation queue ÔÇö check in, screen, and complete appointments.</p>
+  </div>
+
+  @if (isLoading()) {
+    <app-loading-spinner />
+  } @else if (queue().length === 0) {
+    <app-empty-state icon="list" title="No appointments today" message="Today's queue is empty." />
+  } @else {
+    <p-tabs value="0">
+      <p-tablist>
+        <p-tab value="0">Checked In</p-tab>
+        <p-tab value="1">Scheduled</p-tab>
+        <p-tab value="2">Completed</p-tab>
+      </p-tablist>
+      <p-tabpanel value="0">
+        <div class="space-y-3 mt-4">
+          @for (item of filtered('CHECKED_IN'); track item.id) {
+            <p-card>
+              <ng-template pTemplate="content">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-gray-900 font-medium">Donor #{{ item.donorId }}</p>
+                    <p class="text-sm text-gray-500">Slot #{{ item.slotId }}</p>
+                    <app-status-badge [status]="item.status" />
+                  </div>
+                  <div class="flex gap-2">
+                    <p-button label="Screen" severity="info" (click)="goToScreening(item.id)" />
+                  </div>
+                </div>
+              </ng-template>
+            </p-card>
+          }
+          @if (filtered('CHECKED_IN').length === 0) {
+            <p class="text-gray-400 text-center py-4">No checked-in appointments</p>
+          }
+        </div>
+      </p-tabpanel>
+      <p-tabpanel value="1">
+        <div class="space-y-3 mt-4">
+          @for (item of filtered('SCHEDULED', 'IN_SCREENING'); track item.id) {
+            <p-card>
+              <ng-template pTemplate="content">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-gray-900 font-medium cursor-pointer hover:text-primary-500" (click)="viewDonorProfile(item.donorId)">Donor #{{ item.donorId }}</p>
+                    <p class="text-sm text-gray-500">Slot #{{ item.slotId }}</p>
+                    <app-status-badge [status]="item.status" />
+                  </div>
+                  <div class="flex gap-2">
+                    <p-button label="Check In" severity="primary" (click)="goToCheckIn(item.id)" />
+                    <p-button label="No Show" severity="danger" [outlined]="true" (click)="markAsNoShow(item.id)" />
+                  </div>
+                </div>
+              </ng-template>
+            </p-card>
+          }
+          @if (filtered('SCHEDULED', 'IN_SCREENING').length === 0) {
+            <p class="text-gray-400 text-center py-4">No scheduled appointments</p>
+          }
+        </div>
+      </p-tabpanel>
+      <p-tabpanel value="2">
+        <div class="space-y-3 mt-4">
+          @for (item of filtered('COMPLETED'); track item.id) {
+            <p-card styleClass="opacity-70">
+              <ng-template pTemplate="content">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-gray-900 font-medium">Donor #{{ item.donorId }}</p>
+                    <p class="text-sm text-gray-500">Slot #{{ item.slotId }}</p>
+                    <app-status-badge [status]="item.status" />
+                  </div>
+                  <p-button label="Complete" severity="secondary" [outlined]="true" (click)="goToComplete(item.id)" />
+                </div>
+              </ng-template>
+            </p-card>
+          }
+          @if (filtered('COMPLETED').length === 0) {
+            <p class="text-gray-400 text-center py-4">No completed appointments</p>
+          }
+        </div>
+      </p-tabpanel>
+    </p-tabs>
+  }
+</div>
