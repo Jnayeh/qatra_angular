@@ -1,0 +1,92 @@
+<div class="max-w-2xl mx-auto space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Create Emergency</h1>
+    <p class="text-sm text-gray-500 mt-1">Submit a new blood donation emergency request for a center.</p>
+  </div>
+
+  @if (centerStore.isLoading()) {
+    <app-loading-spinner />
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+      <p-card>
+        <ng-template pTemplate="content">
+          <div class="space-y-4">
+            <div class="flex flex-col gap-1.5">
+              <label for="centerId" class="text-sm font-medium text-gray-700">Center</label>
+              <p-select formControlName="centerId" id="centerId" class="w-full" [options]="centerStore.centers()" optionLabel="name" optionValue="id" />
+              @if (form.get('centerId')?.hasError('required') && form.get('centerId')?.touched) {
+                <small class="text-red-500">Center is required</small>
+              }
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1.5">
+                <label for="bloodType" class="text-sm font-medium text-gray-700">Blood Type</label>
+                <p-select formControlName="bloodType" id="bloodType" class="w-full" [options]="bloodTypeOptions" optionLabel="label" optionValue="value" />
+                @if (form.get('bloodType')?.hasError('required') && form.get('bloodType')?.touched) {
+                  <small class="text-red-500">Blood type is required</small>
+                }
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label for="unitsNeeded" class="text-sm font-medium text-gray-700">Units Needed</label>
+                <input pInputText id="unitsNeeded" type="number" min="1" formControlName="unitsNeeded" class="w-full" />
+                @if (form.get('unitsNeeded')?.hasError('required') && form.get('unitsNeeded')?.touched) {
+                  <small class="text-red-500">Units is required</small>
+                }
+                @if (form.get('unitsNeeded')?.hasError('min')) {
+                  <small class="text-red-500">At least 1 unit required</small>
+                }
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Urgency</label>
+              <div class="flex gap-4">
+                @for (opt of urgencyOptions; track opt.value) {
+                  <div class="flex items-center gap-2">
+                    <p-radioButton [value]="opt.value" formControlName="urgency" [inputId]="opt.value" />
+                    <label [for]="opt.value" class="text-sm text-gray-700">{{ opt.label }}</label>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1.5">
+                <label for="contactPhone" class="text-sm font-medium text-gray-700">Contact Phone</label>
+                <input pInputText id="contactPhone" formControlName="contactPhone" placeholder="+216 XX XXX XXX" class="w-full" />
+                @if (form.get('contactPhone')?.hasError('required') && form.get('contactPhone')?.touched) {
+                  <small class="text-red-500">Phone is required</small>
+                }
+                @if (form.get('contactPhone')?.hasError('pattern')) {
+                  <small class="text-red-500">Invalid phone number format</small>
+                }
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label for="matchRadius" class="text-sm font-medium text-gray-700">Match Radius (km)</label>
+                <input pInputText id="matchRadius" type="number" min="1" formControlName="matchRadius" class="w-full" />
+                @if (form.get('matchRadius')?.hasError('required') && form.get('matchRadius')?.touched) {
+                  <small class="text-red-500">Radius is required</small>
+                }
+                @if (form.get('matchRadius')?.hasError('min')) {
+                  <small class="text-red-500">Must be at least 1 km</small>
+                }
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-card>
+
+      <div class="flex justify-end gap-2">
+        <p-button label="Cancel" severity="secondary" styleClass="p-button-outlined" type="button" routerLink="/emergencies/list"></p-button>
+        @if (submitting()) {
+          <p-button [disabled]="true" icon="pi pi-spin pi-spinner"></p-button>
+        } @else {
+          <p-button label="Create Emergency" type="submit" [disabled]="form.invalid"></p-button>
+        }
+      </div>
+    </form>
+  }
+</div>
