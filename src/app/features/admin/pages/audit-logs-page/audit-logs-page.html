@@ -1,0 +1,89 @@
+<div class="space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Audit Logs</h1>
+    <p class="text-sm text-gray-500 mt-1">Track all system actions and changes for accountability.</p>
+  </div>
+
+  <p-card>
+    <ng-template pTemplate="content">
+      <div class="flex flex-wrap items-end gap-4 mb-6">
+        <div class="flex flex-col gap-1.5">
+          <label class="text-sm font-medium text-gray-700">Action</label>
+          <p-select
+            [options]="actionOptions"
+            [(ngModel)]="selectedAction"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="All Actions"
+            [showClear]="true"
+            styleClass="w-64"
+          />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="dateFrom" class="text-sm font-medium text-gray-700">From</label>
+          <p-datepicker [(ngModel)]="dateFrom" inputId="dateFrom" [showIcon]="true" styleClass="w-44" />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="dateTo" class="text-sm font-medium text-gray-700">To</label>
+          <p-datepicker [(ngModel)]="dateTo" inputId="dateTo" [showIcon]="true" styleClass="w-44" />
+        </div>
+        <p-button label="Filter" severity="primary" (click)="applyFilters()" />
+        <p-button label="Clear" severity="secondary" [text]="true" (click)="clearFilters()" />
+      </div>
+
+      @if (isLoading()) {
+        <app-loading-spinner />
+      } @else if (logs().length === 0) {
+        <app-empty-state
+          icon="pi-history"
+          title="No audit logs"
+          message="No audit log entries match your filters."
+        />
+      } @else {
+        <p-table [value]="logs()" [tableStyle]="{ 'min-width': '50rem' }">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="text-gray-500">Timestamp</th>
+              <th class="text-gray-500">Action</th>
+              <th class="text-gray-500">Entity</th>
+              <th class="text-gray-500">User</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-l>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="text-gray-900 text-sm whitespace-nowrap">{{ l.timestamp | date:'medium' }}</td>
+              <td>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                  {{ l.action }}
+                </span>
+              </td>
+              <td class="text-gray-900">{{ l.entityType }}</td>
+              <td class="text-gray-900 text-sm">#{{ l.userId }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+          <p-button
+            icon="pi pi-chevron-left"
+            severity="secondary"
+            styleClass="p-button-text p-button-sm"
+            [disabled]="pagination.page() === 0"
+            (click)="prevPage()"
+          />
+          <span class="text-sm text-gray-500">
+            Page {{ pagination.page() + 1 }} of {{ pagination.totalPages() }}
+            <span class="text-gray-400 ml-2">({{ pagination.totalElements() }} total)</span>
+          </span>
+          <p-button
+            icon="pi pi-chevron-right"
+            severity="secondary"
+            styleClass="p-button-text p-button-sm"
+            [disabled]="pagination.page() >= pagination.totalPages() - 1"
+            (click)="nextPage()"
+          />
+        </div>
+      }
+    </ng-template>
+  </p-card>
+</div>
