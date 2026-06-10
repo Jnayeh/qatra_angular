@@ -1,0 +1,48 @@
+.auth-surface-donor {
+  background: linear-gradient(165deg, #eef0f4 0%, #ffffff 45%, #fce8e8 100%);
+}
+
+.auth-surface-staff {
+  background: linear-gradient(165deg, #e8f4fc 0%, #f4f8fb 50%, #e2eef8 100%);
+}
+
+.auth-surface-center-admin {
+  background: linear-gradient(165deg, #fef6e8 0%, #fffbf5 50%, #fdecd0 100%);
+}
+
+.auth-surface-admin {
+  background: linear-gradient(165deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+
+.auth-card-donor {
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 12px 32px rgba(15, 23, 42, 0.1),
+    0 24px 48px rgba(204, 0, 0, 0.08);
+}
+
+.auth-card-staff {
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 12px 32px rgba(14, 116, 144, 0.12),
+    0 24px 48px rgba(14, 116, 144, 0.08);
+}
+
+.auth-card-center-admin {
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 12px 32px rgba(180, 83, 9, 0.12),
+    0 24px 48px rgba(180, 83, 9, 0.08);
+}
+
+.auth-card-admin {
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.2),
+    0 16px 40px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(148, 163, 184, 0.15);
+}
+
+.auth-card-pop {
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+}
