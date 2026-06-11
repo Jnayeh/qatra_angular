@@ -1,0 +1,299 @@
+<div class="max-w-4xl mx-auto space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Notifications</h1>
+      <p class="text-sm text-gray-500 mt-1">Stay updated on your donations and emergency responses.</p>
+    </div>
+    @if (store.notifications().length > 0) {
+      <p-button severity="secondary" styleClass="p-button-outlined" (click)="store.markAllAsRead()">
+        <i class="pi pi-check-circle mr-1"></i> Mark All Read
+      </p-button>
+    }
+  </div>
+
+  @if (store.isLoading()) {
+    <div class="flex justify-center py-12">
+      <p-progressSpinner strokeWidth="4" styleClass="w-10 h-10" />
+    </div>
+  } @else if (store.notifications().length === 0) {
+    <app-empty-state icon="bell" title="No notifications" message="You're all caught up!" />
+  } @else {
+    <div #scrollContainer class="space-y-2 max-h-[75vh] overflow-y-auto pr-1" style="scroll-behavior: smooth;">
+      @for (n of store.notifications(); track n.id) {
+        @if (isEmergency(n); as isEmerg) {
+          <!-- EMERGENCY NOTIFICATION CARD -->
+          <p-card class="!shadow-sm" [class.border-l-4]="n.status !== 'READ'" [class.border-red-500]="n.status !== 'READ'">
+            <ng-template pTemplate="content">
+              <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
+                  <i class="pi pi-exclamation-triangle text-red-500 text-lg"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-2">
+                    <p class="text-gray-900 font-semibold" [class.font-bold]="n.status !== 'READ'">{{ n.title }}</p>
+                    @if (getResponseStatus(n) === 'ACCEPTED') {
+                      <p-tag value="Confirmed" severity="success" />
+                    } @else if (getResponseStatus(n) === 'DECLINED') {
+                      <p-tag value="Declined" severity="danger" />
+                    } @else if (isExpired(n)) {
+                      <p-tag value="Expired" severity="secondary" />
+                    } @else {
+                      <app-status-badge [status]="n.status" />
+                    }
+                  </div>
+                  <p class="text-sm text-gray-500 mt-1">{{ n.body }}</p>
+
+                  @if (getData(n); as data) {
+                    <div class="flex flex-wrap items-center gap-2 mt-2">
+                      <p-tag [value]="data.bloodType" severity="danger" />
+                      <p-tag [value]="data.urgency" [severity]="urgencySeverity(data.urgency)" />
+                      @if (data.centerName) {
+                        <span class="text-xs text-gray-500">{{ data.centerName }}</span>
+                      }
+                      @if (data.distanceKm != null) {
+                        <span class="text-xs text-gray-400">{{ data.distanceKm | number:'1.1-1' }} km away</span>
+                      }
+                    </div>
+                  }
+
+                  <div class="flex items-center gap-2 mt-3">
+                    @if (getResponseStatus(n) !== 'ACCEPTED' && getResponseStatus(n) !== 'DECLINED' && !isExpired(n)) {
+                      <p-button label="Confirm" severity="success" size="small" icon="pi pi-check" (click)="openConfirmModal(n); $event.stopPropagation()" />
+                      <p-button label="Reject" severity="danger" size="small" styleClass="p-button-outlined" icon="pi pi-times" (click)="openRejectDialog(n); $event.stopPropagation()" />
+                    }
+                    <p-button label="View Details" severity="secondary" size="small" styleClass="p-button-text" icon="pi pi-eye" (click)="openDetailsModal(n); $event.stopPropagation()" />
+                    <span class="text-xs text-gray-400 ml-auto">{{ formatTime(n.createdAt) }}</span>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </p-card>
+        } @else {
+          <!-- REGULAR NOTIFICATION CARD -->
+          <p-card
+            class="cursor-pointer hover:shadow-md transition-all"
+            [class.border-l-4]="n.status !== 'READ'"
+            [class.border-primary-500]="n.status !== 'READ'"
+            (click)="store.markAsRead(n.id)"
+          >
+            <ng-template pTemplate="content">
+              <div class="flex items-start gap-3">
+                <i class="pi {{ notificationIcon(n.type) }} mt-1 text-xl"
+                   [class.text-primary-500]="n.status !== 'READ'"
+                   [class.text-gray-400]="n.status === 'READ'"></i>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-2">
+                    <p class="text-gray-900 font-medium truncate"
+                       [class.font-bold]="n.status !== 'READ'">{{ n.title }}</p>
+                    <app-status-badge [status]="n.status" />
+                  </div>
+                  <p class="text-sm text-gray-500 mt-1 line-clamp-2">{{ n.body }}</p>
+                  <p class="text-xs text-gray-400 mt-1">{{ formatTime(n.createdAt) }}</p>
+                </div>
+              </div>
+            </ng-template>
+          </p-card>
+        }
+      }
+
+      <div id="scroll-sentinel" class="h-1"></div>
+
+      @if (store.isLoadingMore()) {
+        <div class="flex justify-center py-4">
+          <p-progressSpinner strokeWidth="4" styleClass="w-8 h-8" />
+        </div>
+      }
+
+      @if (store.currentPage() >= store.totalPages() - 1 && store.notifications().length > 0) {
+        <p class="text-center text-sm text-gray-400 py-4">You've reached the end</p>
+      }
+    </div>
+  }
+</div>
+
+<!-- ÔòÉÔòÉÔòÉ CONFIRM MODAL (Slot Selection) ÔòÉÔòÉÔòÉ -->
+<p-dialog header="Confirm Emergency Response" [(visible)]="showConfirmModal" [modal]="true" [style]="{ width: '560px' }" [closable]="!isConfirming()">
+  @if (bookingResult(); as result) {
+    <div class="text-center py-6 space-y-4">
+      <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto">
+        <i class="pi pi-check-circle text-green-600 text-3xl"></i>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-900">Appointment Confirmed!</h3>
+      <p class="text-sm text-gray-500">Your emergency donation appointment has been booked.</p>
+      <div class="bg-gray-50 rounded-xl p-4 inline-block">
+        <p class="text-xs text-gray-500 mb-1">QR Code</p>
+        <p class="font-mono text-sm text-gray-900">{{ result.qrCode }}</p>
+      </div>
+      <p-button label="Done" (click)="closeConfirmModal()" styleClass="mt-2" />
+    </div>
+  } @else {
+    @if (isLoadingSlots()) {
+      <div class="flex justify-center py-8">
+        <p-progressSpinner strokeWidth="4" styleClass="w-8 h-8" />
+      </div>
+    } @else if (activeEmergency(); as emerg) {
+      <div class="space-y-4">
+        <div class="p-3 rounded-xl bg-red-50 border border-red-100">
+          <div class="flex items-center gap-2 mb-1">
+            <p-tag [value]="emerg.bloodType" severity="danger" />
+            <p-tag [value]="emerg.urgency" [severity]="urgencySeverity(emerg.urgency)" />
+          </div>
+          <p class="text-sm text-gray-600">{{ emergencyData()?.centerName ?? 'N/A' }}</p>
+          <p class="text-xs text-gray-400 mt-1">Expires: {{ formatDate(emerg.expiresAt) }}</p>
+        </div>
+
+        @if (availableSlots().length === 0) {
+          <div class="text-center py-6">
+            <i class="pi pi-calendar-times text-3xl text-gray-300 mb-2 block"></i>
+            <p class="text-sm text-gray-500">No available slots before expiration.</p>
+            <p class="text-xs text-gray-400 mt-1">You can still confirm ÔÇö staff will reach out to schedule.</p>
+          </div>
+        } @else {
+          <div>
+            <p class="text-sm font-medium text-gray-700 mb-2">Available Slots</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+              @for (slot of availableSlots(); track slot.id) {
+                <button
+                  class="flex items-center justify-between p-3 rounded-xl border text-left transition-all"
+                  [class.border-green-500]="selectedSlotId() === slot.id"
+                  [class.bg-green-50]="selectedSlotId() === slot.id"
+                  [class.border-gray-200]="selectedSlotId() !== slot.id"
+                  [class.hover:border-gray-300]="selectedSlotId() !== slot.id"
+                  (click)="selectSlot(slot.id)"
+                >
+                  <div>
+                    <p class="text-sm font-medium text-gray-900">{{ formatSlotTime(slot) }}</p>
+                    <p class="text-xs text-gray-500">{{ slot.date }}</p>
+                  </div>
+                  @if (selectedSlotId() === slot.id) {
+                    <i class="pi pi-check-circle text-green-600"></i>
+                  }
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <ng-template #footer>
+      <p-button label="Cancel" severity="secondary" styleClass="p-button-text" (click)="closeConfirmModal()" [disabled]="isConfirming()" />
+      <p-button
+        [label]="selectedSlotId() ? 'Confirm & Book' : 'Confirm Without Slot'"
+        severity="success"
+        [loading]="isConfirming()"
+        [disabled]="isConfirming()"
+        (click)="confirmSlot()"
+      />
+    </ng-template>
+  }
+</p-dialog>
+
+<!-- ÔòÉÔòÉÔòÉ REJECT CONFIRMATION ÔòÉÔòÉÔòÉ -->
+<p-dialog header="Reject Emergency?" [(visible)]="showRejectDialog" [modal]="true" [style]="{ width: '400px' }" [closable]="!isDeclining()">
+  <div class="space-y-4">
+    <p class="text-sm text-gray-600">Are you sure you want to decline this emergency request?</p>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Reason (optional)</label>
+      <p-textarea [(ngModel)]="rejectReason" rows="3" class="w-full" placeholder="Why are you declining?" />
+    </div>
+  </div>
+  <ng-template #footer>
+    <p-button label="Go Back" severity="secondary" styleClass="p-button-text" (click)="showRejectDialog.set(false)" [disabled]="isDeclining()" />
+    <p-button label="Yes, Decline" severity="danger" [loading]="isDeclining()" [disabled]="isDeclining()" (click)="confirmReject()" />
+  </ng-template>
+</p-dialog>
+
+<!-- ÔòÉÔòÉÔòÉ VIEW DETAILS MODAL ÔòÉÔòÉÔòÉ -->
+<p-dialog header="Emergency Details" [(visible)]="showDetailsModal" [modal]="true" [style]="{ width: '600px' }">
+  @if (activeEmergency(); as emerg) {
+    <div class="space-y-5">
+      <div class="p-4 rounded-xl bg-red-50 border border-red-100">
+        <div class="flex items-center gap-3 mb-3">
+          <p-tag [value]="emerg.bloodType" severity="danger" styleClass="text-sm font-bold" />
+          <p-tag [value]="emerg.urgency" [severity]="urgencySeverity(emerg.urgency)" />
+          <p-tag [value]="emerg.status" severity="secondary" />
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <p class="text-gray-500">Center</p>
+            <p class="text-gray-900 font-medium">{{ emergencyData()?.centerName ?? 'N/A' }}</p>
+          </div>
+          <div>
+            <p class="text-gray-500">Units Needed</p>
+            <p class="text-gray-900 font-medium">{{ emerg.unitsNeeded }}</p>
+          </div>
+          <div>
+            <p class="text-gray-500">Created</p>
+            <p class="text-gray-900 font-medium">{{ formatDate(emerg.createdAt) }}</p>
+          </div>
+          <div>
+            <p class="text-gray-500">Expires</p>
+            <p class="text-gray-900 font-medium">{{ formatDate(emerg.expiresAt) }}</p>
+          </div>
+          @if (emergencyData()?.distanceKm != null) {
+            <div>
+              <p class="text-gray-500">Distance</p>
+              <p class="text-gray-900 font-medium">{{ emergencyData()!.distanceKm | number:'1.1-1' }} km</p>
+            </div>
+          }
+          @if (emergencyData()?.matchedDonorCount != null) {
+            <div>
+              <p class="text-gray-500">Matched Donors</p>
+              <p class="text-gray-900 font-medium">{{ emergencyData()!.matchedDonorCount }}</p>
+            </div>
+          }
+        </div>
+      </div>
+
+      @if (isLoadingSlots()) {
+        <div class="flex justify-center py-4">
+          <p-progressSpinner strokeWidth="4" styleClass="w-6 h-6" />
+        </div>
+      } @else if (availableSlots().length > 0) {
+        <div>
+          <p class="text-sm font-medium text-gray-700 mb-2">Available Slots</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+            @for (slot of availableSlots(); track slot.id) {
+              <button
+                class="flex items-center justify-between p-3 rounded-xl border text-left transition-all"
+                [class.border-green-500]="selectedSlotId() === slot.id"
+                [class.bg-green-50]="selectedSlotId() === slot.id"
+                [class.border-gray-200]="selectedSlotId() !== slot.id"
+                [class.hover:border-gray-300]="selectedSlotId() !== slot.id"
+                (click)="selectSlot(slot.id)"
+              >
+                <div>
+                  <p class="text-sm font-medium text-gray-900">{{ formatSlotTime(slot) }}</p>
+                  <p class="text-xs text-gray-500">{{ slot.date }}</p>
+                </div>
+                @if (selectedSlotId() === slot.id) {
+                  <i class="pi pi-check-circle text-green-600"></i>
+                }
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="flex justify-center py-8">
+      <p-progressSpinner strokeWidth="4" styleClass="w-8 h-8" />
+    </div>
+  }
+
+  <ng-template #footer>
+    @if (activeNotification() && getResponseStatus(activeNotification()!) !== 'ACCEPTED' && getResponseStatus(activeNotification()!) !== 'DECLINED' && !isExpired(activeNotification()!)) {
+      <p-button label="Reject" severity="danger" styleClass="p-button-outlined" (click)="showDetailsModal.set(false); openRejectDialog(activeNotification()!)" />
+      <p-button
+        [label]="selectedSlotId() ? 'Confirm & Book' : 'Confirm Without Slot'"
+        severity="success"
+        [loading]="isConfirming()"
+        [disabled]="isConfirming()"
+        (click)="confirmSlot()"
+      />
+    } @else {
+      <p-button label="Close" severity="secondary" styleClass="p-button-outlined" (click)="closeDetailsModal()" />
+    }
+  </ng-template>
+</p-dialog>
