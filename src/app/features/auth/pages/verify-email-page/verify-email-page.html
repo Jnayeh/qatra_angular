@@ -1,0 +1,43 @@
+<app-public-navbar />
+<div class="min-h-screen flex items-center justify-center auth-surface-donor">
+  <div class="w-full max-w-md rounded-2xl bg-white overflow-hidden auth-card-donor">
+    <div class="px-6 pt-4 pb-2 text-center">
+      <p class="text-3xl font-bold text-primary-600 mb-1">Qatra</p>
+      <p class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full mb-4 bg-primary-50 text-primary-700">
+        <i class="pi pi-envelope text-xs"></i>
+        Email Verification
+      </p>
+      <h1 class="text-2xl font-bold text-gray-900 mt-2">Verify Email</h1>
+      <p class="text-sm text-gray-500 mt-1">Enter the verification token sent to your email</p>
+    </div>
+
+    <div class="px-6 pb-8 pt-4">
+      @if (!verified()) {
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label for="token" class="text-sm font-medium text-gray-700">Verification Token</label>
+            <input pInputText id="token" formControlName="token" placeholder="Enter token" class="w-full" [class.ng-invalid]="form.get('token')?.invalid && form.get('token')?.touched" />
+            @if (form.get('token')?.invalid && form.get('token')?.touched) {
+              <small class="text-red-500">Token is required</small>
+            }
+          </div>
+
+          @if (error()) {
+            <p-message severity="error" variant="simple" size="small">{{ error() }}</p-message>
+          }
+
+          <p-button label="Verify Email" severity="primary" type="submit" class="w-full mt-1" styleClass="w-full" [disabled]="form.invalid || isLoading()" [loading]="isLoading()"></p-button>
+        </form>
+      } @else {
+        <div class="text-center py-4">
+          <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+            <i class="pi pi-check text-3xl text-green-600"></i>
+          </div>
+          <p class="text-gray-900 font-medium mb-2">Email verified!</p>
+          <p class="text-sm text-gray-500 mb-4">Your email has been confirmed.</p>
+          <a routerLink="/auth/login" class="text-primary-500 hover:underline">Sign in</a>
+        </div>
+      }
+    </div>
+  </div>
+</div>

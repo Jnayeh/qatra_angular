@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+.stat-item:not(:last-child) {
+  border-right: none;
+}
+
+@media (min-width: 768px) {
+  .stat-item:not(:last-child) {
+    border-right: 1px solid #f3f4f6;
+  }
+}
+
+.emergency-item + .emergency-item {
+  margin-top: 0.625rem;
+}
