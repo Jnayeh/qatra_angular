@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request:
-    branches: [qatra_front]
+    branches: [master]
 
 jobs:
   test:
