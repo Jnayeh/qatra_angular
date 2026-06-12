@@ -1,0 +1,115 @@
+<div class="max-w-5xl mx-auto space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Center Analytics</h1>
+    <p class="text-sm text-gray-500 mt-1">View metrics and performance data for this center.</p>
+  </div>
+
+  @if (loading()) {
+    <app-loading-spinner />
+  } @else if (metrics(); as m) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="rounded-2xl bg-white shadow-sm p-6 border border-gray-100">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+            <i class="pi pi-calendar text-blue-500 text-xl"></i>
+          </div>
+          <div class="min-w-0">
+            <p class="text-2xl font-bold text-gray-900">{{ m.totalAppointments }}</p>
+            <p class="text-sm text-gray-500">Total Appointments</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-2xl bg-white shadow-sm p-6 border border-gray-100">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
+            <i class="pi pi-exclamation-triangle text-red-500 text-xl"></i>
+          </div>
+          <div class="min-w-0">
+            <p class="text-2xl font-bold text-gray-900">{{ m.activeEmergencies }}</p>
+            <p class="text-sm text-gray-500">Active Emergencies</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-2xl bg-white shadow-sm p-6 border border-gray-100">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
+            <i class="pi pi-chart-line text-green-500 text-xl"></i>
+          </div>
+          <div class="min-w-0">
+            <p class="text-2xl font-bold text-gray-900">{{ m.responseRate30d }}%</p>
+            <p class="text-sm text-gray-500">Response Rate</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-2xl bg-white shadow-sm p-6 border border-gray-100">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center shrink-0">
+            <i class="pi pi-droplet text-purple-500 text-xl"></i>
+          </div>
+          <div class="min-w-0">
+            <p class="text-2xl font-bold text-gray-900">{{ m.totalMlCollected }}</p>
+            <p class="text-sm text-gray-500">Total ML Collected</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center">
+        <p class="text-lg font-bold text-gray-900">{{ m.todayAppointments }}</p>
+        <p class="text-xs text-gray-500">Today's Appointments</p>
+      </div>
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center">
+        <p class="text-lg font-bold text-gray-900">{{ m.weekAppointments }}</p>
+        <p class="text-xs text-gray-500">This Week</p>
+      </div>
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center">
+        <p class="text-lg font-bold text-gray-900">{{ m.monthAppointments }}</p>
+        <p class="text-xs text-gray-500">This Month</p>
+      </div>
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center">
+        <p class="text-lg font-bold text-gray-900">{{ m.fulfilledEmergencies }}</p>
+        <p class="text-xs text-gray-500">Fulfilled Emergencies</p>
+      </div>
+    </div>
+
+    @defer (on viewport) {
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <p-card styleClass="shadow-sm">
+          <ng-template pTemplate="title">Appointments Completed (30d)</ng-template>
+          <ng-template pTemplate="content">
+            @if (m.appointmentsByDay?.length) {
+              <canvas #appointmentsChart></canvas>
+            } @else {
+              <div class="text-center py-8 text-gray-400">
+                <i class="pi pi-chart-line text-3xl mb-2"></i>
+                <p class="text-sm">No appointment data available</p>
+              </div>
+            }
+          </ng-template>
+        </p-card>
+
+        <p-card styleClass="shadow-sm">
+          <ng-template pTemplate="title">Emergencies Created (30d)</ng-template>
+          <ng-template pTemplate="content">
+            @if (m.emergenciesByDay?.length) {
+              <canvas #emergenciesChart></canvas>
+            } @else {
+              <div class="text-center py-8 text-gray-400">
+                <i class="pi pi-chart-line text-3xl mb-2"></i>
+                <p class="text-sm">No emergency data available</p>
+              </div>
+            }
+          </ng-template>
+        </p-card>
+      </div>
+    } @placeholder {
+      <div class="col-span-2 flex items-center justify-center py-12 bg-gray-50 rounded-2xl">
+        <p class="text-sm text-gray-400">Loading charts...</p>
+      </div>
+    }
+  }
+</div>
