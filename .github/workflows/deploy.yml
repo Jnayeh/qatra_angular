@@ -9,22 +9,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
+      - uses: actions/setup-node@v4
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v6
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm run build:prod
+      - uses: appleboy/scp-action@v0.1.7
         with:
-          context: .
-          push: true
-          tags: ghcr.io/${{ github.repository_owner }}/qatra-frontend:latest
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "dist/frontend/browser/*"
+          target: /var/www/qatra
+          strip_components: 3
       - uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            docker pull ghcr.io/${{ github.repository_owner }}/qatra-frontend:latest
-            docker save ghcr.io/${{ github.repository_owner }}/qatra-frontend:latest | sudo k3s ctr images import -
-            sudo k3s kubectl rollout restart deployment/frontend -n qatra
+          script: sudo nginx -t && sudo systemctl reload nginx
