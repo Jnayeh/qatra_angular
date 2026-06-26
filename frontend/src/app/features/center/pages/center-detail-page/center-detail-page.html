@@ -1,0 +1,74 @@
+<div class="max-w-4xl mx-auto space-y-6">
+  @if (store.isLoading()) {
+    <app-loading-spinner />
+  } @else if (store.selectedCenter(); as c) {
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-white">{{ c.name }}</h1>
+        <p class="text-gray-400">{{ c.address }}, {{ c.city }}, {{ c.country }}</p>
+      </div>
+      <app-status-badge [status]="c.status" />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <mat-card class="bg-surface-card">
+        <mat-card-content class="text-center py-4">
+          <mat-icon class="text-3xl text-primary-500 mb-2">phone</mat-icon>
+          <p class="text-sm text-gray-400">{{ c.phone }}</p>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="bg-surface-card">
+        <mat-card-content class="text-center py-4">
+          <mat-icon class="text-3xl text-primary-500 mb-2">email</mat-icon>
+          <p class="text-sm text-gray-400">{{ c.email }}</p>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="bg-surface-card">
+        <mat-card-content class="text-center py-4">
+          <mat-icon class="text-3xl text-primary-500 mb-2">schedule</mat-icon>
+          <p class="text-sm text-gray-400">{{ c.isOperatingNow ? 'Open Now' : 'Closed' }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <mat-card class="bg-surface-card">
+        <mat-card-header>
+          <mat-card-title class="text-white">Operating Hours</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="space-y-2">
+            @for (day of days; track day.key) {
+              <div class="flex items-center justify-between py-1">
+                <span class="text-gray-400 w-24">{{ day.label }}</span>
+                @if (c.operatingHours[day.key]; as schedule) {
+                  <span class="text-white">{{ schedule.open }} – {{ schedule.close }}</span>
+                } @else {
+                  <span class="text-gray-600">Closed</span>
+                }
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="bg-surface-card">
+        <mat-card-header>
+          <mat-card-title class="text-white">Location</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="p-2">
+          <div #mapDetail class="w-full h-64 rounded-md"></div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="flex gap-2">
+      <button mat-raised-button color="primary" [routerLink]="['/centers', c.id, 'book']">
+        Book Appointment
+      </button>
+      <button mat-stroked-button [routerLink]="['/centers', c.id, 'manage']">
+        Manage Center
+      </button>
+    </div>
+  }
+</div>

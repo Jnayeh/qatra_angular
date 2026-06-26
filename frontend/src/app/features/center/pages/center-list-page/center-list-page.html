@@ -1,0 +1,52 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-white">Donation Centers</h1>
+    <div class="flex items-center gap-2">
+      <mat-form-field appearance="outline" class="w-48">
+        <mat-label>City</mat-label>
+        <input matInput [formControl]="cityFilter" (keyup.enter)="search()" placeholder="Search city..." />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="search()">Search</button>
+      <button mat-icon-button (click)="toggleMap()" [matTooltip]="showMap() ? 'Hide map' : 'Show map'">
+        <mat-icon>{{ showMap() ? 'map' : 'map' }}</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex flex-col lg:flex-row gap-4">
+    @if (showMap()) {
+      <div class="lg:w-1/2 h-96 lg:h-auto">
+        <div #mapContainer class="w-full h-full min-h-[300px] rounded-lg overflow-hidden"></div>
+      </div>
+    }
+
+    <div class="flex-1 min-w-0">
+      @if (store.isLoading()) {
+        <app-loading-spinner />
+      } @else if (store.centers().length === 0) {
+        <app-empty-state icon="local_hospital" title="No centers found" message="Try adjusting your search or location filter." />
+      } @else {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          @for (center of store.centers(); track center.id) {
+            <mat-card class="bg-surface-card cursor-pointer hover:bg-surface-hover transition-colors" [routerLink]="['/centers', center.id]">
+              <mat-card-content class="p-4">
+                <div class="flex items-start justify-between mb-2">
+                  <h3 class="text-white font-medium">{{ center.name }}</h3>
+                  <app-status-badge [status]="center.status" />
+                </div>
+                <p class="text-sm text-gray-400">{{ center.city }}, {{ center.country }}</p>
+                <p class="text-xs text-gray-500">{{ center.facilityType }}</p>
+                <div class="flex items-center gap-4 mt-3 text-xs text-gray-400">
+                  @if (center.distanceKm != null) {
+                    <span>{{ center.distanceKm.toFixed(1) }} km away</span>
+                  }
+                  <span [class.text-green-400]="center.isOperatingNow">● {{ center.isOperatingNow ? 'Open' : 'Closed' }}</span>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

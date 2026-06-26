@@ -1,0 +1,33 @@
+<div class="flex flex-col h-full">
+  <div class="p-4 border-b border-primary-900">
+    <h1 class="text-xl font-bold text-primary-500">Qatra</h1>
+    <p class="text-xs text-gray-400">Blood Donation Platform</p>
+  </div>
+
+  <nav class="flex-1 p-2 space-y-1">
+    @for (item of navItems(); track item.path) {
+      @if (!item.roles || item.roles.includes(activeRole())) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="bg-primary-800 text-white"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-300 hover:bg-surface-hover transition-colors"
+        >
+          <mat-icon class="text-lg">{{ item.icon }}</mat-icon>
+          {{ item.label }}
+        </a>
+      }
+    }
+  </nav>
+
+  <div class="p-4 border-t border-primary-900">
+    <button
+      mat-stroked-button
+      color="primary"
+      class="w-full"
+      (click)="authStore.logout()"
+    >
+      <mat-icon class="text-sm">logout</mat-icon>
+      Logout
+    </button>
+  </div>
+</div>

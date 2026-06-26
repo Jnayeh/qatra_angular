@@ -1,0 +1,88 @@
+    <div class="max-w-4xl mx-auto space-y-6">
+      <h1 class="text-2xl font-bold text-white">Book Appointment</h1>
+
+      @if (store.isLoading()) {
+        <app-loading-spinner />
+      } @else {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <mat-card class="bg-surface-card">
+            <mat-card-header>
+              <mat-card-title class="text-white text-lg">Select Date</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Date</mat-label>
+                <input matInput [matDatepicker]="picker" [value]="selectedDate()" (dateChange)="onDateChange($event.value)" />
+                <mat-datepicker-toggle matSuffix [for]="picker" />
+                <mat-datepicker #picker />
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="bg-surface-card">
+            <mat-card-header>
+              <mat-card-title class="text-white text-lg">Appointment Type</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-radio-group [value]="appointmentType()" (change)="appointmentType.set($event.value)" class="flex flex-col gap-2">
+                <mat-radio-button value="REGULAR">Regular</mat-radio-button>
+                <mat-radio-button value="EMERGENCY">Emergency</mat-radio-button>
+              </mat-radio-group>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        @if (store.slots().length > 0) {
+          <mat-card class="bg-surface-card">
+            <mat-card-header>
+              <mat-card-title class="text-white text-lg">Available Slots</mat-card-title>
+              <mat-card-subtitle class="text-gray-400">{{ selectedDate()?.toLocaleDateString() }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                @for (slot of store.slots(); track slot.id) {
+                  <button
+                    mat-stroked-button
+                    class="slot-card"
+                    [class.selected]="selectedSlotId() === slot.id"
+                    [disabled]="slot.bookedCount >= slot.maxBookings || slot.isBlocked"
+                    (click)="selectSlot(slot.id)"
+                  >
+                    <div class="flex flex-col items-center py-2">
+                      <span class="text-white font-medium">{{ formatTime(slot.startTime) }} – {{ formatTime(slot.endTime) }}</span>
+                      <span class="text-xs text-gray-400">
+                        {{ slot.maxBookings - slot.bookedCount }} / {{ slot.maxBookings }} available
+                      </span>
+                      @if (slot.bookedCount >= slot.maxBookings) {
+                        <span class="text-xs text-red-400">Full</span>
+                      }
+                      @if (slot.isBlocked) {
+                        <span class="text-xs text-yellow-400">Blocked</span>
+                      }
+                    </div>
+                  </button>
+                }
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          @if (selectedSlotId()) {
+            <div class="flex justify-end">
+              <button mat-raised-button color="primary" [disabled]="isBooking()" (click)="book()">
+                @if (isBooking()) {
+                  <mat-spinner diameter="20" />
+                } @else {
+                  Book Appointment
+                }
+              </button>
+            </div>
+          }
+        } @else if (selectedDate()) {
+          <app-empty-state icon="event_busy" title="No slots available" message="Try a different date." />
+        }
+
+        @if (error()) {
+          <p class="text-red-400 text-sm">{{ error() }}</p>
+        }
+      }
+    </div>

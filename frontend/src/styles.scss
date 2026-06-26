@@ -1,0 +1,51 @@
+@use '@angular/material' as mat;
+
+$red-palette: (
+  50: #fce4e4,
+  100: #f8baba,
+  200: #f28b8b,
+  300: #eb5c5c,
+  400: #e63939,
+  500: #e01616,
+  600: #cc0000,
+  700: #b30000,
+  800: #990000,
+  900: #7a0000,
+  contrast: (
+    50: #000,
+    100: #000,
+    200: #fff,
+    300: #fff,
+    400: #fff,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+  ),
+);
+
+$theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$red-palette,
+  ),
+  typography: (
+    plain-family: 'Inter, Roboto, sans-serif',
+  ),
+  density: (
+    scale: 0,
+  ),
+));
+
+html {
+  @include mat.all-component-themes($theme);
+  @include mat.color-variants-backwards-compatibility($theme);
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  background-color: #1a0f0f;
+  color: #f5f5f5;
+}

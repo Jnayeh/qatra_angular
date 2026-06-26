@@ -1,0 +1,42 @@
+<div class="max-w-2xl mx-auto space-y-6">
+  <h1 class="text-2xl font-bold text-white">My Profile</h1>
+
+  <mat-card class="bg-surface-card">
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Display Name</mat-label>
+          <input matInput formControlName="displayName" />
+          <mat-error>Name is required (min 2 characters)</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Phone</mat-label>
+          <input matInput formControlName="phone" />
+          <mat-error>Invalid phone number</mat-error>
+        </mat-form-field>
+
+        <div class="flex gap-4">
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || isLoading()">
+            Save Changes
+          </button>
+          <button mat-stroked-button type="button" routerLink="/donor/dashboard">Cancel</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="bg-surface-card border border-red-900">
+    <mat-card-header>
+      <mat-card-title class="text-red-400 text-lg">Danger Zone</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="text-sm text-gray-400 mb-4">
+        Request permanent deletion of your account and all associated data (GDPR).
+      </p>
+      <button mat-raised-button color="warn" (click)="requestDeletion()">
+        Request Account Deletion
+      </button>
+    </mat-card-content>
+  </mat-card>
+</div>

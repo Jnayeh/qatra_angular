@@ -1,0 +1,21 @@
+    <div class="space-y-6">
+      <h1 class="text-2xl font-bold text-white">Center Approval</h1>
+
+      @for (c of pendingCenters(); track c.id) {
+        <mat-card class="bg-surface-card">
+          <mat-card-content class="flex items-center justify-between">
+            <div>
+              <p class="text-white font-medium">{{ c.name }}</p>
+              <p class="text-sm text-gray-400">{{ c.city }}, {{ c.country }}</p>
+              <app-status-badge [status]="c.status" />
+            </div>
+            <div class="flex gap-2">
+              <button mat-raised-button color="primary" (click)="approve(c.id, true)">Approve</button>
+              <button mat-stroked-button color="warn" (click)="approve(c.id, false)">Reject</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      } @empty {
+        <p class="text-gray-400">No pending center registrations.</p>
+      }
+    </div>

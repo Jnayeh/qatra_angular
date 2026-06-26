@@ -1,0 +1,54 @@
+<div class="max-w-2xl mx-auto space-y-6">
+  <h1 class="text-2xl font-bold text-white">My Location</h1>
+
+  <mat-card class="bg-surface-card">
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-gray-300">Use GPS location</span>
+          <mat-slide-toggle formControlName="useGps" color="primary" (change)="onUseGpsChange()" />
+        </div>
+
+        @if (!form.get('useGps')?.value) {
+          <div class="grid grid-cols-2 gap-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Latitude</mat-label>
+              <input matInput type="number" formControlName="latitude" />
+              <mat-error>Invalid latitude (-90 to 90)</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Longitude</mat-label>
+              <input matInput type="number" formControlName="longitude" />
+              <mat-error>Invalid longitude (-180 to 180)</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <mat-form-field appearance="outline">
+              <mat-label>City</mat-label>
+              <input matInput formControlName="city" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Country</mat-label>
+              <input matInput formControlName="country" />
+            </mat-form-field>
+          </div>
+        }
+
+        @if (error()) {
+          <mat-error class="block">{{ error() }}</mat-error>
+        }
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+          @if (form.get('useGps')?.value) {
+            Get GPS Location
+          } @else {
+            Save Location
+          }
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

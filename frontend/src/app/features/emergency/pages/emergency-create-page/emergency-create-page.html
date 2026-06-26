@@ -1,0 +1,91 @@
+    <div class="max-w-2xl mx-auto space-y-6">
+      <h1 class="text-2xl font-bold text-white">Create Emergency</h1>
+
+      @if (centerStore.isLoading()) {
+        <app-loading-spinner />
+      } @else {
+        <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+          <mat-card class="bg-surface-card">
+            <mat-card-content class="space-y-4">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Center</mat-label>
+                <mat-select formControlName="centerId">
+                  @for (c of centerStore.centers(); track c.id) {
+                    <mat-option [value]="c.id">{{ c.name }} – {{ c.city }}</mat-option>
+                  }
+                </mat-select>
+                @if (form.get('centerId')?.hasError('required') && form.get('centerId')?.touched) {
+                  <mat-error>Center is required</mat-error>
+                }
+              </mat-form-field>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <mat-form-field appearance="outline">
+                  <mat-label>Blood Type</mat-label>
+                  <mat-select formControlName="bloodType">
+                    @for (bt of bloodTypeKeys; track bt) {
+                      <mat-option [value]="bt">{{ bloodTypes[bt] }}</mat-option>
+                    }
+                  </mat-select>
+                  @if (form.get('bloodType')?.hasError('required') && form.get('bloodType')?.touched) {
+                    <mat-error>Blood type is required</mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Units Needed</mat-label>
+                  <input matInput type="number" min="1" formControlName="unitsNeeded" />
+                  @if (form.get('unitsNeeded')?.hasError('required') && form.get('unitsNeeded')?.touched) {
+                    <mat-error>Units is required</mat-error>
+                  }
+                  @if (form.get('unitsNeeded')?.hasError('min')) {
+                    <mat-error>At least 1 unit required</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <label class="block text-sm text-gray-400 mb-1">Urgency</label>
+              <mat-radio-group formControlName="urgency" class="flex gap-4">
+                <mat-radio-button value="CRITICAL" class="text-red-400">Critical</mat-radio-button>
+                <mat-radio-button value="URGENT" class="text-orange-400">Urgent</mat-radio-button>
+                <mat-radio-button value="MODERATE" class="text-yellow-400">Moderate</mat-radio-button>
+              </mat-radio-group>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <mat-form-field appearance="outline">
+                  <mat-label>Contact Phone</mat-label>
+                  <input matInput formControlName="contactPhone" placeholder="+212 6XX XXX XXX" />
+                  @if (form.get('contactPhone')?.hasError('required') && form.get('contactPhone')?.touched) {
+                    <mat-error>Phone is required</mat-error>
+                  }
+                  @if (form.get('contactPhone')?.hasError('pattern')) {
+                    <mat-error>Invalid phone number format</mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Needed By</mat-label>
+                  <input matInput [matDatepicker]="dp" formControlName="neededBy" />
+                  <mat-datepicker-toggle matSuffix [for]="dp" />
+                  <mat-datepicker #dp />
+                  @if (form.get('neededBy')?.hasError('required') && form.get('neededBy')?.touched) {
+                    <mat-error>Deadline is required</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <div class="flex justify-end gap-2">
+            <button mat-stroked-button type="button" routerLink="/emergencies/list">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || submitting()">
+              @if (submitting()) {
+                <mat-spinner diameter="20" />
+              } @else {
+                Create Emergency
+              }
+            </button>
+          </div>
+        </form>
+      }
+    </div>

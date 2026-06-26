@@ -1,0 +1,64 @@
+<div class="min-h-screen flex items-center justify-center bg-surface-dark p-4">
+  <mat-card class="w-full max-w-md bg-surface-card">
+    <mat-card-header class="flex flex-col items-center pb-4">
+      <h1 class="text-3xl font-bold text-primary-500 mb-1">Create Account</h1>
+      <p class="text-sm text-gray-400">Join Qatra as a donor</p>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Display Name</mat-label>
+          <input matInput formControlName="displayName" placeholder="John Doe" />
+          <mat-error>Display name is required (min 2 characters)</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="your@email.com" />
+          @if (form.get('email')?.hasError('email')) {
+            <mat-error>Invalid email address</mat-error>
+          }
+          <mat-error>Email is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Phone</mat-label>
+          <input matInput formControlName="phone" placeholder="+212600000000" />
+          <mat-error>Invalid phone number</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" />
+          <mat-error>Password must be at least 8 characters</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput type="password" formControlName="confirmPassword" />
+          @if (form.hasError('mismatch')) {
+            <mat-error>Passwords do not match</mat-error>
+          }
+        </mat-form-field>
+
+        @if (error()) {
+          <mat-error class="text-center">{{ error() }}</mat-error>
+        }
+
+        <button mat-raised-button color="primary" type="submit" class="w-full" [disabled]="form.invalid || isLoading()">
+          @if (isLoading()) {
+            <mat-spinner diameter="20" class="inline-block" />
+          } @else {
+            Create Account
+          }
+        </button>
+
+        <div class="text-center text-sm mt-2">
+          <span class="text-gray-400">Already have an account?</span>
+          <a routerLink="/auth/login" class="text-primary-400 hover:underline ml-1">Sign in</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

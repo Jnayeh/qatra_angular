@@ -1,0 +1,31 @@
+    <div class="space-y-6">
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold text-white">Emergencies</h1>
+        <button mat-raised-button color="primary" routerLink="/emergencies/create">
+          <mat-icon>add</mat-icon> New Emergency
+        </button>
+      </div>
+
+      @if (store.isLoading()) {
+        <app-loading-spinner />
+      } @else if (store.emergencies().length === 0) {
+        <app-empty-state icon="warning" title="No emergencies" message="There are no active emergencies at this time." />
+      } @else {
+        <div class="grid gap-4">
+          @for (e of store.emergencies(); track e.id) {
+            <mat-card class="bg-surface-card cursor-pointer hover:bg-surface-hover" [routerLink]="['/emergencies', e.id]">
+              <mat-card-content class="flex items-center justify-between p-4">
+                <div class="flex items-center gap-4">
+                  <mat-icon class="text-red-500 text-3xl">emergency</mat-icon>
+                  <div>
+                    <p class="text-white font-medium">Blood {{ e.bloodType }} – {{ e.unitsNeeded }} units needed</p>
+                    <p class="text-sm text-gray-400">Center #{{ e.centerId }} • Urgency: {{ e.urgency }}</p>
+                  </div>
+                </div>
+                <app-status-badge [status]="e.status" />
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
+      }
+    </div>

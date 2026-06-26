@@ -1,0 +1,28 @@
+<div class="max-w-2xl mx-auto space-y-6">
+  <h1 class="text-2xl font-bold text-white">Availability Status</h1>
+
+  <mat-card class="bg-surface-card">
+    <mat-card-content>
+      <div class="flex flex-col gap-4">
+        <p class="text-sm text-gray-400 mb-2">Current status: <span class="text-white font-medium">{{ currentStatus() }}</span></p>
+
+        @for (opt of availabilityOptions; track opt.value) {
+          <button
+            mat-stroked-button
+            [class.mat-primary]="currentStatus() === opt.label"
+            (click)="setStatus(opt.value)"
+            class="justify-start p-4"
+          >
+            <div class="flex items-center gap-3">
+              <mat-icon>{{ opt.icon }}</mat-icon>
+              <div class="text-left">
+                <div class="font-medium">{{ opt.label }}</div>
+                <div class="text-xs text-gray-400">{{ opt.description }}</div>
+              </div>
+            </div>
+          </button>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

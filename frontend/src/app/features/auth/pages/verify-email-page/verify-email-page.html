@@ -1,0 +1,41 @@
+<div class="min-h-screen flex items-center justify-center bg-surface-dark p-4">
+  <mat-card class="w-full max-w-md bg-surface-card">
+    <mat-card-header class="flex flex-col items-center pb-4">
+      <h1 class="text-2xl font-bold text-primary-500 mb-1">Verify Email</h1>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (!verified()) {
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+          <p class="text-sm text-gray-400 text-center mb-4">
+            Enter the verification token sent to your email
+          </p>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Verification Token</mat-label>
+            <input matInput formControlName="token" placeholder="Enter token" />
+            <mat-error>Token is required</mat-error>
+          </mat-form-field>
+
+          @if (error()) {
+            <mat-error class="text-center">{{ error() }}</mat-error>
+          }
+
+          <button mat-raised-button color="primary" type="submit" class="w-full" [disabled]="form.invalid || isLoading()">
+            @if (isLoading()) {
+              <mat-spinner diameter="20" class="inline-block" />
+            } @else {
+              Verify Email
+            }
+          </button>
+        </form>
+      } @else {
+        <div class="text-center py-4">
+          <mat-icon class="text-5xl text-green-500 mb-4">check_circle</mat-icon>
+          <p class="text-gray-300 mb-2">Email verified!</p>
+          <a routerLink="/auth/login" class="text-primary-400 hover:underline block mt-4">Sign in</a>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

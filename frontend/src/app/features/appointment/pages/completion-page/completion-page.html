@@ -1,0 +1,50 @@
+    <div class="max-w-2xl mx-auto space-y-6">
+      <h1 class="text-2xl font-bold text-white">Complete Appointment</h1>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+        <mat-card class="bg-surface-card">
+          <mat-card-content class="space-y-4">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>ML Collected</mat-label>
+              <input matInput type="number" min="1" formControlName="mlCollected" placeholder="450" />
+              @if (form.get('mlCollected')?.hasError('required') && form.get('mlCollected')?.touched) {
+                <mat-error>Required</mat-error>
+              }
+              @if (form.get('mlCollected')?.hasError('min')) {
+                <mat-error>At least 1 ml</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Blood Type (optional)</mat-label>
+              <mat-select formControlName="bloodType">
+                <mat-option [value]="null">Keep existing</mat-option>
+                @for (bt of bloodTypeKeys; track bt) {
+                  <mat-option [value]="bt">{{ bloodTypes[bt] }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Notes</mat-label>
+              <textarea matInput rows="3" formControlName="notes" placeholder="Optional notes..."></textarea>
+            </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+
+        <div class="flex justify-end gap-2">
+          <button mat-stroked-button type="button" routerLink="/appointments/staff-queue">Cancel</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || submitting()">
+            @if (submitting()) {
+              <mat-spinner diameter="20" />
+            } @else {
+              Complete Donation
+            }
+          </button>
+        </div>
+      </form>
+
+      @if (error()) {
+        <p class="text-red-400 text-sm">{{ error() }}</p>
+      }
+    </div>

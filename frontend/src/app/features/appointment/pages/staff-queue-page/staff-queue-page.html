@@ -1,0 +1,71 @@
+    <div class="max-w-4xl mx-auto space-y-6">
+      <h1 class="text-2xl font-bold text-white">Staff Queue</h1>
+
+      @if (isLoading()) {
+        <app-loading-spinner />
+      } @else if (queue().length === 0) {
+        <app-empty-state icon="list_alt" title="No appointments today" message="Today's queue is empty." />
+      } @else {
+        <mat-tab-group dynamicHeight>
+          <mat-tab label="Checked In">
+            <div class="space-y-3 mt-4">
+              @for (item of filtered('CHECKED_IN'); track item.appointment.id) {
+                <mat-card class="bg-surface-card">
+                  <mat-card-content class="flex items-center justify-between">
+                    <div>
+                      <p class="text-white font-medium">{{ item.donor }}</p>
+                      <p class="text-sm text-gray-400">{{ item.slotTime }}</p>
+                      <app-status-badge [status]="item.appointment.status" />
+                    </div>
+                    <div class="flex gap-2">
+                      <button mat-raised-button color="accent" (click)="goToScreening(item.appointment.id)">Screen</button>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              }
+              @if (filtered('CHECKED_IN').length === 0) {
+                <p class="text-gray-500 text-center py-4">No checked-in appointments</p>
+              }
+            </div>
+          </mat-tab>
+          <mat-tab label="Scheduled">
+            <div class="space-y-3 mt-4">
+              @for (item of filtered('SCHEDULED', 'CONFIRMED'); track item.appointment.id) {
+                <mat-card class="bg-surface-card">
+                  <mat-card-content class="flex items-center justify-between">
+                    <div>
+                      <p class="text-white font-medium">{{ item.donor }}</p>
+                      <p class="text-sm text-gray-400">{{ item.slotTime }}</p>
+                      <app-status-badge [status]="item.appointment.status" />
+                    </div>
+                    <button mat-raised-button color="primary" (click)="goToCheckIn(item.appointment.id)">Check In</button>
+                  </mat-card-content>
+                </mat-card>
+              }
+              @if (filtered('SCHEDULED', 'CONFIRMED').length === 0) {
+                <p class="text-gray-500 text-center py-4">No scheduled appointments</p>
+              }
+            </div>
+          </mat-tab>
+          <mat-tab label="Completed">
+            <div class="space-y-3 mt-4">
+              @for (item of filtered('COMPLETED'); track item.appointment.id) {
+                <mat-card class="bg-surface-card opacity-80">
+                  <mat-card-content class="flex items-center justify-between">
+                    <div>
+                      <p class="text-white font-medium">{{ item.donor }}</p>
+                      <p class="text-sm text-gray-400">{{ item.slotTime }}</p>
+                      <app-status-badge [status]="item.appointment.status" />
+                    </div>
+                    <button mat-stroked-button (click)="goToComplete(item.appointment.id)">Complete</button>
+                  </mat-card-content>
+                </mat-card>
+              }
+              @if (filtered('COMPLETED').length === 0) {
+                <p class="text-gray-500 text-center py-4">No completed appointments</p>
+              }
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      }
+    </div>

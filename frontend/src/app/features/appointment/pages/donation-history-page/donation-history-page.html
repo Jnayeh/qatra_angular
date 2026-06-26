@@ -1,0 +1,62 @@
+    <div class="max-w-4xl mx-auto space-y-6">
+      <h1 class="text-2xl font-bold text-white">Donation History</h1>
+
+      <mat-card class="bg-surface-card">
+        <mat-card-content>
+          <div class="flex flex-wrap items-center gap-4">
+            <mat-form-field appearance="outline" class="w-40">
+              <mat-label>From</mat-label>
+              <input matInput [matDatepicker]="fromPicker" [(ngModel)]="dateFrom" (dateChange)="applyFilter()" />
+              <mat-datepicker-toggle matSuffix [for]="fromPicker" />
+              <mat-datepicker #fromPicker />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-40">
+              <mat-label>To</mat-label>
+              <input matInput [matDatepicker]="toPicker" [(ngModel)]="dateTo" (dateChange)="applyFilter()" />
+              <mat-datepicker-toggle matSuffix [for]="toPicker" />
+              <mat-datepicker #toPicker />
+            </mat-form-field>
+            <button mat-stroked-button (click)="clearFilter()">Clear</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      @if (isLoading()) {
+        <app-loading-spinner />
+      } @else if (dataSource.data.length === 0) {
+        <app-empty-state icon="history" title="No donations yet" message="Your donation history will appear here." />
+      } @else {
+        <mat-card class="bg-surface-card overflow-hidden">
+          <table mat-table [dataSource]="dataSource" matSort class="w-full">
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+              <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+            </ng-container>
+            <ng-container matColumnDef="center">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Center</th>
+              <td mat-cell *matCellDef="let row">{{ row.center }}</td>
+            </ng-container>
+            <ng-container matColumnDef="mlCollected">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ML Collected</th>
+              <td mat-cell *matCellDef="let row">{{ row.mlCollected }} ml</td>
+            </ng-container>
+            <ng-container matColumnDef="certificate">
+              <th mat-header-cell *matHeaderCellDef>Certificate</th>
+              <td mat-cell *matCellDef="let row">
+                @if (row.certificateUrl) {
+                  <a mat-icon-button [href]="row.certificateUrl" target="_blank" color="primary">
+                    <mat-icon>download</mat-icon>
+                  </a>
+                } @else {
+                  <span class="text-gray-500">—</span>
+                }
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-surface-hover"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons />
+        </mat-card>
+      }
+    </div>

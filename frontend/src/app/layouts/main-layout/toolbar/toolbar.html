@@ -1,0 +1,26 @@
+<mat-toolbar class="bg-surface-card border-b border-primary-900">
+  <button mat-icon-button (click)="menuToggle.emit()" class="mr-2">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <span class="text-lg font-medium">{{ title() }}</span>
+
+  <span class="flex-1"></span>
+
+  @if (authStore.isAuthenticated()) {
+    <app-notification-bell />
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item disabled>
+        <span class="text-sm">{{ authStore.user()?.displayName }}</span>
+      </button>
+      <mat-divider />
+      <button mat-menu-item (click)="authStore.logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  }
+</mat-toolbar>

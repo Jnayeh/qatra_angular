@@ -1,0 +1,69 @@
+    <div class="max-w-2xl mx-auto space-y-6">
+      <h1 class="text-2xl font-bold text-white">Check-In</h1>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <mat-card class="bg-surface-card">
+          <mat-card-header>
+            <mat-card-title class="text-white text-lg">QR Scanner</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (!scannerReady()) {
+              <button mat-raised-button color="primary" (click)="startScanner()" [disabled]="scanning()">
+                @if (scanning()) {
+                  <mat-spinner diameter="20" />
+                } @else {
+                  Start Camera
+                }
+              </button>
+            }
+            <div #scannerContainer class="w-full aspect-square bg-black rounded-md overflow-hidden mt-2"></div>
+            @if (scannerReady()) {
+              <button mat-stroked-button color="warn" (click)="stopScanner()" class="mt-2">Stop Camera</button>
+            }
+            @if (scanError()) {
+              <p class="text-red-400 text-sm mt-2">{{ scanError() }}</p>
+            }
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="bg-surface-card">
+          <mat-card-header>
+            <mat-card-title class="text-white text-lg">Manual Entry</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="space-y-3">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Appointment ID</mat-label>
+              <input matInput type="number" [(ngModel)]="manualAppointmentId" placeholder="Enter appointment ID" />
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="manualCheckIn()" [disabled]="!manualAppointmentId() || checkingIn()" class="w-full">
+              @if (checkingIn()) {
+                <mat-spinner diameter="20" />
+              } @else {
+                Check In
+              }
+            </button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      @if (result(); as r) {
+        <mat-card class="bg-surface-card border-2" [class.border-green-500]="r.eligibility.eligible" [class.border-red-500]="!r.eligibility.eligible">
+          <mat-card-header>
+            <mat-card-title class="text-white text-lg">
+              <mat-icon [class.text-green-400]="r.eligibility.eligible" [class.text-red-400]="!r.eligibility.eligible" class="align-middle mr-2">
+                {{ r.eligibility.eligible ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+              Check-In {{ r.eligibility.eligible ? 'Successful' : 'Failed' }}
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="space-y-2">
+            <p class="text-white"><span class="text-gray-400">Donor:</span> {{ r.donorProfile.displayName }}</p>
+            <p class="text-white"><span class="text-gray-400">Blood Type:</span> {{ r.donorProfile.bloodType }} @if (r.donorProfile.bloodTypeVerified) { <mat-icon class="text-green-400 text-sm">verified</mat-icon> }</p>
+            <p class="text-white"><span class="text-gray-400">Appointment Status:</span> {{ r.appointment.status }}</p>
+            @if (!r.eligibility.eligible && r.eligibility.nextEligibleDate) {
+              <p class="text-yellow-400">Next eligible date: {{ r.eligibility.nextEligibleDate }}</p>
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>

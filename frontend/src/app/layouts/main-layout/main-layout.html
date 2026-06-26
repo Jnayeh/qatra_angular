@@ -1,0 +1,12 @@
+<mat-drawer-container class="h-screen">
+  <mat-drawer #drawer mode="side" opened class="w-64 bg-surface-card border-r border-primary-900">
+    <app-sidebar (toggle)="drawer.toggle()" />
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <app-toolbar (menuToggle)="drawer.toggle()" />
+    <main class="p-6">
+      <router-outlet />
+    </main>
+  </mat-drawer-content>
+</mat-drawer-container>
