@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, output } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
+import { Button } from 'primeng/button';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthStore } from '../../../core/auth/auth.store';
 
@@ -13,14 +13,34 @@ interface NavItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, MatIconModule],
+  imports: [Button, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
-  styleUrl: './sidebar.scss',
+  styleUrl: './sidebar.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
   readonly toggle = output<void>();
   readonly authStore = inject(AuthStore);
+
+  private readonly iconMap: Record<string, string> = {
+    dashboard: 'pi-th-large',
+    person: 'pi-user',
+    calendar_today: 'pi-calendar',
+    warning: 'pi-exclamation-triangle',
+    favorite: 'pi-heart-fill',
+    local_hospital: 'pi-building',
+    list_alt: 'pi-list',
+    emergency: 'pi-exclamation-triangle',
+    admin_panel_settings: 'pi-shield',
+    people: 'pi-users',
+    verified: 'pi-check-circle',
+    history: 'pi-history',
+    notifications: 'pi-bell',
+  };
+
+  protected iconClass(icon: string): string {
+    return this.iconMap[icon] ?? 'pi-' + icon;
+  }
 
   protected readonly allNavItems: NavItem[] = [
     { label: 'Dashboard', path: '/donor/dashboard', icon: 'dashboard', roles: ['DONOR'] },

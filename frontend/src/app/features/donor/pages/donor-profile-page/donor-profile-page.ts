@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatError, MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { InputText } from 'primeng/inputtext';
+import { Message } from 'primeng/message';
 import { DonorService } from '../../donor.service';
 import { DonorStore } from '../../donor.store';
 
 @Component({
   selector: 'app-donor-profile-page',
   standalone: true,
-  imports: [ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatError, RouterLink],
+  imports: [ReactiveFormsModule, Card, Button, InputText, Message, RouterLink],
   templateUrl: './donor-profile-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

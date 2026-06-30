@@ -1,15 +1,9 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, inject, OnInit, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { DatePicker } from 'primeng/datepicker';
+import { TableModule } from 'primeng/table';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state';
 import { AppointmentService } from '../../appointment.service';
@@ -26,39 +20,24 @@ interface DonationRecord {
   standalone: true,
   imports: [
     FormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
+    Card,
+    Button,
+    DatePicker,
+    TableModule,
     LoadingSpinnerComponent,
     EmptyStateComponent,
   ],
   templateUrl: './donation-history-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DonationHistoryPageComponent implements OnInit, AfterViewInit {
+export class DonationHistoryPageComponent implements OnInit {
   private readonly appointmentService = inject(AppointmentService);
   protected readonly isLoading = signal(true);
-  protected readonly displayedColumns = ['date', 'center', 'mlCollected', 'certificate'];
-  protected dataSource = new MatTableDataSource<DonationRecord>([]);
+  protected readonly donations = signal<DonationRecord[]>([]);
   protected dateFrom: Date | null = null;
   protected dateTo: Date | null = null;
 
   private allDonations: DonationRecord[] = [];
-
-  readonly sort = viewChild.required(MatSort);
-  readonly paginator = viewChild.required(MatPaginator);
-
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort();
-    this.dataSource.paginator = this.paginator();
-  }
 
   ngOnInit(): void {
     this.loadHistory();
@@ -68,7 +47,7 @@ export class DonationHistoryPageComponent implements OnInit, AfterViewInit {
     this.appointmentService.getMyDonations({ page: 0, size: 100 }).subscribe({
       next: (res) => {
         this.allDonations = res.data.content;
-        this.dataSource.data = this.allDonations;
+        this.donations.set(this.allDonations);
         this.isLoading.set(false);
       },
       error: () => this.isLoading.set(false),
@@ -85,12 +64,16 @@ export class DonationHistoryPageComponent implements OnInit, AfterViewInit {
       const to = this.dateTo.toISOString().split('T')[0];
       filtered = filtered.filter((d) => d.date <= to);
     }
-    this.dataSource.data = filtered;
+    this.donations.set(filtered);
   }
 
   protected clearFilter(): void {
     this.dateFrom = null;
     this.dateTo = null;
-    this.dataSource.data = this.allDonations;
+    this.donations.set(this.allDonations);
+  }
+
+  protected openUrl(url: string): void {
+    window.open(url, '_blank');
   }
 }

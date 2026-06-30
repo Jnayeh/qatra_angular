@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTabsModule } from '@angular/material/tabs';
 import { Router } from '@angular/router';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { Tabs, TabList, Tab, TabPanel } from 'primeng/tabs';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge';
@@ -20,10 +19,12 @@ interface QueueItem {
   selector: 'app-staff-queue-page',
   standalone: true,
   imports: [
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTabsModule,
+    Card,
+    Button,
+    Tabs,
+    TabList,
+    Tab,
+    TabPanel,
     LoadingSpinnerComponent,
     EmptyStateComponent,
     StatusBadgeComponent,

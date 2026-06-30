@@ -1,9 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject, output, signal } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { ChangeDetectionStrategy, Component, computed, inject, output, signal } from '@angular/core';
+import { Toolbar } from 'primeng/toolbar';
+import { Button } from 'primeng/button';
+import { Menu } from 'primeng/menu';
 import { Router, Event, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
 import { AuthStore } from '../../../core/auth/auth.store';
@@ -13,15 +11,13 @@ import { NotificationBellComponent } from '../../../shared/components/notificati
   selector: 'app-toolbar',
   standalone: true,
   imports: [
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatMenuModule,
-    MatDividerModule,
+    Toolbar,
+    Button,
+    Menu,
     NotificationBellComponent,
   ],
   templateUrl: './toolbar.html',
-  styleUrl: './toolbar.scss',
+  styleUrl: './toolbar.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToolbarComponent {
@@ -30,6 +26,19 @@ export class ToolbarComponent {
   private readonly router = inject(Router);
 
   protected readonly title = signal('Qatra');
+
+  protected readonly menuItems = computed(() => [
+    {
+      label: this.authStore.user()?.displayName ?? '',
+      disabled: true,
+    },
+    { separator: true },
+    {
+      label: 'Logout',
+      icon: 'pi pi-sign-out',
+      command: () => this.authStore.logout(),
+    },
+  ]);
 
   constructor() {
     this.router.events

@@ -1,43 +1,45 @@
-    <div class="max-w-4xl mx-auto space-y-6">
-      @if (store.isLoading()) {
-        <app-loading-spinner />
-      } @else if (store.selectedEmergency(); as e) {
-        <div class="flex items-center justify-between">
-          <h1 class="text-2xl font-bold text-white">Emergency #{{ e.id }}</h1>
-          <app-status-badge [status]="e.status" />
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <mat-card class="bg-surface-card">
-            <mat-card-content class="space-y-3">
-              <div class="flex justify-between"><span class="text-gray-400">Blood Type</span><span class="text-white font-bold">{{ e.bloodType }}</span></div>
-              <div class="flex justify-between"><span class="text-gray-400">Units Needed</span><span class="text-white">{{ e.unitsNeeded }}</span></div>
-              <div class="flex justify-between"><span class="text-gray-400">Urgency</span><app-status-badge [status]="e.urgency" /></div>
-              <div class="flex justify-between"><span class="text-gray-400">Center</span><span class="text-white">#{{ e.centerId }}</span></div>
-            </mat-card-content>
-          </mat-card>
-
-          <mat-card class="bg-surface-card">
-            <mat-card-content class="space-y-3">
-              <div class="flex justify-between"><span class="text-gray-400">Status</span><app-status-badge [status]="e.status" /></div>
-              <div class="flex justify-between"><span class="text-gray-400">Match Radius</span><span class="text-white">{{ e.matchRadius }} km</span></div>
-              <div class="flex justify-between"><span class="text-gray-400">Escalation Level</span><span class="text-white">{{ e.escalationLevel }}</span></div>
-              <div class="flex justify-between"><span class="text-gray-400">Needed By</span><span class="text-white">{{ e.neededBy }}</span></div>
-            </mat-card-content>
-          </mat-card>
-        </div>
-
-        @if (authStore.isDonor()) {
-          <mat-card class="bg-surface-card border border-primary-800">
-            <mat-card-content class="flex gap-4">
-              <button mat-raised-button color="primary" class="flex-1">
-                <mat-icon>check</mat-icon> I'm Willing
-              </button>
-              <button mat-stroked-button color="warn" class="flex-1">
-                <mat-icon>close</mat-icon> Decline
-              </button>
-            </mat-card-content>
-          </mat-card>
-        }
-      }
+<div class="max-w-4xl mx-auto space-y-6">
+  @if (store.isLoading()) {
+    <app-loading-spinner />
+  } @else if (store.selectedEmergency(); as e) {
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-bold text-white">Emergency #{{ e.id }}</h1>
+      <app-status-badge [status]="e.status" />
     </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <p-card class="bg-surface-card">
+        <ng-template pTemplate="content">
+          <div class="space-y-3">
+            <div class="flex justify-between"><span class="text-gray-400">Blood Type</span><span class="text-white font-bold">{{ e.bloodType }}</span></div>
+            <div class="flex justify-between"><span class="text-gray-400">Units Needed</span><span class="text-white">{{ e.unitsNeeded }}</span></div>
+            <div class="flex justify-between"><span class="text-gray-400">Urgency</span><app-status-badge [status]="e.urgency" /></div>
+            <div class="flex justify-between"><span class="text-gray-400">Center</span><span class="text-white">#{{ e.centerId }}</span></div>
+          </div>
+        </ng-template>
+      </p-card>
+
+      <p-card class="bg-surface-card">
+        <ng-template pTemplate="content">
+          <div class="space-y-3">
+            <div class="flex justify-between"><span class="text-gray-400">Status</span><app-status-badge [status]="e.status" /></div>
+            <div class="flex justify-between"><span class="text-gray-400">Match Radius</span><span class="text-white">{{ e.matchRadius }} km</span></div>
+            <div class="flex justify-between"><span class="text-gray-400">Escalation Level</span><span class="text-white">{{ e.escalationLevel }}</span></div>
+            <div class="flex justify-between"><span class="text-gray-400">Needed By</span><span class="text-white">{{ e.neededBy }}</span></div>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
+
+    @if (authStore.isDonor()) {
+      <p-card class="bg-surface-card border border-primary-800">
+        <ng-template pTemplate="content">
+          <div class="flex gap-4">
+            <p-button label="I'm Willing" severity="primary" icon="pi pi-check" class="flex-1"></p-button>
+            <p-button label="Decline" severity="danger" styleClass="p-button-outlined" icon="pi pi-times" class="flex-1"></p-button>
+          </div>
+        </ng-template>
+      </p-card>
+    }
+  }
+</div>

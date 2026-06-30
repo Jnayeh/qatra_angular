@@ -1,91 +1,86 @@
-    <div class="max-w-2xl mx-auto space-y-6">
-      <h1 class="text-2xl font-bold text-white">Create Emergency</h1>
+<div class="max-w-2xl mx-auto space-y-6">
+  <h1 class="text-2xl font-bold text-white">Create Emergency</h1>
 
-      @if (centerStore.isLoading()) {
-        <app-loading-spinner />
-      } @else {
-        <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
-          <mat-card class="bg-surface-card">
-            <mat-card-content class="space-y-4">
-              <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Center</mat-label>
-                <mat-select formControlName="centerId">
-                  @for (c of centerStore.centers(); track c.id) {
-                    <mat-option [value]="c.id">{{ c.name }} – {{ c.city }}</mat-option>
-                  }
-                </mat-select>
-                @if (form.get('centerId')?.hasError('required') && form.get('centerId')?.touched) {
-                  <mat-error>Center is required</mat-error>
-                }
-              </mat-form-field>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <mat-form-field appearance="outline">
-                  <mat-label>Blood Type</mat-label>
-                  <mat-select formControlName="bloodType">
-                    @for (bt of bloodTypeKeys; track bt) {
-                      <mat-option [value]="bt">{{ bloodTypes[bt] }}</mat-option>
-                    }
-                  </mat-select>
-                  @if (form.get('bloodType')?.hasError('required') && form.get('bloodType')?.touched) {
-                    <mat-error>Blood type is required</mat-error>
-                  }
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>Units Needed</mat-label>
-                  <input matInput type="number" min="1" formControlName="unitsNeeded" />
-                  @if (form.get('unitsNeeded')?.hasError('required') && form.get('unitsNeeded')?.touched) {
-                    <mat-error>Units is required</mat-error>
-                  }
-                  @if (form.get('unitsNeeded')?.hasError('min')) {
-                    <mat-error>At least 1 unit required</mat-error>
-                  }
-                </mat-form-field>
-              </div>
-
-              <label class="block text-sm text-gray-400 mb-1">Urgency</label>
-              <mat-radio-group formControlName="urgency" class="flex gap-4">
-                <mat-radio-button value="CRITICAL" class="text-red-400">Critical</mat-radio-button>
-                <mat-radio-button value="URGENT" class="text-orange-400">Urgent</mat-radio-button>
-                <mat-radio-button value="MODERATE" class="text-yellow-400">Moderate</mat-radio-button>
-              </mat-radio-group>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <mat-form-field appearance="outline">
-                  <mat-label>Contact Phone</mat-label>
-                  <input matInput formControlName="contactPhone" placeholder="+212 6XX XXX XXX" />
-                  @if (form.get('contactPhone')?.hasError('required') && form.get('contactPhone')?.touched) {
-                    <mat-error>Phone is required</mat-error>
-                  }
-                  @if (form.get('contactPhone')?.hasError('pattern')) {
-                    <mat-error>Invalid phone number format</mat-error>
-                  }
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>Needed By</mat-label>
-                  <input matInput [matDatepicker]="dp" formControlName="neededBy" />
-                  <mat-datepicker-toggle matSuffix [for]="dp" />
-                  <mat-datepicker #dp />
-                  @if (form.get('neededBy')?.hasError('required') && form.get('neededBy')?.touched) {
-                    <mat-error>Deadline is required</mat-error>
-                  }
-                </mat-form-field>
-              </div>
-            </mat-card-content>
-          </mat-card>
-
-          <div class="flex justify-end gap-2">
-            <button mat-stroked-button type="button" routerLink="/emergencies/list">Cancel</button>
-            <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || submitting()">
-              @if (submitting()) {
-                <mat-spinner diameter="20" />
-              } @else {
-                Create Emergency
+  @if (centerStore.isLoading()) {
+    <app-loading-spinner />
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+      <p-card class="bg-surface-card">
+        <ng-template pTemplate="content">
+          <div class="space-y-4">
+            <div class="flex flex-col gap-1">
+              <label for="centerId" class="text-gray-400">Center</label>
+              <p-select formControlName="centerId" id="centerId" class="w-full" [options]="centerStore.centers()" optionLabel="name" optionValue="id" />
+              @if (form.get('centerId')?.hasError('required') && form.get('centerId')?.touched) {
+                <small class="text-red-500">Center is required</small>
               }
-            </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1">
+                <label for="bloodType" class="text-gray-400">Blood Type</label>
+                <p-select formControlName="bloodType" id="bloodType" class="w-full" [options]="bloodTypeOptions" optionLabel="label" optionValue="value" />
+                @if (form.get('bloodType')?.hasError('required') && form.get('bloodType')?.touched) {
+                  <small class="text-red-500">Blood type is required</small>
+                }
+              </div>
+
+              <div class="flex flex-col gap-1">
+                <label for="unitsNeeded" class="text-gray-400">Units Needed</label>
+                <input pInputText id="unitsNeeded" type="number" min="1" formControlName="unitsNeeded" class="w-full" />
+                @if (form.get('unitsNeeded')?.hasError('required') && form.get('unitsNeeded')?.touched) {
+                  <small class="text-red-500">Units is required</small>
+                }
+                @if (form.get('unitsNeeded')?.hasError('min')) {
+                  <small class="text-red-500">At least 1 unit required</small>
+                }
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Urgency</label>
+              <div class="flex gap-4">
+                @for (opt of urgencyOptions; track opt.value) {
+                  <div class="flex items-center gap-2">
+                    <p-radioButton [value]="opt.value" formControlName="urgency" [inputId]="opt.value" />
+                    <label [for]="opt.value" class="text-sm">{{ opt.label }}</label>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1">
+                <label for="contactPhone" class="text-gray-400">Contact Phone</label>
+                <input pInputText id="contactPhone" formControlName="contactPhone" placeholder="+212 6XX XXX XXX" class="w-full" />
+                @if (form.get('contactPhone')?.hasError('required') && form.get('contactPhone')?.touched) {
+                  <small class="text-red-500">Phone is required</small>
+                }
+                @if (form.get('contactPhone')?.hasError('pattern')) {
+                  <small class="text-red-500">Invalid phone number format</small>
+                }
+              </div>
+
+              <div class="flex flex-col gap-1">
+                <label for="neededBy" class="text-gray-400">Needed By</label>
+                <p-datepicker formControlName="neededBy" inputId="neededBy" class="w-full" />
+                @if (form.get('neededBy')?.hasError('required') && form.get('neededBy')?.touched) {
+                  <small class="text-red-500">Deadline is required</small>
+                }
+              </div>
+            </div>
           </div>
-        </form>
-      }
-    </div>
+        </ng-template>
+      </p-card>
+
+      <div class="flex justify-end gap-2">
+        <p-button label="Cancel" severity="secondary" styleClass="p-button-outlined" type="button" routerLink="/emergencies/list"></p-button>
+        @if (submitting()) {
+          <p-button [disabled]="true" icon="pi pi-spin pi-spinner"></p-button>
+        } @else {
+          <p-button label="Create Emergency" type="submit" [disabled]="form.invalid"></p-button>
+        }
+      </div>
+    </form>
+  }
+</div>

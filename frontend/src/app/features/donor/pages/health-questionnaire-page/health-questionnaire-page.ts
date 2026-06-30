@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatError, MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { RouterLink } from '@angular/router';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { Textarea } from 'primeng/textarea';
+import { ToggleSwitch } from 'primeng/toggleswitch';
+import { Divider } from 'primeng/divider';
+import { Message } from 'primeng/message';
 import { DonorStore } from '../../donor.store';
 
 @Component({
   selector: 'app-health-questionnaire-page',
   standalone: true,
-  imports: [ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSlideToggleModule, MatDividerModule, MatError, RouterLink],
+  imports: [ReactiveFormsModule, Card, Button, Textarea, ToggleSwitch, Divider, Message, RouterLink],
   templateUrl: './health-questionnaire-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

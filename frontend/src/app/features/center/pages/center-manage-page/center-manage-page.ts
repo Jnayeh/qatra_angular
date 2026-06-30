@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatIconModule } from '@angular/material/icon';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { Divider } from 'primeng/divider';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge';
@@ -11,7 +10,7 @@ import { CenterStore } from '../../center.store';
 @Component({
   selector: 'app-center-manage-page',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, MatButtonModule, MatDividerModule, RouterLink, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [Card, Button, Divider, RouterLink, LoadingSpinnerComponent, StatusBadgeComponent],
   templateUrl: './center-manage-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

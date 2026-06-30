@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge';
 import type { DataDeletionRequest } from '../../../../shared/models/config.model';
 import { AdminService } from '../../admin.service';
@@ -8,24 +8,26 @@ import { AdminService } from '../../admin.service';
 @Component({
   selector: 'app-deletion-requests-page',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, StatusBadgeComponent],
+  imports: [Card, Button, StatusBadgeComponent],
   template: `
     <div class="space-y-6">
       <h1 class="text-2xl font-bold text-white">Deletion Requests</h1>
       @for (req of requests(); track req.id) {
-        <mat-card class="bg-surface-card">
-          <mat-card-content class="flex items-center justify-between">
-            <div>
-              <p class="text-white">User #{{ req.requestedByUserId }}</p>
-              <app-status-badge [status]="req.status" />
-              <p class="text-xs text-gray-500">{{ req.requestedAt }}</p>
+        <p-card class="bg-surface-card">
+          <ng-template pTemplate="content">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-white">User #{{ req.requestedByUserId }}</p>
+                <app-status-badge [status]="req.status" />
+                <p class="text-xs text-gray-500">{{ req.requestedAt }}</p>
+              </div>
+              <div class="flex gap-2">
+                <p-button label="Approve" severity="primary" (click)="process(req.id, true)" />
+                <p-button label="Reject" severity="danger" styleClass="p-button-outlined" (click)="process(req.id, false)" />
+              </div>
             </div>
-            <div class="flex gap-2">
-              <button mat-raised-button color="primary" (click)="process(req.id, true)">Approve</button>
-              <button mat-stroked-button color="warn" (click)="process(req.id, false)">Reject</button>
-            </div>
-          </mat-card-content>
-        </mat-card>
+          </ng-template>
+        </p-card>
       }
     </div>
   `,

@@ -2,45 +2,34 @@
       <h1 class="text-2xl font-bold text-white">Complete Appointment</h1>
 
       <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
-        <mat-card class="bg-surface-card">
-          <mat-card-content class="space-y-4">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>ML Collected</mat-label>
-              <input matInput type="number" min="1" formControlName="mlCollected" placeholder="450" />
-              @if (form.get('mlCollected')?.hasError('required') && form.get('mlCollected')?.touched) {
-                <mat-error>Required</mat-error>
-              }
-              @if (form.get('mlCollected')?.hasError('min')) {
-                <mat-error>At least 1 ml</mat-error>
-              }
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Blood Type (optional)</mat-label>
-              <mat-select formControlName="bloodType">
-                <mat-option [value]="null">Keep existing</mat-option>
-                @for (bt of bloodTypeKeys; track bt) {
-                  <mat-option [value]="bt">{{ bloodTypes[bt] }}</mat-option>
+        <p-card class="bg-surface-card">
+          <ng-template pTemplate="content">
+            <div class="space-y-4">
+              <div class="flex flex-col gap-1">
+                <label for="mlCollected">ML Collected</label>
+                <p-inputNumber formControlName="mlCollected" inputId="mlCollected" placeholder="450" class="w-full" [min]="1" />
+                @if (form.get('mlCollected')?.invalid && form.get('mlCollected')?.touched) {
+                  @if (form.get('mlCollected')?.hasError('required')) { <small class="text-red-500">Required</small> }
+                  @if (form.get('mlCollected')?.hasError('min')) { <small class="text-red-500">At least 1 ml</small> }
                 }
-              </mat-select>
-            </mat-form-field>
+              </div>
 
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Notes</mat-label>
-              <textarea matInput rows="3" formControlName="notes" placeholder="Optional notes..."></textarea>
-            </mat-form-field>
-          </mat-card-content>
-        </mat-card>
+              <div class="flex flex-col gap-1">
+                <label for="bloodType">Blood Type (optional)</label>
+                <p-select formControlName="bloodType" [options]="bloodTypeOptions" optionLabel="label" optionValue="value" class="w-full" />
+              </div>
+
+              <div class="flex flex-col gap-1">
+                <label for="notes">Notes</label>
+                <textarea pTextarea id="notes" formControlName="notes" rows="3" placeholder="Optional notes..." class="w-full"></textarea>
+              </div>
+            </div>
+          </ng-template>
+        </p-card>
 
         <div class="flex justify-end gap-2">
-          <button mat-stroked-button type="button" routerLink="/appointments/staff-queue">Cancel</button>
-          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || submitting()">
-            @if (submitting()) {
-              <mat-spinner diameter="20" />
-            } @else {
-              Complete Donation
-            }
-          </button>
+          <p-button label="Cancel" severity="secondary" [outlined]="true" type="button" routerLink="/appointments/staff-queue" />
+          <p-button label="Complete Donation" severity="primary" type="submit" [disabled]="form.invalid || submitting()" [loading]="submitting()" />
         </div>
       </form>
 

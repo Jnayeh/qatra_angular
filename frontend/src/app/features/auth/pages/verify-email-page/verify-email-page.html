@@ -1,41 +1,39 @@
 <div class="min-h-screen flex items-center justify-center bg-surface-dark p-4">
-  <mat-card class="w-full max-w-md bg-surface-card">
-    <mat-card-header class="flex flex-col items-center pb-4">
-      <h1 class="text-2xl font-bold text-primary-500 mb-1">Verify Email</h1>
-    </mat-card-header>
+  <p-card class="w-full max-w-md bg-surface-card">
+    <ng-template pTemplate="header">
+      <div class="flex flex-col items-center pb-4 pt-4">
+        <h1 class="text-2xl font-bold text-primary-500 mb-1">Verify Email</h1>
+      </div>
+    </ng-template>
 
-    <mat-card-content>
+    <ng-template pTemplate="content">
       @if (!verified()) {
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
           <p class="text-sm text-gray-400 text-center mb-4">
             Enter the verification token sent to your email
           </p>
 
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Verification Token</mat-label>
-            <input matInput formControlName="token" placeholder="Enter token" />
-            <mat-error>Token is required</mat-error>
-          </mat-form-field>
+          <div class="flex flex-col gap-1">
+            <label for="token">Verification Token</label>
+            <input pInputText id="token" formControlName="token" placeholder="Enter token" class="w-full" [class.ng-invalid]="form.get('token')?.invalid && form.get('token')?.touched" />
+            @if (form.get('token')?.invalid && form.get('token')?.touched) {
+              <small class="text-red-500">Token is required</small>
+            }
+          </div>
 
           @if (error()) {
-            <mat-error class="text-center">{{ error() }}</mat-error>
+            <p-message severity="error" variant="simple" size="small">{{ error() }}</p-message>
           }
 
-          <button mat-raised-button color="primary" type="submit" class="w-full" [disabled]="form.invalid || isLoading()">
-            @if (isLoading()) {
-              <mat-spinner diameter="20" class="inline-block" />
-            } @else {
-              Verify Email
-            }
-          </button>
+          <p-button label="Verify Email" severity="primary" type="submit" class="w-full" [disabled]="form.invalid || isLoading()" [loading]="isLoading()"></p-button>
         </form>
       } @else {
         <div class="text-center py-4">
-          <mat-icon class="text-5xl text-green-500 mb-4">check_circle</mat-icon>
+          <i class="pi pi-check-circle text-5xl text-green-500 mb-4 block"></i>
           <p class="text-gray-300 mb-2">Email verified!</p>
           <a routerLink="/auth/login" class="text-primary-400 hover:underline block mt-4">Sign in</a>
         </div>
       }
-    </mat-card-content>
-  </mat-card>
+    </ng-template>
+  </p-card>
 </div>

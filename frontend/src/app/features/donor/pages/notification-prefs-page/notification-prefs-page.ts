@@ -1,24 +1,31 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { InputText } from 'primeng/inputtext';
+import { InputNumber } from 'primeng/inputnumber';
+import { Select } from 'primeng/select';
+import { ToggleSwitch } from 'primeng/toggleswitch';
 import { DonorService } from '../../donor.service';
 import { DonorStore } from '../../donor.store';
 
 @Component({
   selector: 'app-notification-prefs-page',
   standalone: true,
-  imports: [ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatSlideToggleModule, MatButtonModule],
+  imports: [ReactiveFormsModule, Card, Button, InputText, InputNumber, Select, ToggleSwitch],
   templateUrl: './notification-prefs-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationPrefsPageComponent implements OnInit {
   private readonly donorService = inject(DonorService);
   private readonly donorStore = inject(DonorStore);
+
+  protected readonly frequencyOptions = [
+    { label: 'Immediate', value: 'IMMEDIATE' },
+    { label: 'Daily Digest', value: 'DAILY_DIGEST' },
+    { label: 'Emergency Only', value: 'EMERGENCY_ONLY' },
+    { label: 'Disabled', value: 'DISABLED' },
+  ];
 
   protected readonly form = new FormGroup({
     frequency: new FormControl('IMMEDIATE', { nonNullable: true, validators: [Validators.required] }),

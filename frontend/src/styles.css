@@ -1,0 +1,19 @@
+@import "primeicons/primeicons.css" layer(primeng);
+
+:root {
+  --p-primary-50: #fce4e4;
+  --p-primary-100: #f8baba;
+  --p-primary-200: #f28b8b;
+  --p-primary-300: #eb5c5c;
+  --p-primary-400: #e63939;
+  --p-primary-500: #cc0000;
+  --p-primary-600: #b30000;
+  --p-primary-700: #990000;
+  --p-primary-800: #7a0000;
+  --p-primary-900: #5c0000;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Roboto', sans-serif;
+}

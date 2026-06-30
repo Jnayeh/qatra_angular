@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatError, MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Button } from 'primeng/button';
+import { Card } from 'primeng/card';
+import { InputText } from 'primeng/inputtext';
+import { Message } from 'primeng/message';
+import { Password } from 'primeng/password';
+import { ProgressSpinner } from 'primeng/progressspinner';
 import { AuthStore } from '../../../../core/auth/auth.store';
 
 @Component({
@@ -13,12 +14,12 @@ import { AuthStore } from '../../../../core/auth/auth.store';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatError,
+    Card,
+    Button,
+    InputText,
+    Password,
+    Message,
+    ProgressSpinner,
     RouterLink,
   ],
   templateUrl: './login-page.html',

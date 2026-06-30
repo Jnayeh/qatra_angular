@@ -1,27 +1,31 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { JsonPipe } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { FormsModule } from '@angular/forms';
+import { Card } from 'primeng/card';
+import { ToggleSwitch } from 'primeng/toggleswitch';
 import type { FeatureFlag } from '../../../../shared/models/config.model';
 import { AdminService } from '../../admin.service';
 
 @Component({
   selector: 'app-feature-flags-page',
   standalone: true,
-  imports: [MatCardModule, MatSlideToggleModule, JsonPipe],
+  imports: [Card, ToggleSwitch, FormsModule, JsonPipe],
   template: `
     <div class="space-y-6">
       <h1 class="text-2xl font-bold text-white">Feature Flags</h1>
       @for (flag of flags(); track flag.featureName) {
-        <mat-card class="bg-surface-card">
-          <mat-card-content class="flex items-center justify-between">
-            <div>
-              <p class="text-white font-medium">{{ flag.featureName }}</p>
-              <p class="text-sm text-gray-400">{{ flag.rules | json }}</p>
+        <p-card class="bg-surface-card">
+          <ng-template pTemplate="content">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-white font-medium">{{ flag.featureName }}</p>
+                <p class="text-sm text-gray-400">{{ flag.rules | json }}</p>
+              </div>
+              <p-toggleSwitch [ngModel]="flag.enabled" (onChange)="toggle(flag, $event.checked)" inputId="toggle-{{ flag.featureName }}" />
+
             </div>
-            <mat-slide-toggle [checked]="flag.enabled" color="primary" (change)="toggle(flag)" />
-          </mat-card-content>
-        </mat-card>
+          </ng-template>
+        </p-card>
       }
     </div>
   `,
@@ -35,8 +39,8 @@ export class FeatureFlagsPageComponent implements OnInit {
     this.adminService.getFeatureFlags().subscribe((res) => this.flags.set(res.data));
   }
 
-  protected toggle(flag: FeatureFlag): void {
-    this.adminService.updateFeatureFlag(flag.featureName, !flag.enabled, flag.rules).subscribe((res) => {
+  protected toggle(flag: FeatureFlag, checked: boolean): void {
+    this.adminService.updateFeatureFlag(flag.featureName, checked, flag.rules).subscribe((res) => {
       this.flags.update((list) => list.map((f) => f.featureName === res.data.featureName ? res.data : f));
     });
   }

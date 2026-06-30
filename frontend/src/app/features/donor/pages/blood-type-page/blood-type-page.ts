@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatError } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { Message } from 'primeng/message';
 import type { BloodType } from '../../../../shared/models/donor.model';
 import { formatBloodType } from '../../../../shared/utils/blood-type-utils';
 import { DonorStore } from '../../donor.store';
@@ -16,7 +15,7 @@ const ALL_BLOOD_TYPES: BloodType[] = [
 @Component({
   selector: 'app-blood-type-page',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatIconModule, MatError, RouterLink],
+  imports: [Card, Button, RouterLink, Message],
   templateUrl: './blood-type-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

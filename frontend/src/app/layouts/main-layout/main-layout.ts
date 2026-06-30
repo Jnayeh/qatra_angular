@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './sidebar/sidebar';
 import { ToolbarComponent } from './toolbar/toolbar';
@@ -8,15 +7,14 @@ import { ToolbarComponent } from './toolbar/toolbar';
   selector: 'app-main-layout',
   standalone: true,
   imports: [
-    MatDrawerContainer,
-    MatDrawer,
-    MatDrawerContent,
     RouterOutlet,
     SidebarComponent,
     ToolbarComponent,
   ],
   templateUrl: './main-layout.html',
-  styleUrl: './main-layout.scss',
+  styleUrl: './main-layout.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainLayoutComponent {}
+export class MainLayoutComponent {
+  protected readonly sidebarOpen = signal(true);
+}

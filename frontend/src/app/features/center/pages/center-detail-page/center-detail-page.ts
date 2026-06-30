@@ -1,7 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, viewChild } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import * as L from 'leaflet';
 import { AuthStore } from '../../../../core/auth/auth.store';
@@ -12,7 +11,7 @@ import { CenterStore } from '../../center.store';
 @Component({
   selector: 'app-center-detail-page',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, MatButtonModule, RouterLink, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [Card, Button, RouterLink, LoadingSpinnerComponent, StatusBadgeComponent],
   templateUrl: './center-detail-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

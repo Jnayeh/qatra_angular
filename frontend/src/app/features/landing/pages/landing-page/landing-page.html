@@ -5,8 +5,8 @@
     <span class="text-2xl text-primary-500 font-bold tracking-tight">Qatra</span>
 
     <nav class="grid grid-flow-col gap-2 items-center">
-      <a mat-stroked-button routerLink="/auth/login" class="text-sm">Sign In</a>
-      <a mat-raised-button color="primary" routerLink="/auth/register" class="text-sm">Get Started</a>
+      <a pButton label="Sign In" severity="secondary" styleClass="p-button-outlined" routerLink="/auth/login" class="text-sm"></a>
+      <a pButton label="Get Started" severity="primary" routerLink="/auth/register" class="text-sm"></a>
     </nav>
   </header>
 
@@ -22,25 +22,19 @@
     </p>
 
     <div class="grid grid-cols-2 gap-4 max-w-sm">
-      <a mat-raised-button color="primary" routerLink="/auth/login" class="text-base px-8 py-6">
-        <mat-icon class="mr-2">favorite</mat-icon>
-        Sign In
-      </a>
-      <a mat-stroked-button routerLink="/auth/register"
-         class="text-base px-8 py-6 !border-primary-500 !text-primary-500 hover:!bg-primary-50">
-        <mat-icon class="mr-2">person_add</mat-icon>
-        Register
-      </a>
+      <a pButton label="Sign In" icon="pi pi-heart-fill" severity="primary" routerLink="/auth/login" class="text-base px-8 py-6"></a>
+      <a pButton label="Register" icon="pi pi-user-plus" severity="secondary" styleClass="p-button-outlined" routerLink="/auth/register"
+         class="text-base px-8 py-6 !border-primary-500 !text-primary-500 hover:!bg-primary-50"></a>
     </div>
 
     <nav class="grid grid-flow-col gap-6">
       <a routerLink="/auth/staff-login"
          class="text-gray-500 hover:text-primary-500 transition-colors grid grid-flow-col gap-1 items-center">
-        <mat-icon class="text-base">badge</mat-icon> Staff Login
+        <i class="pi pi-id-card text-base"></i> Staff Login
       </a>
       <a routerLink="/auth/admin-login"
          class="text-gray-500 hover:text-primary-500 transition-colors grid grid-flow-col gap-1 items-center">
-        <mat-icon class="text-base">admin_panel_settings</mat-icon> Admin Login
+        <i class="pi pi-shield text-base"></i> Admin Login
       </a>
     </nav>
   </section>
@@ -73,7 +67,7 @@
       <div class="grid md:grid-cols-3 gap-6">
         <article class="rounded-xl p-8 text-center border border-gray-200 bg-white">
           <div class="w-14 h-14 rounded-full mx-auto mb-4 grid place-items-center bg-primary-50">
-            <mat-icon class="text-primary-500 text-3xl">search</mat-icon>
+            <i class="pi pi-search text-primary-500 text-3xl"></i>
           </div>
           <h3 class="text-lg font-semibold text-gray-900 mb-2">Find a Center</h3>
           <p class="text-sm text-gray-500 leading-relaxed">Locate blood donation centers near you with real-time availability and operating hours.</p>
@@ -81,7 +75,7 @@
 
         <article class="rounded-xl p-8 text-center border border-gray-200 bg-white">
           <div class="w-14 h-14 rounded-full mx-auto mb-4 grid place-items-center bg-primary-50">
-            <mat-icon class="text-primary-500 text-3xl">calendar_today</mat-icon>
+            <i class="pi pi-calendar text-primary-500 text-3xl"></i>
           </div>
           <h3 class="text-lg font-semibold text-gray-900 mb-2">Book a Slot</h3>
           <p class="text-sm text-gray-500 leading-relaxed">Schedule your donation at a time that works for you. No waiting, no hassle.</p>
@@ -89,7 +83,7 @@
 
         <article class="rounded-xl p-8 text-center border border-gray-200 bg-white">
           <div class="w-14 h-14 rounded-full mx-auto mb-4 grid place-items-center bg-primary-50">
-            <mat-icon class="text-primary-500 text-3xl">notifications_active</mat-icon>
+            <i class="pi pi-bell text-primary-500 text-3xl"></i>
           </div>
           <h3 class="text-lg font-semibold text-gray-900 mb-2">Emergency Alerts</h3>
           <p class="text-sm text-gray-500 leading-relaxed">Get notified when your blood type is urgently needed and respond instantly.</p>
@@ -102,10 +96,7 @@
     <div class="max-w-3xl mx-auto text-center rounded-2xl p-12 border border-gray-200 bg-gray-50">
       <h2 class="text-3xl font-bold text-gray-900 mb-4">Ready to Make a Difference?</h2>
       <p class="text-gray-500 mb-8 max-w-lg mx-auto">Join Morocco's fastest-growing blood donation community. Your donation can save up to three lives.</p>
-      <a mat-raised-button color="primary" routerLink="/auth/register" class="text-base px-10 py-6">
-        <mat-icon class="mr-2">how_to_reg</mat-icon>
-        Join Qatra Today
-      </a>
+      <a pButton label="Join Qatra Today" icon="pi pi-user-check" severity="primary" routerLink="/auth/register" class="text-base px-10 py-6"></a>
     </div>
   </section>
 

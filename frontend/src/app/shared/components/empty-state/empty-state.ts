@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-empty-state',
   standalone: true,
-  imports: [MatIconModule, MatButtonModule],
+  imports: [Button],
   templateUrl: './empty-state.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

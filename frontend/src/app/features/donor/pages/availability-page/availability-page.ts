@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
 import { DonorService } from '../../donor.service';
 import { DonorStore } from '../../donor.store';
 
 @Component({
   selector: 'app-availability-page',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatIconModule],
+  imports: [Card, Button],
   templateUrl: './availability-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

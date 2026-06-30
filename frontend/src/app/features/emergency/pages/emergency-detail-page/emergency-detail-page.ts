@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
 import { ActivatedRoute } from '@angular/router';
 import { AuthStore } from '../../../../core/auth/auth.store';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner';
@@ -11,7 +10,7 @@ import { EmergencyStore } from '../../emergency.store';
 @Component({
   selector: 'app-emergency-detail-page',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, MatButtonModule, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [Card, Button, LoadingSpinnerComponent, StatusBadgeComponent],
   templateUrl: './emergency-detail-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

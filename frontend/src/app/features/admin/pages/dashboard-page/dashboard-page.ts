@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { Card } from 'primeng/card';
 import { Chart, registerables } from 'chart.js';
 import { AdminService } from '../../admin.service';
 import type { SystemDashboard } from '../../../../shared/models/analytics.model';
@@ -10,7 +9,7 @@ Chart.register(...registerables);
 @Component({
   selector: 'app-dashboard-page',
   standalone: true,
-  imports: [MatCardModule, MatIconModule],
+  imports: [Card],
   templateUrl: './dashboard-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

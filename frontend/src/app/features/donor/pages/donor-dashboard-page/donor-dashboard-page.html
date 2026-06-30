@@ -5,78 +5,72 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-    <mat-card class="bg-surface-card">
-      <mat-card-content class="flex flex-col items-center py-6">
-        <mat-icon class="text-4xl text-primary-500 mb-2">bloodtype</mat-icon>
+    <p-card styleClass="text-center">
+      <ng-template pTemplate="content">
+        <i class="pi pi-heart text-4xl text-primary-500 mb-2 block"></i>
         <span class="text-sm text-gray-400">Blood Type</span>
-        <span class="text-xl font-bold">{{ store.profile()?.bloodType ?? '—' }}</span>
-      </mat-card-content>
-    </mat-card>
+        <p class="text-xl font-bold">{{ store.profile()?.bloodType ?? '—' }}</p>
+      </ng-template>
+    </p-card>
 
-    <mat-card class="bg-surface-card">
-      <mat-card-content class="flex flex-col items-center py-6">
-        <mat-icon class="text-4xl text-green-500 mb-2">check_circle</mat-icon>
+    <p-card styleClass="text-center">
+      <ng-template pTemplate="content">
+        <i class="pi pi-check-circle text-4xl text-green-500 mb-2 block"></i>
         <span class="text-sm text-gray-400">Eligibility</span>
-        <span class="text-xl font-bold" [class.text-green-400]="store.eligibility()?.eligible" [class.text-red-400]="!store.eligibility()?.eligible">
+        <p class="text-xl font-bold" [class.text-green-400]="store.eligibility()?.eligible" [class.text-red-400]="!store.eligibility()?.eligible">
           {{ store.eligibility()?.eligible ? 'Eligible' : 'Not Eligible' }}
-        </span>
-      </mat-card-content>
-    </mat-card>
+        </p>
+      </ng-template>
+    </p-card>
 
-    <mat-card class="bg-surface-card">
-      <mat-card-content class="flex flex-col items-center py-6">
-        <mat-icon class="text-4xl text-yellow-500 mb-2">star</mat-icon>
+    <p-card styleClass="text-center">
+      <ng-template pTemplate="content">
+        <i class="pi pi-star-fill text-4xl text-yellow-500 mb-2 block"></i>
         <span class="text-sm text-gray-400">Reliability Score</span>
-        <span class="text-xl font-bold">{{ store.reliabilityScore() }}/100</span>
-      </mat-card-content>
-    </mat-card>
+        <p class="text-xl font-bold">{{ store.reliabilityScore() }}/100</p>
+      </ng-template>
+    </p-card>
 
-    <mat-card class="bg-surface-card">
-      <mat-card-content class="flex flex-col items-center py-6">
-        <mat-icon class="text-4xl text-blue-500 mb-2">favorite</mat-icon>
+    <p-card styleClass="text-center">
+      <ng-template pTemplate="content">
+        <i class="pi pi-heart-fill text-4xl text-blue-500 mb-2 block"></i>
         <span class="text-sm text-gray-400">Lives Saved</span>
-        <span class="text-xl font-bold">{{ store.impact()?.estimatedLivesSaved ?? 0 }}</span>
-      </mat-card-content>
-    </mat-card>
+        <p class="text-xl font-bold">{{ store.impact()?.estimatedLivesSaved ?? 0 }}</p>
+      </ng-template>
+    </p-card>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-    <mat-card class="bg-surface-card">
-      <mat-card-header>
-        <mat-card-title class="text-white text-lg">Quick Actions</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="flex flex-col gap-2">
-        <a mat-stroked-button color="primary" routerLink="/centers" class="w-full">Find a Donation Center</a>
-        <a mat-stroked-button color="primary" routerLink="/donor/appointments" class="w-full">My Appointments</a>
-        <a mat-stroked-button color="primary" routerLink="/donor/emergencies" class="w-full">Emergency Responses</a>
-        <a mat-stroked-button color="primary" routerLink="/donor/impact" class="w-full">View Impact</a>
-      </mat-card-content>
-    </mat-card>
+    <p-card>
+      <ng-template pTemplate="title">Quick Actions</ng-template>
+      <ng-template pTemplate="content">
+        <div class="flex flex-col gap-2">
+          <a pButton variant="outlined" severity="primary" routerLink="/centers" class="w-full">Find a Donation Center</a>
+          <a pButton variant="outlined" severity="primary" routerLink="/donor/appointments" class="w-full">My Appointments</a>
+          <a pButton variant="outlined" severity="primary" routerLink="/donor/emergencies" class="w-full">Emergency Responses</a>
+          <a pButton variant="outlined" severity="primary" routerLink="/donor/impact" class="w-full">View Impact</a>
+        </div>
+      </ng-template>
+    </p-card>
 
-    <mat-card class="bg-surface-card">
-      <mat-card-header>
-        <mat-card-title class="text-white text-lg">Profile Status</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-gray-400">Profile Complete</span>
-          <mat-icon [class.text-green-400]="store.profileComplete()" [class.text-gray-600]="!store.profileComplete()">
-            {{ store.profileComplete() ? 'check_circle' : 'radio_button_unchecked' }}
-          </mat-icon>
+    <p-card>
+      <ng-template pTemplate="title">Profile Status</ng-template>
+      <ng-template pTemplate="content">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-gray-400">Profile Complete</span>
+            <i class="pi {{ store.profileComplete() ? 'pi-check-circle' : 'pi-circle-off' }} text-xl" [class.text-green-400]="store.profileComplete()" [class.text-gray-600]="!store.profileComplete()"></i>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-gray-400">Blood Type Verified</span>
+            <i class="pi {{ store.bloodTypeVerified() ? 'pi-check-circle' : 'pi-circle-off' }} text-xl" [class.text-green-400]="store.bloodTypeVerified()" [class.text-gray-600]="!store.bloodTypeVerified()"></i>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-gray-400">Health Questionnaire</span>
+            <i class="pi {{ store.healthQuestionnaire() ? 'pi-check-circle' : 'pi-circle-off' }} text-xl" [class.text-green-400]="store.healthQuestionnaire()" [class.text-gray-600]="!store.healthQuestionnaire()"></i>
+          </div>
         </div>
-        <div class="flex items-center justify-between">
-          <span class="text-gray-400">Blood Type Verified</span>
-          <mat-icon [class.text-green-400]="store.bloodTypeVerified()" [class.text-gray-600]="!store.bloodTypeVerified()">
-            {{ store.bloodTypeVerified() ? 'check_circle' : 'radio_button_unchecked' }}
-          </mat-icon>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-gray-400">Health Questionnaire</span>
-          <mat-icon [class.text-green-400]="store.healthQuestionnaire()" [class.text-gray-600]="!store.healthQuestionnaire()">
-            {{ store.healthQuestionnaire() ? 'check_circle' : 'radio_button_unchecked' }}
-          </mat-icon>
-        </div>
-      </mat-card-content>
-    </mat-card>
+      </ng-template>
+    </p-card>
   </div>
 </div>

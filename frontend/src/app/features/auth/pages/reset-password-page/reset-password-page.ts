@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatError, MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Button } from 'primeng/button';
+import { Card } from 'primeng/card';
+import { Message } from 'primeng/message';
+import { Password } from 'primeng/password';
+import { ProgressSpinner } from 'primeng/progressspinner';
 import { AuthService } from '../../../../core/auth/auth.service';
 
 @Component({
@@ -14,13 +13,11 @@ import { AuthService } from '../../../../core/auth/auth.service';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatIconModule,
-    MatError,
+    Card,
+    Button,
+    Password,
+    Message,
+    ProgressSpinner,
     RouterLink,
   ],
   templateUrl: './reset-password-page.html',

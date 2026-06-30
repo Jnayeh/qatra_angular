@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state';
 import { DonorStore } from '../../donor.store';
 
 @Component({
   selector: 'app-certificates-page',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, MatButtonModule, EmptyStateComponent],
+  imports: [Card, Button, EmptyStateComponent],
   templateUrl: './certificates-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

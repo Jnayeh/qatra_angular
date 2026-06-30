@@ -12,7 +12,7 @@
           routerLinkActive="bg-primary-800 text-white"
           class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-300 hover:bg-surface-hover transition-colors"
         >
-          <mat-icon class="text-lg">{{ item.icon }}</mat-icon>
+          <i class="pi text-lg {{ iconClass(item.icon) }}"></i>
           {{ item.label }}
         </a>
       }
@@ -20,14 +20,6 @@
   </nav>
 
   <div class="p-4 border-t border-primary-900">
-    <button
-      mat-stroked-button
-      color="primary"
-      class="w-full"
-      (click)="authStore.logout()"
-    >
-      <mat-icon class="text-sm">logout</mat-icon>
-      Logout
-    </button>
+    <p-button label="Logout" icon="pi pi-sign-out" severity="secondary" styleClass="p-button-outlined w-full" (click)="authStore.logout()"></p-button>
   </div>
 </div>

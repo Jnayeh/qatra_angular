@@ -1,14 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { Select } from 'primeng/select';
+import { DatePicker } from 'primeng/datepicker';
+import { TableModule } from 'primeng/table';
+import { ProgressSpinner } from 'primeng/progressspinner';
 import Papa from 'papaparse';
 import { AdminService } from '../../admin.service';
 
@@ -17,15 +14,12 @@ import { AdminService } from '../../admin.service';
   standalone: true,
   imports: [
     FormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatTableModule,
+    Card,
+    Select,
+    Button,
+    DatePicker,
+    TableModule,
+    ProgressSpinner,
   ],
   templateUrl: './reports-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,6 +32,12 @@ export class ReportsPageComponent {
   protected dateFrom: Date | null = null;
   protected dateTo: Date | null = null;
   protected reportType = 'DONATIONS';
+  protected readonly reportTypeOptions = [
+    { value: 'DONATIONS', label: 'Donations' },
+    { value: 'DONORS', label: 'Donors' },
+    { value: 'CENTERS', label: 'Centers' },
+    { value: 'EMERGENCIES', label: 'Emergencies' },
+  ];
 
   protected generate(): void {
     this.generating.set(true);

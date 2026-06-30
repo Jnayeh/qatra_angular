@@ -1,12 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatRadioModule } from '@angular/material/radio';
+import { FormsModule } from '@angular/forms';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { DatePicker } from 'primeng/datepicker';
+import { RadioButton } from 'primeng/radiobutton';
 import { ActivatedRoute, Router } from '@angular/router';
 import { formatTime } from '../../../../shared/utils/date-utils';
 import { AppointmentService } from '../../../appointment/appointment.service';
@@ -18,14 +15,11 @@ import { EmptyStateComponent } from '../../../../shared/components/empty-state/e
   selector: 'app-slot-booking-page',
   standalone: true,
   imports: [
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
+    FormsModule,
+    Card,
+    Button,
+    DatePicker,
+    RadioButton,
     LoadingSpinnerComponent,
     EmptyStateComponent,
   ],
@@ -43,6 +37,11 @@ export class SlotBookingPageComponent implements OnInit {
   protected readonly appointmentType = signal<'REGULAR' | 'EMERGENCY'>('REGULAR');
   protected readonly isBooking = signal(false);
   protected readonly error = signal('');
+
+  protected readonly appointmentOptions = [
+    { value: 'REGULAR', label: 'Regular' },
+    { value: 'EMERGENCY', label: 'Emergency' },
+  ];
 
   private centerId = 0;
 

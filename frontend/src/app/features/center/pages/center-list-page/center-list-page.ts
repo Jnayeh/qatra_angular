@@ -1,11 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { InputText } from 'primeng/inputtext';
+import { Tooltip } from 'primeng/tooltip';
 import { Router, RouterLink } from '@angular/router';
 import * as L from 'leaflet';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state';
@@ -19,12 +17,10 @@ import { CenterStore } from '../../center.store';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
+    Card,
+    Button,
+    InputText,
+    Tooltip,
     RouterLink,
     LoadingSpinnerComponent,
     EmptyStateComponent,

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge';
 import type { UserDetail } from '../../../../shared/models/user.model';
@@ -10,7 +9,7 @@ import { AdminService } from '../../admin.service';
 @Component({
   selector: 'app-user-detail-page',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, MatButtonModule, RouterLink, StatusBadgeComponent],
+  imports: [Card, Button, RouterLink, StatusBadgeComponent],
   template: `
     <div class="max-w-2xl mx-auto space-y-6">
       @if (user(); as u) {
@@ -19,16 +18,18 @@ import { AdminService } from '../../admin.service';
           <app-status-badge [status]="u.status" />
         </div>
 
-        <mat-card class="bg-surface-card">
-          <mat-card-content class="space-y-3">
-            <div class="flex justify-between"><span class="text-gray-400">Email</span><span class="text-white">{{ u.email }}</span></div>
-            <div class="flex justify-between"><span class="text-gray-400">Roles</span><span class="text-white">{{ u.roles.join(', ') }}</span></div>
-            <div class="flex justify-between"><span class="text-gray-400">Email Verified</span><mat-icon [class.text-green-400]="u.emailVerified" [class.text-gray-600]="!u.emailVerified">{{ u.emailVerified ? 'check_circle' : 'cancel' }}</mat-icon></div>
-            <div class="flex justify-between"><span class="text-gray-400">Created</span><span class="text-white">{{ u.createdAt }}</span></div>
-          </mat-card-content>
-        </mat-card>
+        <p-card class="bg-surface-card">
+          <ng-template pTemplate="content">
+            <div class="space-y-3">
+              <div class="flex justify-between"><span class="text-gray-400">Email</span><span class="text-white">{{ u.email }}</span></div>
+              <div class="flex justify-between"><span class="text-gray-400">Roles</span><span class="text-white">{{ u.roles.join(', ') }}</span></div>
+              <div class="flex justify-between"><span class="text-gray-400">Email Verified</span><i class="pi" [class.pi-check-circle]="u.emailVerified" [class.pi-times-circle]="!u.emailVerified" [class.text-green-400]="u.emailVerified" [class.text-gray-600]="!u.emailVerified"></i></div>
+              <div class="flex justify-between"><span class="text-gray-400">Created</span><span class="text-white">{{ u.createdAt }}</span></div>
+            </div>
+          </ng-template>
+        </p-card>
       }
-      <button mat-stroked-button routerLink="/admin/users">Back to Users</button>
+      <a pButton label="Back to Users" severity="secondary" styleClass="p-button-outlined" routerLink="/admin/users"></a>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

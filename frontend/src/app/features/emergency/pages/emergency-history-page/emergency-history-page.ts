@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { Card } from 'primeng/card';
+import { Select } from 'primeng/select';
 import { RouterLink } from '@angular/router';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state';
@@ -15,11 +13,9 @@ import { formatDate } from '../../../../shared/utils/date-utils';
   selector: 'app-emergency-history-page',
   standalone: true,
   imports: [
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSelectModule,
-    MatFormFieldModule,
+    FormsModule,
+    Card,
+    Select,
     RouterLink,
     LoadingSpinnerComponent,
     EmptyStateComponent,
@@ -31,6 +27,14 @@ export class EmergencyHistoryPageComponent implements OnInit {
   protected readonly store = inject(EmergencyStore);
   protected readonly statusFilter = signal<string>('ALL');
   protected readonly formatDate = formatDate;
+
+  protected readonly filterOptions = [
+    { value: 'ALL', label: 'All' },
+    { value: 'WILLING', label: 'Willing' },
+    { value: 'DECLINED', label: 'Declined' },
+    { value: 'CONVERTED_TO_APPOINTMENT', label: 'Converted' },
+    { value: 'NO_RESPONSE', label: 'No Response' },
+  ];
 
   ngOnInit(): void {
     this.store.loadMyEmergencies();

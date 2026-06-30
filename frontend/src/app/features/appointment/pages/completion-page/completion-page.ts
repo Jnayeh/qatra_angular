@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { InputNumber } from 'primeng/inputnumber';
+import { Select } from 'primeng/select';
+import { Textarea } from 'primeng/textarea';
+import { ProgressSpinner } from 'primeng/progressspinner';
 import { CompletionSchema } from '../../../../shared/schemas/appointment.schema';
 import { BLOOD_TYPE_NAMES } from '../../../../shared/utils/blood-type-utils';
 import { AppointmentService } from '../../appointment.service';
@@ -16,12 +16,12 @@ import { AppointmentService } from '../../appointment.service';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatSelectModule,
+    Card,
+    Button,
+    InputNumber,
+    Select,
+    Textarea,
+    ProgressSpinner,
     RouterLink,
   ],
   templateUrl: './completion-page.html',
@@ -34,8 +34,12 @@ export class CompletionPageComponent implements OnInit {
   private readonly appointmentService = inject(AppointmentService);
   protected readonly submitting = signal(false);
   protected readonly error = signal('');
-  protected readonly bloodTypes = BLOOD_TYPE_NAMES;
-  protected readonly bloodTypeKeys = Object.keys(BLOOD_TYPE_NAMES).filter((k) => k !== 'UNKNOWN') as Array<keyof typeof BLOOD_TYPE_NAMES>;
+  protected readonly bloodTypeOptions = [
+    { label: 'Keep existing', value: null },
+    ...Object.keys(BLOOD_TYPE_NAMES)
+      .filter((k) => k !== 'UNKNOWN')
+      .map(k => ({ label: BLOOD_TYPE_NAMES[k as keyof typeof BLOOD_TYPE_NAMES], value: k })),
+  ];
 
   private appointmentId = 0;
 

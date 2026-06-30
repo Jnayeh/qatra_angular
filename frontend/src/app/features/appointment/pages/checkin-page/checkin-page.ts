@@ -1,11 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { InputText } from 'primeng/inputtext';
+import { ProgressSpinner } from 'primeng/progressspinner';
 import { Html5Qrcode } from 'html5-qrcode';
 import { CheckInResult } from '../../../../shared/models/appointment.model';
 import { AppointmentService } from '../../appointment.service';
@@ -15,12 +13,10 @@ import { AppointmentService } from '../../appointment.service';
   standalone: true,
   imports: [
     FormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
+    Card,
+    Button,
+    InputText,
+    ProgressSpinner,
   ],
   templateUrl: './checkin-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,61 +1,58 @@
     <div class="space-y-6">
       <h1 class="text-2xl font-bold text-white">Reports</h1>
 
-      <mat-card class="bg-surface-card">
-        <mat-card-content>
+      <p-card class="bg-surface-card">
+        <ng-template pTemplate="content">
           <div class="flex flex-wrap items-center gap-4">
-            <mat-form-field appearance="outline" class="w-36">
-              <mat-label>From</mat-label>
-              <input matInput [matDatepicker]="fromDp" [(ngModel)]="dateFrom" />
-              <mat-datepicker-toggle matSuffix [for]="fromDp" />
-              <mat-datepicker #fromDp />
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="w-36">
-              <mat-label>To</mat-label>
-              <input matInput [matDatepicker]="toDp" [(ngModel)]="dateTo" />
-              <mat-datepicker-toggle matSuffix [for]="toDp" />
-              <mat-datepicker #toDp />
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="w-44">
-              <mat-label>Report Type</mat-label>
-              <mat-select [(ngModel)]="reportType">
-                <mat-option value="DONATIONS">Donations</mat-option>
-                <mat-option value="DONORS">Donors</mat-option>
-                <mat-option value="CENTERS">Centers</mat-option>
-                <mat-option value="EMERGENCIES">Emergencies</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <button mat-raised-button color="primary" (click)="generate()" [disabled]="generating()">
+            <div class="flex flex-col gap-1">
+              <label for="fromDp">From</label>
+              <p-datepicker [(ngModel)]="dateFrom" inputId="fromDp" class="w-36" />
+            </div>
+            <div class="flex flex-col gap-1">
+              <label for="toDp">To</label>
+              <p-datepicker [(ngModel)]="dateTo" inputId="toDp" class="w-36" />
+            </div>
+            <div class="flex flex-col gap-1">
+              <label for="reportType">Report Type</label>
+              <p-select [(ngModel)]="reportType" inputId="reportType" [options]="reportTypeOptions" optionValue="value" optionLabel="label" class="w-44" />
+            </div>
+            <p-button severity="primary" (click)="generate()" [disabled]="generating()">
               @if (generating()) {
-                <mat-spinner diameter="20" />
+                <p-progressSpinner styleClass="w-5 h-5" strokeWidth="4" />
               } @else {
                 Generate
               }
-            </button>
+            </p-button>
           </div>
-        </mat-card-content>
-      </mat-card>
+        </ng-template>
+      </p-card>
 
       @if (reportData().length > 0) {
-        <mat-card class="bg-surface-card overflow-hidden">
-          <mat-card-header class="flex items-center justify-between">
-            <mat-card-title class="text-white text-lg">Results</mat-card-title>
-            <button mat-stroked-button (click)="exportCsv()">
-              <mat-icon>download</mat-icon> Export CSV
-            </button>
-          </mat-card-header>
-          <mat-card-content class="p-0">
-            <table mat-table [dataSource]="reportData()" class="w-full">
-              @for (col of reportColumns(); track col) {
-                <ng-container [matColumnDef]="col">
-                  <th mat-header-cell *matHeaderCellDef class="text-gray-400 uppercase text-xs">{{ col }}</th>
-                  <td mat-cell *matCellDef="let row">{{ row[col] }}</td>
-                </ng-container>
-              }
-              <tr mat-header-row *matHeaderRowDef="reportColumns()"></tr>
-              <tr mat-row *matRowDef="let row; columns: reportColumns()" class="hover:bg-surface-hover"></tr>
-            </table>
-          </mat-card-content>
-        </mat-card>
+        <p-card class="bg-surface-card overflow-hidden">
+          <ng-template pTemplate="title">Results</ng-template>
+          <ng-template pTemplate="content">
+            <p-table [value]="reportData()" [tableStyle]="{'min-width': '50rem'}">
+              <ng-template pTemplate="header">
+                <tr>
+                  @for (col of reportColumns(); track col) {
+                    <th class="text-gray-400 uppercase text-xs">{{ col }}</th>
+                  }
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-row>
+                <tr class="hover:bg-surface-hover">
+                  @for (col of reportColumns(); track col) {
+                    <td>{{ row[col] }}</td>
+                  }
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-template>
+          <ng-template pTemplate="footer">
+            <div class="flex justify-end">
+              <p-button label="Export CSV" icon="pi pi-download" severity="secondary" styleClass="p-button-outlined" (click)="exportCsv()" />
+            </div>
+          </ng-template>
+        </p-card>
       }
     </div>

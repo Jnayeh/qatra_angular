@@ -4,68 +4,79 @@
       @if (isLoading()) {
         <app-loading-spinner />
       } @else if (queue().length === 0) {
-        <app-empty-state icon="list_alt" title="No appointments today" message="Today's queue is empty." />
+        <app-empty-state icon="list" title="No appointments today" message="Today's queue is empty." />
       } @else {
-        <mat-tab-group dynamicHeight>
-          <mat-tab label="Checked In">
+        <p-tabs value="0">
+          <p-tablist>
+            <p-tab value="0">Checked In</p-tab>
+            <p-tab value="1">Scheduled</p-tab>
+            <p-tab value="2">Completed</p-tab>
+          </p-tablist>
+          <p-tabpanel value="0">
             <div class="space-y-3 mt-4">
               @for (item of filtered('CHECKED_IN'); track item.appointment.id) {
-                <mat-card class="bg-surface-card">
-                  <mat-card-content class="flex items-center justify-between">
-                    <div>
-                      <p class="text-white font-medium">{{ item.donor }}</p>
-                      <p class="text-sm text-gray-400">{{ item.slotTime }}</p>
-                      <app-status-badge [status]="item.appointment.status" />
+                <p-card class="bg-surface-card">
+                  <ng-template pTemplate="content">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <p class="text-white font-medium">{{ item.donor }}</p>
+                        <p class="text-sm text-gray-400">{{ item.slotTime }}</p>
+                        <app-status-badge [status]="item.appointment.status" />
+                      </div>
+                      <div class="flex gap-2">
+                        <p-button label="Screen" severity="info" (click)="goToScreening(item.appointment.id)" />
+                      </div>
                     </div>
-                    <div class="flex gap-2">
-                      <button mat-raised-button color="accent" (click)="goToScreening(item.appointment.id)">Screen</button>
-                    </div>
-                  </mat-card-content>
-                </mat-card>
+                  </ng-template>
+                </p-card>
               }
               @if (filtered('CHECKED_IN').length === 0) {
                 <p class="text-gray-500 text-center py-4">No checked-in appointments</p>
               }
             </div>
-          </mat-tab>
-          <mat-tab label="Scheduled">
+          </p-tabpanel>
+          <p-tabpanel value="1">
             <div class="space-y-3 mt-4">
               @for (item of filtered('SCHEDULED', 'CONFIRMED'); track item.appointment.id) {
-                <mat-card class="bg-surface-card">
-                  <mat-card-content class="flex items-center justify-between">
-                    <div>
-                      <p class="text-white font-medium">{{ item.donor }}</p>
-                      <p class="text-sm text-gray-400">{{ item.slotTime }}</p>
-                      <app-status-badge [status]="item.appointment.status" />
+                <p-card class="bg-surface-card">
+                  <ng-template pTemplate="content">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <p class="text-white font-medium">{{ item.donor }}</p>
+                        <p class="text-sm text-gray-400">{{ item.slotTime }}</p>
+                        <app-status-badge [status]="item.appointment.status" />
+                      </div>
+                      <p-button label="Check In" severity="primary" (click)="goToCheckIn(item.appointment.id)" />
                     </div>
-                    <button mat-raised-button color="primary" (click)="goToCheckIn(item.appointment.id)">Check In</button>
-                  </mat-card-content>
-                </mat-card>
+                  </ng-template>
+                </p-card>
               }
               @if (filtered('SCHEDULED', 'CONFIRMED').length === 0) {
                 <p class="text-gray-500 text-center py-4">No scheduled appointments</p>
               }
             </div>
-          </mat-tab>
-          <mat-tab label="Completed">
+          </p-tabpanel>
+          <p-tabpanel value="2">
             <div class="space-y-3 mt-4">
               @for (item of filtered('COMPLETED'); track item.appointment.id) {
-                <mat-card class="bg-surface-card opacity-80">
-                  <mat-card-content class="flex items-center justify-between">
-                    <div>
-                      <p class="text-white font-medium">{{ item.donor }}</p>
-                      <p class="text-sm text-gray-400">{{ item.slotTime }}</p>
-                      <app-status-badge [status]="item.appointment.status" />
+                <p-card class="bg-surface-card opacity-80">
+                  <ng-template pTemplate="content">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <p class="text-white font-medium">{{ item.donor }}</p>
+                        <p class="text-sm text-gray-400">{{ item.slotTime }}</p>
+                        <app-status-badge [status]="item.appointment.status" />
+                      </div>
+                      <p-button label="Complete" severity="secondary" [outlined]="true" (click)="goToComplete(item.appointment.id)" />
                     </div>
-                    <button mat-stroked-button (click)="goToComplete(item.appointment.id)">Complete</button>
-                  </mat-card-content>
-                </mat-card>
+                  </ng-template>
+                </p-card>
               }
               @if (filtered('COMPLETED').length === 0) {
                 <p class="text-gray-500 text-center py-4">No completed appointments</p>
               }
             </div>
-          </mat-tab>
-        </mat-tab-group>
+          </p-tabpanel>
+        </p-tabs>
       }
     </div>

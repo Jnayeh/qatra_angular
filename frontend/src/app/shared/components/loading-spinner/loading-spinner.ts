@@ -1,13 +1,11 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ProgressSpinner } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-loading-spinner',
   standalone: true,
-  imports: [MatProgressSpinnerModule],
+  imports: [ProgressSpinner],
   templateUrl: './loading-spinner.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoadingSpinnerComponent {
-  readonly diameter = input(40);
-}
+export class LoadingSpinnerComponent {}

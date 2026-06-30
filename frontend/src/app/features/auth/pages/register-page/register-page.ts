@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatError, MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterLink } from '@angular/router';
+import { Button } from 'primeng/button';
+import { Card } from 'primeng/card';
+import { InputText } from 'primeng/inputtext';
+import { Password } from 'primeng/password';
+import { ProgressSpinner } from 'primeng/progressspinner';
 import { AuthService } from '../../../../core/auth/auth.service';
 import type { RegisterRequest } from '../../../../shared/models/user.model';
 
@@ -14,12 +14,11 @@ import type { RegisterRequest } from '../../../../shared/models/user.model';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatError,
+    Card,
+    Button,
+    InputText,
+    Password,
+    ProgressSpinner,
     RouterLink,
   ],
   templateUrl: './register-page.html',

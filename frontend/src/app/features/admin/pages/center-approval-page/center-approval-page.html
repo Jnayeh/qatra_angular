@@ -2,19 +2,21 @@
       <h1 class="text-2xl font-bold text-white">Center Approval</h1>
 
       @for (c of pendingCenters(); track c.id) {
-        <mat-card class="bg-surface-card">
-          <mat-card-content class="flex items-center justify-between">
-            <div>
-              <p class="text-white font-medium">{{ c.name }}</p>
-              <p class="text-sm text-gray-400">{{ c.city }}, {{ c.country }}</p>
-              <app-status-badge [status]="c.status" />
+        <p-card class="bg-surface-card">
+          <ng-template pTemplate="content">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-white font-medium">{{ c.name }}</p>
+                <p class="text-sm text-gray-400">{{ c.city }}, {{ c.country }}</p>
+                <app-status-badge [status]="c.status" />
+              </div>
+              <div class="flex gap-2">
+                <p-button label="Approve" severity="primary" (click)="approve(c.id, true)" />
+                <p-button label="Reject" severity="danger" styleClass="p-button-outlined" (click)="approve(c.id, false)" />
+              </div>
             </div>
-            <div class="flex gap-2">
-              <button mat-raised-button color="primary" (click)="approve(c.id, true)">Approve</button>
-              <button mat-stroked-button color="warn" (click)="approve(c.id, false)">Reject</button>
-            </div>
-          </mat-card-content>
-        </mat-card>
+          </ng-template>
+        </p-card>
       } @empty {
         <p class="text-gray-400">No pending center registrations.</p>
       }

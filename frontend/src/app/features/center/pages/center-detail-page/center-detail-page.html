@@ -11,32 +11,36 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <mat-card class="bg-surface-card">
-        <mat-card-content class="text-center py-4">
-          <mat-icon class="text-3xl text-primary-500 mb-2">phone</mat-icon>
-          <p class="text-sm text-gray-400">{{ c.phone }}</p>
-        </mat-card-content>
-      </mat-card>
-      <mat-card class="bg-surface-card">
-        <mat-card-content class="text-center py-4">
-          <mat-icon class="text-3xl text-primary-500 mb-2">email</mat-icon>
-          <p class="text-sm text-gray-400">{{ c.email }}</p>
-        </mat-card-content>
-      </mat-card>
-      <mat-card class="bg-surface-card">
-        <mat-card-content class="text-center py-4">
-          <mat-icon class="text-3xl text-primary-500 mb-2">schedule</mat-icon>
-          <p class="text-sm text-gray-400">{{ c.isOperatingNow ? 'Open Now' : 'Closed' }}</p>
-        </mat-card-content>
-      </mat-card>
+      <p-card class="bg-surface-card">
+        <ng-template pTemplate="content">
+          <div class="text-center py-4">
+            <i class="pi pi-phone text-3xl text-primary-500 mb-2"></i>
+            <p class="text-sm text-gray-400">{{ c.phone }}</p>
+          </div>
+        </ng-template>
+      </p-card>
+      <p-card class="bg-surface-card">
+        <ng-template pTemplate="content">
+          <div class="text-center py-4">
+            <i class="pi pi-envelope text-3xl text-primary-500 mb-2"></i>
+            <p class="text-sm text-gray-400">{{ c.email }}</p>
+          </div>
+        </ng-template>
+      </p-card>
+      <p-card class="bg-surface-card">
+        <ng-template pTemplate="content">
+          <div class="text-center py-4">
+            <i class="pi pi-clock text-3xl text-primary-500 mb-2"></i>
+            <p class="text-sm text-gray-400">{{ c.isOperatingNow ? 'Open Now' : 'Closed' }}</p>
+          </div>
+        </ng-template>
+      </p-card>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <mat-card class="bg-surface-card">
-        <mat-card-header>
-          <mat-card-title class="text-white">Operating Hours</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
+      <p-card class="bg-surface-card">
+        <ng-template pTemplate="title">Operating Hours</ng-template>
+        <ng-template pTemplate="content">
           <div class="space-y-2">
             @for (day of days; track day.key) {
               <div class="flex items-center justify-between py-1">
@@ -49,26 +53,20 @@
               </div>
             }
           </div>
-        </mat-card-content>
-      </mat-card>
+        </ng-template>
+      </p-card>
 
-      <mat-card class="bg-surface-card">
-        <mat-card-header>
-          <mat-card-title class="text-white">Location</mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="p-2">
+      <p-card class="bg-surface-card">
+        <ng-template pTemplate="title">Location</ng-template>
+        <ng-template pTemplate="content">
           <div #mapDetail class="w-full h-64 rounded-md"></div>
-        </mat-card-content>
-      </mat-card>
+        </ng-template>
+      </p-card>
     </div>
 
     <div class="flex gap-2">
-      <button mat-raised-button color="primary" [routerLink]="['/centers', c.id, 'book']">
-        Book Appointment
-      </button>
-      <button mat-stroked-button [routerLink]="['/centers', c.id, 'manage']">
-        Manage Center
-      </button>
+      <p-button label="Book Appointment" severity="primary" [routerLink]="['/centers', c.id, 'book']"></p-button>
+      <p-button label="Manage Center" severity="secondary" styleClass="p-button-outlined" [routerLink]="['/centers', c.id, 'manage']"></p-button>
     </div>
   }
 </div>

@@ -2,68 +2,52 @@
       <h1 class="text-2xl font-bold text-white">Check-In</h1>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <mat-card class="bg-surface-card">
-          <mat-card-header>
-            <mat-card-title class="text-white text-lg">QR Scanner</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
+        <p-card class="bg-surface-card">
+          <ng-template pTemplate="title">QR Scanner</ng-template>
+          <ng-template pTemplate="content">
             @if (!scannerReady()) {
-              <button mat-raised-button color="primary" (click)="startScanner()" [disabled]="scanning()">
-                @if (scanning()) {
-                  <mat-spinner diameter="20" />
-                } @else {
-                  Start Camera
-                }
-              </button>
+              <p-button label="Start Camera" severity="primary" (click)="startScanner()" [disabled]="scanning()" [loading]="scanning()" />
             }
             <div #scannerContainer class="w-full aspect-square bg-black rounded-md overflow-hidden mt-2"></div>
             @if (scannerReady()) {
-              <button mat-stroked-button color="warn" (click)="stopScanner()" class="mt-2">Stop Camera</button>
+              <p-button label="Stop Camera" severity="danger" [outlined]="true" (click)="stopScanner()" class="mt-2" />
             }
             @if (scanError()) {
               <p class="text-red-400 text-sm mt-2">{{ scanError() }}</p>
             }
-          </mat-card-content>
-        </mat-card>
+          </ng-template>
+        </p-card>
 
-        <mat-card class="bg-surface-card">
-          <mat-card-header>
-            <mat-card-title class="text-white text-lg">Manual Entry</mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="space-y-3">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Appointment ID</mat-label>
-              <input matInput type="number" [(ngModel)]="manualAppointmentId" placeholder="Enter appointment ID" />
-            </mat-form-field>
-            <button mat-raised-button color="primary" (click)="manualCheckIn()" [disabled]="!manualAppointmentId() || checkingIn()" class="w-full">
-              @if (checkingIn()) {
-                <mat-spinner diameter="20" />
-              } @else {
-                Check In
-              }
-            </button>
-          </mat-card-content>
-        </mat-card>
+        <p-card class="bg-surface-card">
+          <ng-template pTemplate="title">Manual Entry</ng-template>
+          <ng-template pTemplate="content">
+            <div class="space-y-3">
+              <div class="flex flex-col gap-1">
+                <label for="appointmentId">Appointment ID</label>
+                <input pInputText id="appointmentId" type="number" [(ngModel)]="manualAppointmentId" placeholder="Enter appointment ID" class="w-full" />
+              </div>
+              <p-button label="Check In" severity="primary" (click)="manualCheckIn()" [disabled]="!manualAppointmentId() || checkingIn()" [loading]="checkingIn()" class="w-full" />
+            </div>
+          </ng-template>
+        </p-card>
       </div>
 
       @if (result(); as r) {
-        <mat-card class="bg-surface-card border-2" [class.border-green-500]="r.eligibility.eligible" [class.border-red-500]="!r.eligibility.eligible">
-          <mat-card-header>
-            <mat-card-title class="text-white text-lg">
-              <mat-icon [class.text-green-400]="r.eligibility.eligible" [class.text-red-400]="!r.eligibility.eligible" class="align-middle mr-2">
-                {{ r.eligibility.eligible ? 'check_circle' : 'cancel' }}
-              </mat-icon>
-              Check-In {{ r.eligibility.eligible ? 'Successful' : 'Failed' }}
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="space-y-2">
-            <p class="text-white"><span class="text-gray-400">Donor:</span> {{ r.donorProfile.displayName }}</p>
-            <p class="text-white"><span class="text-gray-400">Blood Type:</span> {{ r.donorProfile.bloodType }} @if (r.donorProfile.bloodTypeVerified) { <mat-icon class="text-green-400 text-sm">verified</mat-icon> }</p>
-            <p class="text-white"><span class="text-gray-400">Appointment Status:</span> {{ r.appointment.status }}</p>
-            @if (!r.eligibility.eligible && r.eligibility.nextEligibleDate) {
-              <p class="text-yellow-400">Next eligible date: {{ r.eligibility.nextEligibleDate }}</p>
-            }
-          </mat-card-content>
-        </mat-card>
+        <p-card class="bg-surface-card border-2" [class.border-green-500]="r.eligibility.eligible" [class.border-red-500]="!r.eligibility.eligible">
+          <ng-template pTemplate="title">
+            <i class="pi {{ r.eligibility.eligible ? 'pi-check-circle' : 'pi-times-circle' }}" [class.text-green-400]="r.eligibility.eligible" [class.text-red-400]="!r.eligibility.eligible"></i>
+            Check-In {{ r.eligibility.eligible ? 'Successful' : 'Failed' }}
+          </ng-template>
+          <ng-template pTemplate="content">
+            <div class="space-y-2">
+              <p class="text-white"><span class="text-gray-400">Donor:</span> {{ r.donorProfile.displayName }}</p>
+              <p class="text-white"><span class="text-gray-400">Blood Type:</span> {{ r.donorProfile.bloodType }} @if (r.donorProfile.bloodTypeVerified) { <i class="pi pi-verified text-green-400 text-sm"></i> }</p>
+              <p class="text-white"><span class="text-gray-400">Appointment Status:</span> {{ r.appointment.status }}</p>
+              @if (!r.eligibility.eligible && r.eligibility.nextEligibleDate) {
+                <p class="text-yellow-400">Next eligible date: {{ r.eligibility.nextEligibleDate }}</p>
+              }
+            </div>
+          </ng-template>
+        </p-card>
       }
     </div>

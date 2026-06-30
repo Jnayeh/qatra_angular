@@ -1,14 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { InputText } from 'primeng/inputtext';
+import { Select } from 'primeng/select';
+import { DatePicker } from 'primeng/datepicker';
+import { RadioButton } from 'primeng/radiobutton';
 import { Router, RouterLink } from '@angular/router';
 import { EmergencyCreateSchema } from '../../../../shared/schemas/emergency.schema';
 import { BLOOD_TYPE_NAMES } from '../../../../shared/utils/blood-type-utils';
@@ -21,15 +18,12 @@ import { LoadingSpinnerComponent } from '../../../../shared/components/loading-s
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatRadioModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
+    Card,
+    Button,
+    InputText,
+    Select,
+    DatePicker,
+    RadioButton,
     RouterLink,
     LoadingSpinnerComponent,
   ],
@@ -44,6 +38,13 @@ export class EmergencyCreatePageComponent implements OnInit {
   protected readonly submitting = signal(false);
   protected readonly bloodTypes = BLOOD_TYPE_NAMES;
   protected readonly bloodTypeKeys = Object.keys(BLOOD_TYPE_NAMES).filter((k) => k !== 'UNKNOWN') as Array<keyof typeof BLOOD_TYPE_NAMES>;
+  protected readonly bloodTypeOptions = this.bloodTypeKeys.map((k) => ({ value: k, label: this.bloodTypes[k] }));
+
+  protected readonly urgencyOptions = [
+    { value: 'CRITICAL', label: 'Critical' },
+    { value: 'URGENT', label: 'Urgent' },
+    { value: 'MODERATE', label: 'Moderate' },
+  ];
 
   protected form = this.fb.group({
     centerId: [<number | null>null, Validators.required],

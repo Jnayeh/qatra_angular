@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { InputText } from 'primeng/inputtext';
+import { InputNumber } from 'primeng/inputnumber';
+import { Textarea } from 'primeng/textarea';
+import { ProgressSpinner } from 'primeng/progressspinner';
+import { ToggleSwitch } from 'primeng/toggleswitch';
 import { ScreeningSchema } from '../../../../shared/schemas/appointment.schema';
 import { AppointmentService } from '../../appointment.service';
 
@@ -15,12 +16,13 @@ import { AppointmentService } from '../../appointment.service';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatSlideToggleModule,
+    Card,
+    Button,
+    InputText,
+    InputNumber,
+    Textarea,
+    ProgressSpinner,
+    ToggleSwitch,
     RouterLink,
   ],
   templateUrl: './screening-page.html',

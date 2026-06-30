@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, viewChild } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { Card } from 'primeng/card';
 import { Chart, registerables } from 'chart.js';
 import { DonorStore } from '../../donor.store';
 
@@ -9,7 +8,7 @@ Chart.register(...registerables);
 @Component({
   selector: 'app-impact-page',
   standalone: true,
-  imports: [MatCardModule, MatIconModule],
+  imports: [Card],
   templateUrl: './impact-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

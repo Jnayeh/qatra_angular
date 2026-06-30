@@ -1,16 +1,17 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatError, MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+import { InputText } from 'primeng/inputtext';
+import { InputNumber } from 'primeng/inputnumber';
+import { ToggleSwitch } from 'primeng/toggleswitch';
+import { Message } from 'primeng/message';
 import { DonorService } from '../../donor.service';
 
 @Component({
   selector: 'app-location-page',
   standalone: true,
-  imports: [ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSlideToggleModule, MatError],
+  imports: [ReactiveFormsModule, Card, Button, InputText, InputNumber, ToggleSwitch, Message],
   templateUrl: './location-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

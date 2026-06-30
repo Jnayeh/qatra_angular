@@ -1,37 +1,37 @@
-    <div class="max-w-4xl mx-auto space-y-6">
-      <h1 class="text-2xl font-bold text-white">Manage Center</h1>
+<div class="max-w-4xl mx-auto space-y-6">
+  <h1 class="text-2xl font-bold text-white">Manage Center</h1>
 
-      @if (store.isLoading()) {
-        <app-loading-spinner />
-      } @else if (store.selectedCenter(); as c) {
-        <mat-card class="bg-surface-card">
-          <mat-card-header>
-            <mat-card-title class="text-white">{{ c.name }}</mat-card-title>
-            <mat-card-subtitle>Center ID: {{ c.id }}</mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content class="space-y-4">
-            <div class="flex items-center justify-between">
-              <span class="text-gray-400">Status</span>
-              <app-status-badge [status]="c.status" />
-            </div>
-            <mat-divider class="border-gray-700" />
-            <div class="flex items-center justify-between">
-              <span class="text-gray-400">Total Capacity</span>
-              <span class="text-white">{{ c.totalCapacity }}</span>
-            </div>
-            <div class="flex items-center justify-between">
-              <span class="text-gray-400">Max Regular</span>
-              <span class="text-white">{{ c.maxRegular }}</span>
-            </div>
-            <div class="flex items-center justify-between">
-              <span class="text-gray-400">Slot Period</span>
-              <span class="text-white">{{ c.slotPeriod }} min</span>
-            </div>
-            <mat-divider class="border-gray-700" />
-            <div class="flex gap-2">
-              <button mat-stroked-button color="primary" routerLink="/centers">Back</button>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      }
-    </div>
+  @if (store.isLoading()) {
+    <app-loading-spinner />
+  } @else if (store.selectedCenter(); as c) {
+    <p-card class="bg-surface-card">
+      <ng-template pTemplate="title">{{ c.name }}</ng-template>
+      <ng-template pTemplate="subtitle">Center ID: {{ c.id }}</ng-template>
+      <ng-template pTemplate="content">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-gray-400">Status</span>
+            <app-status-badge [status]="c.status" />
+          </div>
+          <p-divider class="border-gray-700" />
+          <div class="flex items-center justify-between">
+            <span class="text-gray-400">Total Capacity</span>
+            <span class="text-white">{{ c.totalCapacity }}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-gray-400">Max Regular</span>
+            <span class="text-white">{{ c.maxRegular }}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-gray-400">Slot Period</span>
+            <span class="text-white">{{ c.slotPeriod }} min</span>
+          </div>
+          <p-divider class="border-gray-700" />
+          <div class="flex gap-2">
+            <p-button label="Back" severity="secondary" styleClass="p-button-outlined" routerLink="/centers"></p-button>
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+  }
+</div>
