@@ -43,5 +43,5 @@ __screenshots__/
 Thumbs.db
 
 # Environment (generated from .env)
-src/environments/environment.ts
+src/environments/environment.prod.ts
 .env

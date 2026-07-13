@@ -94,7 +94,7 @@ export class LoginPageComponent {
 
   protected readonly form = new FormGroup({
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
-    password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8)] }),
+    password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
 
   protected onSubmit(): void {
