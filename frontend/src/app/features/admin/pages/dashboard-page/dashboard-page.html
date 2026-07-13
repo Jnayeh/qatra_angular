@@ -66,30 +66,36 @@
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-    <p-card styleClass="shadow-sm">
-      <ng-template pTemplate="title">Top Centers by Donations</ng-template>
-      <ng-template pTemplate="content">
-        @if (dashboard()?.topCenters?.length) {
-          <canvas #barChart></canvas>
-        } @else {
-          <div class="text-center py-8 text-gray-400">
-            <i class="pi pi-chart-bar text-3xl mb-2"></i>
-            <p class="text-sm">No data available</p>
-          </div>
-        }
-      </ng-template>
-    </p-card>
+    @defer (on viewport) {
+      <p-card styleClass="shadow-sm">
+        <ng-template pTemplate="title">Top Centers by Donations</ng-template>
+        <ng-template pTemplate="content">
+          @if (dashboard()?.topCenters?.length) {
+            <canvas #barChart></canvas>
+          } @else {
+            <div class="text-center py-8 text-gray-400">
+              <i class="pi pi-chart-bar text-3xl mb-2"></i>
+              <p class="text-sm">No data available</p>
+            </div>
+          }
+        </ng-template>
+      </p-card>
 
-    <p-card styleClass="shadow-sm">
-      <ng-template pTemplate="title">Emergency Response Rate (30d)</ng-template>
-      <ng-template pTemplate="content">
-        <canvas #pieChart></canvas>
-        <div class="text-center mt-4">
-          <p class="text-3xl font-bold text-gray-900">{{ dashboard()?.responseRate30d ?? 0 }}%</p>
-          <p class="text-sm text-gray-500">Donor response rate in the last 30 days</p>
-        </div>
-      </ng-template>
-    </p-card>
+      <p-card styleClass="shadow-sm">
+        <ng-template pTemplate="title">Emergency Response Rate (30d)</ng-template>
+        <ng-template pTemplate="content">
+          <canvas #pieChart></canvas>
+          <div class="text-center mt-4">
+            <p class="text-3xl font-bold text-gray-900">{{ dashboard()?.responseRate30d ?? 0 }}%</p>
+            <p class="text-sm text-gray-500">Donor response rate in the last 30 days</p>
+          </div>
+        </ng-template>
+      </p-card>
+    } @placeholder {
+      <div class="col-span-2 flex items-center justify-center py-12 bg-gray-50 rounded-2xl">
+        <p class="text-sm text-gray-400">Loading charts...</p>
+      </div>
+    }
   </div>
 
   @if (dashboard()?.recentAlerts?.length) {

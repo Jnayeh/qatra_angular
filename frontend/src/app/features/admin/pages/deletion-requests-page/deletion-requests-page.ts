@@ -38,7 +38,7 @@ export class DeletionRequestsPageComponent implements OnInit {
   protected readonly requests = signal<DataDeletionRequest[]>([]);
 
   ngOnInit(): void {
-    this.adminService.getDeletionRequests({ page: 0, size: 50 }).subscribe((res) => this.requests.set(res.data.content));
+    this.adminService.getDeletionRequests({ page: 0, size: 50 }).subscribe((res) => this.requests.set(res.data));
   }
 
   protected process(id: number, approved: boolean): void {

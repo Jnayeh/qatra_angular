@@ -19,6 +19,6 @@ export class UserManagementPageComponent implements OnInit {
   protected readonly users = signal<UserSummary[]>([]);
 
   ngOnInit(): void {
-    this.adminService.getUsers({ page: 0, size: 50 }).subscribe((res) => this.users.set(res.data.content));
+    this.adminService.getUsers({ page: 0, size: 50 }).subscribe((res) => this.users.set(res.data));
   }
 }

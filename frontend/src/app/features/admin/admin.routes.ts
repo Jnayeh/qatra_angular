@@ -35,6 +35,14 @@ export default [
     loadComponent: () => import('@/app/features/admin/pages/deletion-requests-page/deletion-requests-page').then((m) => m.DeletionRequestsPageComponent),
   },
   {
+    path: 'health-restrictions',
+    loadComponent: () => import('@/app/features/admin/pages/health-restriction-page/health-restriction-page').then((m) => m.HealthRestrictionPageComponent),
+  },
+  {
+    path: 'system-health',
+    loadComponent: () => import('@/app/features/admin/pages/system-health-page/system-health-page').then((m) => m.SystemHealthPageComponent),
+  },
+  {
     path: 'reports',
     loadComponent: () => import('@/app/features/admin/pages/reports-page/reports-page').then((m) => m.ReportsPageComponent),
   },

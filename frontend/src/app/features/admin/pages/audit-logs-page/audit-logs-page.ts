@@ -16,6 +16,6 @@ export class AuditLogsPageComponent implements OnInit {
   protected readonly logs = signal<AuditLogEntry[]>([]);
 
   ngOnInit(): void {
-    this.adminService.getAuditLogs({ page: 0, size: 50 }).subscribe((res) => this.logs.set(res.data.content));
+    this.adminService.getAuditLogs({ page: 0, size: 50 }).subscribe((res) => this.logs.set(res.data));
   }
 }

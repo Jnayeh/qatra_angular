@@ -1,16 +1,37 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { Card } from 'primeng/card';
+import { TableModule } from 'primeng/table';
+import { Button } from 'primeng/button';
+import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
 import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-state';
+import { AdminService } from '@/app/features/admin/admin.service';
+import type { DemandForecast } from '@/app/shared/models/analytics.model';
 
 @Component({
   selector: 'app-forecasts-page',
   standalone: true,
-  imports: [EmptyStateComponent],
-  template: `
-    <div class="space-y-6">
-      <h1 class="text-2xl font-bold text-white">Demand Forecasts</h1>
-      <app-empty-state icon="chart-line" title="Forecasts coming soon" message="Blood type demand forecasts by region with charts." />
-    </div>
-  `,
+  imports: [Card, TableModule, Button, LoadingSpinnerComponent, EmptyStateComponent],
+  templateUrl: './forecasts-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ForecastsPageComponent {}
+export class ForecastsPageComponent implements OnInit {
+  private readonly adminService = inject(AdminService);
+
+  protected readonly forecasts = signal<DemandForecast[]>([]);
+  protected readonly isLoading = signal(true);
+
+  ngOnInit(): void {
+    this.loadForecasts();
+  }
+
+  protected loadForecasts(): void {
+    this.isLoading.set(true);
+    this.adminService.getForecasts().subscribe({
+      next: (res) => {
+        this.forecasts.set(res.data);
+        this.isLoading.set(false);
+      },
+      error: () => this.isLoading.set(false),
+    });
+  }
+}

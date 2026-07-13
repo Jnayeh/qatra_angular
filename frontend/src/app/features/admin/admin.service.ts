@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
-import type { ApiResponse, Page } from '@/app/shared/models/api-response.model';
+import type { ApiResponse } from '@/app/shared/models/api-response.model';
 import type { UserDetail, UserSummary } from '@/app/shared/models/user.model';
 import type { AuditLogEntry, SystemDashboard, SystemHealth, PlatformReport, DemandForecast } from '@/app/shared/models/analytics.model';
 import type { SystemConfigEntry, FeatureFlag, DataDeletionRequest } from '@/app/shared/models/config.model';
@@ -14,56 +14,56 @@ export class AdminService {
     return this.api.get('/api/v1/analytics/metrics');
   }
 
-  getUsers(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<Page<UserSummary>>> {
-    return this.api.getPage('/admin/users', params);
+  getUsers(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<UserSummary[]>> {
+    return this.api.getPage('/api/v1/admin/users', params);
   }
 
   getUser(id: number): Observable<ApiResponse<UserDetail>> {
-    return this.api.get(`/admin/users/${id}`);
+    return this.api.get(`/api/v1/admin/users/${id}`);
   }
 
   updateUserStatus(id: number, status: string): Observable<ApiResponse<UserSummary>> {
-    return this.api.patch(`/admin/users/${id}/status`, { status });
+    return this.api.patch(`/api/v1/admin/users/${id}/status`, { status });
   }
 
   assignRole(id: number, role: string, action: 'ASSIGN' | 'REVOKE'): Observable<ApiResponse<{ userId: number; roles: string[] }>> {
-    return this.api.patch(`/admin/users/${id}/roles`, { role, action });
+    return this.api.patch(`/api/v1/admin/users/${id}/roles`, { role, action });
   }
 
   deleteUser(id: number): Observable<ApiResponse<{ message: string }>> {
-    return this.api.delete(`/admin/users/${id}`);
+    return this.api.delete(`/api/v1/admin/users/${id}`);
   }
 
-  getAuditLogs(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<Page<AuditLogEntry>>> {
-    return this.api.getPage('/admin/audit-logs', params);
+  getAuditLogs(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<AuditLogEntry[]>> {
+    return this.api.getPage('/api/v1/admin/audit-logs', params);
   }
 
   exportAuditLogs(params?: Record<string, string | number | boolean | undefined>): Observable<Blob> {
-    return this.api.get('/admin/audit-logs/export', params) as any;
+    return this.api.get('/api/v1/admin/audit-logs/export', params) as any;
   }
 
   getConfig(): Observable<ApiResponse<SystemConfigEntry[]>> {
-    return this.api.get('/admin/config');
+    return this.api.get('/api/v1/admin/config');
   }
 
   updateConfig(key: string, value: Record<string, unknown>, description: string): Observable<ApiResponse<SystemConfigEntry>> {
-    return this.api.put(`/admin/config/${key}`, { value, description });
+    return this.api.put(`/api/v1/admin/config/${key}`, { value, description });
   }
 
   getFeatureFlags(): Observable<ApiResponse<FeatureFlag[]>> {
-    return this.api.get('/admin/feature-flags');
+    return this.api.get('/api/v1/admin/feature-flags');
   }
 
   updateFeatureFlag(name: string, enabled: boolean, rules?: any): Observable<ApiResponse<FeatureFlag>> {
-    return this.api.put(`/admin/feature-flags/${name}`, { enabled, rules });
+    return this.api.put(`/api/v1/admin/feature-flags/${name}`, { enabled, rules });
   }
 
-  getDeletionRequests(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<Page<DataDeletionRequest>>> {
-    return this.api.getPage('/admin/deletion-requests', params);
+  getDeletionRequests(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<DataDeletionRequest[]>> {
+    return this.api.getPage('/api/v1/admin/deletion-requests', params);
   }
 
   processDeletionRequest(id: number, approved: boolean, reason: string): Observable<ApiResponse<DataDeletionRequest>> {
-    return this.api.post(`/admin/deletion-requests/${id}/process`, { approved, reason });
+    return this.api.post(`/api/v1/admin/deletion-requests/${id}/process`, { approved, reason });
   }
 
   getSystemHealth(): Observable<ApiResponse<SystemHealth>> {
