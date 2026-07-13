@@ -1,0 +1,173 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.donor-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ── Top Navbar ── */
+.donor-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 56px;
+}
+
+/* ── Desktop Nav Links ── */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  color: #111827;
+  background: #f3f4f6;
+}
+
+.nav-link-active {
+  color: var(--p-primary-600, #dc2626) !important;
+  background: var(--p-primary-50, #fef2f2) !important;
+  font-weight: 600;
+}
+
+/* ── Profile Button ── */
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px 4px 4px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.profile-btn:hover {
+  background: #f3f4f6;
+}
+
+/* ── Mobile Nav Dropdown ── */
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px 12px;
+  gap: 2px;
+  border-top: 1px solid #f3f4f6;
+  animation: slideDown 0.15s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link:active {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.mobile-nav-link-active {
+  color: var(--p-primary-600, #dc2626) !important;
+  background: var(--p-primary-50, #fef2f2) !important;
+  font-weight: 600;
+}
+
+/* ── Content Area ── */
+.donor-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px 80px;
+  background: #f9fafb;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .donor-content {
+    padding: 24px 32px;
+    padding-bottom: 24px;
+  }
+}
+
+/* ── Mobile Bottom Tab Bar ── */
+.bottom-tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 60px;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.bottom-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex: 1;
+  padding: 6px 0;
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.bottom-tab:active {
+  opacity: 0.7;
+}
+
+.bottom-tab-active {
+  color: var(--p-primary-600, #dc2626) !important;
+}
+
+.bottom-tab i {
+  font-size: 18px;
+}

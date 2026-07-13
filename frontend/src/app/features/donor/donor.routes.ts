@@ -1,9 +1,13 @@
 import type { Routes } from '@angular/router';
 
 export default [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
-    path: 'dashboard',
+    path: 'onboarding',
+    loadComponent: () => import('@/app/features/donor/pages/onboarding-page/onboarding-page').then((m) => m.OnboardingPageComponent),
+  },
+  {
+    path: 'home',
     loadComponent: () => import('@/app/features/donor/pages/donor-dashboard-page/donor-dashboard-page').then((m) => m.DonorDashboardPageComponent),
   },
   {

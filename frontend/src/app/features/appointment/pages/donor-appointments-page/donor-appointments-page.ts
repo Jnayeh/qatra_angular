@@ -7,6 +7,7 @@ import { AppointmentStore } from '@/app/features/appointment/appointment.store';
 import { AppointmentCardComponent } from '@/app/shared/components/appointment-card/appointment-card';
 import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-state';
 import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
+import { environment } from '@/environments/environment';
 import type { DonorAppointmentView } from '@/app/shared/models/appointment.model';
 
 @Component({
@@ -56,10 +57,14 @@ export class DonorAppointmentsPageComponent implements OnInit {
   }
 
   protected downloadCertificate(appointment: DonorAppointmentView): void {
-    window.open(`/api/v1/donors/me/certificates/${appointment.id}/download`, '_blank');
+    window.open(`${environment.baseUrl}/api/v1/donors/me/certificates/${appointment.id}/download`, '_blank');
   }
 
   protected bookAppointment(): void {
     this.router.navigate(['/appointments/book']);
+  }
+
+  protected rescheduleAppointment(appointment: DonorAppointmentView): void {
+    this.router.navigate(['/appointments', appointment.id, 'reschedule']);
   }
 }

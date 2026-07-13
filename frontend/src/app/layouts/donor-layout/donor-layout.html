@@ -1,0 +1,106 @@
+<div class="donor-layout">
+  <!-- Top Navbar -->
+  <header class="donor-navbar">
+    <div class="navbar-inner">
+      <!-- Logo -->
+      <a routerLink="/donor/home" class="flex items-center gap-2 shrink-0">
+        <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-sm">Q</span>
+        </div>
+        <span class="text-lg font-bold text-gray-900 hidden sm:inline">Qatra</span>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-1">
+        @for (link of navLinks; track link.path) {
+          <a
+            [routerLink]="link.path"
+            routerLinkActive="nav-link-active"
+            [routerLinkActiveOptions]="{ exact: link.path === '/donor/home' }"
+            class="nav-link"
+          >
+            <i class="pi {{ link.icon }} text-sm"></i>
+            <span>{{ link.label }}</span>
+          </a>
+        }
+      </nav>
+
+      <!-- Right Actions -->
+      <div class="flex items-center gap-2">
+        <app-notification-bell />
+        <p-menu #userMenu [model]="menuItems()" [popup]="true" styleClass="donor-user-menu" />
+        <button
+          (click)="userMenu.toggle($event)"
+          class="profile-btn"
+        >
+          <p-avatar
+            [label]="getInitials()"
+            shape="circle"
+            styleClass="!bg-primary-600 !text-white !text-xs !w-8 !h-8"
+          />
+          <span class="hidden sm:inline text-sm font-medium text-gray-700 max-w-[100px] truncate">
+            {{ authStore.user()?.displayName ?? 'Donor' }}
+          </span>
+          <i class="pi pi-chevron-down text-xs text-gray-400"></i>
+        </button>
+
+        <!-- Mobile hamburger -->
+        <button
+          class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          (click)="toggleMobileMenu()"
+        >
+          <i class="pi {{ mobileMenuOpen() ? 'pi-times' : 'pi-bars' }} text-gray-600"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Dropdown -->
+    @if (mobileMenuOpen()) {
+      <div class="mobile-nav">
+        @for (link of navLinks; track link.path) {
+          <a
+            [routerLink]="link.path"
+            routerLinkActive="mobile-nav-link-active"
+            [routerLinkActiveOptions]="{ exact: link.path === '/donor/home' }"
+            (click)="mobileMenuOpen.set(false)"
+            class="mobile-nav-link"
+          >
+            <i class="pi {{ link.icon }}"></i>
+            <span>{{ link.label }}</span>
+          </a>
+        }
+      </div>
+    }
+  </header>
+
+  <!-- Profile Completion Banner -->
+  @if (showProfileBanner()) {
+    <a routerLink="/donor/onboarding" class="profile-banner sticky top-0 z-40 flex items-center justify-center gap-3 px-4 py-2.5 bg-amber-50 border-b border-amber-200 hover:bg-amber-100 transition-colors cursor-pointer">
+      <i class="pi pi-info-circle text-amber-600"></i>
+      <span class="text-sm font-medium text-amber-800">Complete your profile to unlock all features</span>
+      <span class="text-xs text-amber-600 font-semibold">Get Started &rarr;</span>
+    </a>
+  }
+
+  <!-- Content Area -->
+  <main class="donor-content">
+    <router-outlet />
+  </main>
+
+  <!-- Mobile Bottom Tab Bar -->
+  <nav class="bottom-tab-bar md:hidden">
+    @for (link of navLinks; track link.path; let i = $index) {
+      @if (i < 5) {
+        <a
+          [routerLink]="link.path"
+          routerLinkActive="bottom-tab-active"
+          [routerLinkActiveOptions]="{ exact: link.path === '/donor/home' }"
+          class="bottom-tab"
+        >
+          <i class="pi {{ link.icon }}"></i>
+          <span class="text-[10px]">{{ link.label }}</span>
+        </a>
+      }
+    }
+  </nav>
+</div>

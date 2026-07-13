@@ -30,16 +30,22 @@
     </p-card>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-    <p-card>
-      <ng-template pTemplate="title">Donations by Type</ng-template>
-      <ng-template pTemplate="content"><canvas #donutChart></canvas></ng-template>
-    </p-card>
-    <p-card>
-      <ng-template pTemplate="title">Monthly Donations</ng-template>
-      <ng-template pTemplate="content"><canvas #barChart></canvas></ng-template>
-    </p-card>
-  </div>
+  @defer (on viewport) {
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <p-card>
+        <ng-template pTemplate="title">Donations by Type</ng-template>
+        <ng-template pTemplate="content"><canvas #donutChart></canvas></ng-template>
+      </p-card>
+      <p-card>
+        <ng-template pTemplate="title">Monthly Donations</ng-template>
+        <ng-template pTemplate="content"><canvas #barChart></canvas></ng-template>
+      </p-card>
+    </div>
+  } @placeholder {
+    <div class="flex items-center justify-center py-12 bg-gray-50 rounded-2xl">
+      <p class="text-sm text-gray-400">Loading charts...</p>
+    </div>
+  }
 
   @if (store.impact()?.milestones?.length) {
     <p-card>

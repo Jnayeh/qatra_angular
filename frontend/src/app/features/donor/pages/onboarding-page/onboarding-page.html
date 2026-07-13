@@ -1,0 +1,176 @@
+<div class="min-h-screen bg-gradient-to-br from-primary-700 to-primary-500 flex items-center justify-center p-4">
+  <div class="w-full max-w-lg">
+    <!-- Progress -->
+    <div class="flex items-center justify-between mb-6 px-2">
+      @for (s of [1, 2, 3, 4]; track s) {
+        <div class="flex items-center gap-2">
+          <span
+            class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all"
+            [class.bg-white]="step() >= s"
+            [class.text-primary-600]="step() >= s"
+            [class.text-white]="step() >= s"
+            [class.bg-white/20]="step() < s"
+            [class.text-white/60]="step() < s"
+          >{{ s }}</span>
+          @if (s < 4) {
+            <div class="h-0.5 w-8 sm:w-12" [class.bg-white]="step() > s" [class.bg-white/20]="step() <= s"></div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Step labels -->
+    <p class="text-center text-white/80 text-sm mb-4 font-medium">
+      @switch (step()) {
+        @case (1) { Blood Type }
+        @case (2) { Health Screening }
+        @case (3) { Your Location }
+        @case (4) { Notification Preferences }
+      }
+    </p>
+
+    <!-- Card -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <!-- Step 1: Blood Type -->
+      @if (step() === 1) {
+        <div class="p-6 sm:p-8">
+          <h2 class="text-xl font-bold text-gray-900 mb-1">What's your blood type?</h2>
+          <p class="text-sm text-gray-500 mb-6">Select your blood type or choose "I don't know" if unsure.</p>
+          <div class="grid grid-cols-3 gap-3">
+            @for (bt of bloodTypes; track bt.value) {
+              <button
+                type="button"
+                class="rounded-xl border-2 p-4 text-center transition-all hover:border-primary-400 hover:shadow-sm"
+                [class.border-primary-500]="selectedBloodType() === bt.value"
+                [class.bg-primary-50]="selectedBloodType() === bt.value"
+                [class.border-gray-200]="selectedBloodType() !== bt.value"
+                (click)="selectBloodType(bt.value)"
+              >
+                <span class="text-lg font-bold text-gray-900">{{ bt.label }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Step 2: Health Questionnaire -->
+      @if (step() === 2) {
+        <div class="p-6 sm:p-8">
+          <h2 class="text-xl font-bold text-gray-900 mb-1">Health Screening</h2>
+          <p class="text-sm text-gray-500 mb-6">Help us ensure your safety during donation.</p>
+          <form [formGroup]="healthForm" class="flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium text-gray-700">Chronic illness?</span>
+              <p-toggleswitch formControlName="hasChronicIllness" />
+            </div>
+            @if (healthForm.get('hasChronicIllness')?.value) {
+              <div class="flex flex-col gap-1.5">
+                <label class="text-sm font-medium text-gray-700">Details</label>
+                <textarea pTextarea formControlName="medicalConditionsDetails" rows="2" class="w-full" placeholder="Describe your condition..."></textarea>
+              </div>
+            }
+
+            <p-divider />
+
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium text-gray-700">On any medication?</span>
+              <p-toggleswitch formControlName="onMedication" />
+            </div>
+            @if (healthForm.get('onMedication')?.value) {
+              <div class="flex flex-col gap-1.5">
+                <label class="text-sm font-medium text-gray-700">Medication details</label>
+                <textarea pTextarea formControlName="medicationDetails" rows="2" class="w-full" placeholder="List your medications..."></textarea>
+              </div>
+            }
+
+            <p-divider />
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium text-gray-700">Last surgery date</label>
+              <input type="date" formControlName="lastSurgeryAt" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium text-gray-700">Last travel date</label>
+              <input type="date" formControlName="lastTravelAt" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium text-gray-700">Last tattoo/piercing date</label>
+              <input type="date" formControlName="lastTattooOrPiercingAt" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
+            </div>
+          </form>
+        </div>
+      }
+
+      <!-- Step 3: Location -->
+      @if (step() === 3) {
+        <div class="p-6 sm:p-8">
+          <h2 class="text-xl font-bold text-gray-900 mb-1">Your Location</h2>
+          <p class="text-sm text-gray-500 mb-6">We'll use this to find donation centers near you.</p>
+          <form [formGroup]="locationForm" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium text-gray-700">City</label>
+              <input type="text" formControlName="city" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. Tunis" />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium text-gray-700">Country</label>
+              <input type="text" formControlName="country" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="flex flex-col gap-1.5">
+                <label class="text-sm font-medium text-gray-700">Latitude</label>
+                <input type="number" formControlName="latitude" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" step="any" />
+              </div>
+              <div class="flex flex-col gap-1.5">
+                <label class="text-sm font-medium text-gray-700">Longitude</label>
+                <input type="number" formControlName="longitude" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" step="any" />
+              </div>
+            </div>
+          </form>
+        </div>
+      }
+
+      <!-- Step 4: Notification Prefs -->
+      @if (step() === 4) {
+        <div class="p-6 sm:p-8">
+          <h2 class="text-xl font-bold text-gray-900 mb-1">Notification Preferences</h2>
+          <p class="text-sm text-gray-500 mb-6">Choose how you'd like to be notified about emergencies.</p>
+          <form [formGroup]="prefsForm" class="flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium text-gray-700">Emergency notifications</span>
+              <p-toggleswitch formControlName="allowEmergencyNotifications" />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium text-gray-700">Notification frequency</label>
+              <select formControlName="frequency" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+                <option value="ALWAYS">Always</option>
+                <option value="WHEN_NEEDED">When needed</option>
+                <option value="DAILY_SUMMARY">Daily summary</option>
+                <option value="WEEKLY_SUMMARY">Weekly summary</option>
+              </select>
+            </div>
+          </form>
+        </div>
+      }
+
+      <!-- Actions -->
+      <div class="px-6 sm:px-8 pb-6 sm:pb-8 flex items-center justify-between">
+        @if (step() > 1) {
+          <p-button label="Back" severity="secondary" [text]="true" (onClick)="prevStep()" />
+        } @else {
+          <p-button label="Skip" severity="secondary" [text]="true" (onClick)="skipAll()" />
+        }
+
+        @if (step() < totalSteps) {
+          <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextStep()" />
+        } @else {
+          <div class="flex gap-2">
+            <p-button label="Skip" severity="secondary" [outlined]="true" (onClick)="skipAll()" [loading]="isLoading()" />
+            <p-button label="Finish" icon="pi pi-check" (onClick)="finish()" [loading]="isLoading()" />
+          </div>
+        }
+      </div>
+    </div>
+
+    <p class="text-center text-white/60 text-xs mt-4">You can complete your profile later from your settings.</p>
+  </div>
+</div>
