@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { Card } from 'primeng/card';
-import type { SystemConfigEntry } from '../../../../shared/models/config.model';
-import { AdminService } from '../../admin.service';
+import type { SystemConfigEntry } from '@/app/shared/models/config.model';
+import { AdminService } from '@/app/features/admin/admin.service';
 
 @Component({
   selector: 'app-config-page',

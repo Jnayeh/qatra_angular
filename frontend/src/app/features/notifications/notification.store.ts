@@ -2,10 +2,10 @@ import { inject } from '@angular/core';
 import { signalStore, withState, withMethods, withComputed, withHooks, patchState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
-import type { Notification } from '../../shared/models/notification.model';
-import { AuthStore } from '../../core/auth/auth.store';
-import { SocketService } from '../../core/socket/socket.service';
-import { NotificationService } from './notification.service';
+import type { Notification } from '@/app/shared/models/notification.model';
+import { AuthStore } from '@/app/core/auth/auth.store';
+import { SocketService } from '@/app/core/socket/socket.service';
+import { NotificationService } from '@/app/features/notifications/notification.service';
 
 interface NotificationState {
   notifications: Notification[];
@@ -30,10 +30,27 @@ export const NotificationStore = signalStore(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
         switchMap(() =>
-          notificationService.getNotifications().pipe(
+          notificationService.getNotifications({ page: 0, size: 20 }).pipe(
             tap({
-              next: (res) => patchState(store, { notifications: res.data, isLoading: false, unreadCount: res.data.filter((n) => n.status !== 'READ').length }),
+              next: (res) =>
+                patchState(store, {
+                  notifications: res.data.content,
+                  isLoading: false,
+                  unreadCount: res.data.content.filter((n) => n.status !== 'READ').length,
+                }),
               error: () => patchState(store, { isLoading: false }),
+            }),
+          ),
+        ),
+      ),
+    ),
+
+    loadUnreadCount: rxMethod<void>(
+      pipe(
+        switchMap(() =>
+          notificationService.getUnreadCount().pipe(
+            tap({
+              next: (res) => patchState(store, { unreadCount: res.data.count }),
             }),
           ),
         ),
@@ -95,6 +112,7 @@ export const NotificationStore = signalStore(
   withHooks({
     onInit(store) {
       store.initSocket();
+      store.loadUnreadCount();
     },
     onDestroy(store) {
       store.destroySocket();

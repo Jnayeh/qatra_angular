@@ -1,25 +1,28 @@
 <div class="max-w-4xl mx-auto space-y-6">
-  <h1 class="text-2xl font-bold text-white">Book Appointment</h1>
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Book Appointment</h1>
+    <p class="text-sm text-gray-500 mt-1">Select a date and time slot to schedule your donation.</p>
+  </div>
 
   @if (store.isLoading()) {
     <app-loading-spinner />
   } @else {
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <p-card class="bg-surface-card">
+      <p-card>
         <ng-template pTemplate="title">Select Date</ng-template>
         <ng-template pTemplate="content">
           <p-datepicker [(ngModel)]="selectedDate" (onSelect)="onDateChange($event)" inputId="dp" class="w-full" />
         </ng-template>
       </p-card>
 
-      <p-card class="bg-surface-card">
+      <p-card>
         <ng-template pTemplate="title">Appointment Type</ng-template>
         <ng-template pTemplate="content">
           <div class="flex flex-col gap-2">
             @for (opt of appointmentOptions; track opt.value) {
               <div class="flex items-center gap-2">
                 <p-radioButton [value]="opt.value" [(ngModel)]="appointmentType" [inputId]="opt.value" />
-                <label [for]="opt.value">{{ opt.label }}</label>
+                <label [for]="opt.value" class="text-sm font-medium text-gray-700">{{ opt.label }}</label>
               </div>
             }
           </div>
@@ -28,7 +31,7 @@
     </div>
 
     @if (store.slots().length > 0) {
-      <p-card class="bg-surface-card">
+      <p-card>
         <ng-template pTemplate="title">Available Slots</ng-template>
         <ng-template pTemplate="subtitle">{{ selectedDate()?.toLocaleDateString() }}</ng-template>
         <ng-template pTemplate="content">
@@ -42,15 +45,15 @@
                 (click)="selectSlot(slot.id)"
               >
                 <div class="flex flex-col items-center py-2">
-                  <span class="text-white font-medium">{{ formatTime(slot.startTime) }} – {{ formatTime(slot.endTime) }}</span>
-                  <span class="text-xs text-gray-400">
+                  <span class="text-gray-900 font-medium">{{ formatTime(slot.startTime) }} – {{ formatTime(slot.endTime) }}</span>
+                  <span class="text-xs text-gray-500">
                     {{ slot.maxBookings - slot.bookedCount }} / {{ slot.maxBookings }} available
                   </span>
                   @if (slot.bookedCount >= slot.maxBookings) {
-                    <span class="text-xs text-red-400">Full</span>
+                    <span class="text-xs text-red-500">Full</span>
                   }
                   @if (slot.isBlocked) {
-                    <span class="text-xs text-yellow-400">Blocked</span>
+                    <span class="text-xs text-yellow-500">Blocked</span>
                   }
                 </div>
               </button>
@@ -73,7 +76,7 @@
     }
 
     @if (error()) {
-      <p class="text-red-400 text-sm">{{ error() }}</p>
+      <p class="text-red-500 text-sm">{{ error() }}</p>
     }
   }
 </div>

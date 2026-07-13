@@ -1,4 +1,4 @@
-import type { BloodType } from '../models/donor.model';
+import type { BloodType } from '@/app/shared/models/donor.model';
 
 export const BLOOD_TYPE_NAMES: Record<BloodType, string> = {
   A_POSITIVE: 'A+',

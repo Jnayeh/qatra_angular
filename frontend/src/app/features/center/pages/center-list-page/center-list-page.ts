@@ -5,12 +5,13 @@ import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Tooltip } from 'primeng/tooltip';
 import { Router, RouterLink } from '@angular/router';
-import * as L from 'leaflet';
-import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state';
-import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner';
-import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge';
-import type { CenterSummary } from '../../../../shared/models/center.model';
-import { CenterStore } from '../../center.store';
+import maplibregl from 'maplibre-gl';
+import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-state';
+import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
+import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge';
+import type { CenterSummary } from '@/app/shared/models/center.model';
+import { CenterStore } from '@/app/features/center/center.store';
+import { initMapLibre } from '@/app/shared/utils/map-init';
 
 @Component({
   selector: 'app-center-list-page',
@@ -35,8 +36,8 @@ export class CenterListPageComponent implements OnInit, AfterViewInit {
   protected readonly cityFilter = new FormControl('');
   protected readonly showMap = signal(true);
   protected readonly mapEl = viewChild<ElementRef<HTMLDivElement>>('mapContainer');
-  private map: L.Map | null = null;
-  private markers: L.Marker[] = [];
+  private map: maplibregl.Map | null = null;
+  private markers: maplibregl.Marker[] = [];
 
   ngOnInit(): void {
     this.store.loadCenters({ page: 0, size: 50 });
@@ -47,13 +48,15 @@ export class CenterListPageComponent implements OnInit, AfterViewInit {
   }
 
   private initMap(): void {
+    initMapLibre();
     const el = this.mapEl()?.nativeElement;
     if (!el) return;
-    this.map = L.map(el, { zoomControl: true }).setView([31.7917, -7.0926], 6);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap',
-    }).addTo(this.map);
+    this.map = new maplibregl.Map({
+      container: el,
+      style: 'https://tiles.openfreemap.org/styles/liberty',
+      center: [10.1815, 36.8065],
+      zoom: 6,
+    });
     this.addMarkers();
   }
 
@@ -62,11 +65,17 @@ export class CenterListPageComponent implements OnInit, AfterViewInit {
     this.markers.forEach((m) => m.remove());
     this.markers = [];
     for (const c of this.store.centers()) {
-      const lat = 31.7917 + (Math.random() - 0.5) * 2;
-      const lng = -7.0926 + (Math.random() - 0.5) * 2;
-      const marker = L.marker([lat, lng]).addTo(this.map!);
-      marker.bindPopup(`<b>${c.name}</b><br/>${c.city}<br/><a href="/centers/${c.id}">View details</a>`);
-      marker.on('click', () => this.router.navigate(['/centers', c.id]));
+      const el = document.createElement('div');
+      el.style.cssText = 'width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;';
+      el.innerHTML = `<svg viewBox="0 0 24 24" width="28" height="28" fill="#cc0000"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>`;
+      const popup = new maplibregl.Popup({ offset: 15 }).setHTML(
+        `<div dir="auto"><b>${c.name}</b><br/>${c.city}</div><a href="/centers/${c.id}" style="display:block;margin-top:4px;color:#cc0000;">View details</a>`,
+      );
+      const marker = new maplibregl.Marker({ element: el })
+        .setLngLat([c.longitude ?? 0, c.latitude ?? 0])
+        .setPopup(popup)
+        .addTo(this.map!);
+      el.addEventListener('click', () => this.router.navigate(['/centers', c.id]));
       this.markers.push(marker);
     }
   }
@@ -81,6 +90,6 @@ export class CenterListPageComponent implements OnInit, AfterViewInit {
 
   protected toggleMap(): void {
     this.showMap.update((v) => !v);
-    if (this.showMap()) setTimeout(() => this.map?.invalidateSize());
+    if (this.showMap()) setTimeout(() => this.map?.resize());
   }
 }

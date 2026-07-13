@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
-import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge';
-import type { DataDeletionRequest } from '../../../../shared/models/config.model';
-import { AdminService } from '../../admin.service';
+import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge';
+import type { DataDeletionRequest } from '@/app/shared/models/config.model';
+import { AdminService } from '@/app/features/admin/admin.service';
 
 @Component({
   selector: 'app-deletion-requests-page',

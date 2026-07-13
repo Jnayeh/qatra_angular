@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
-import type { ApiResponse } from '../../shared/models/api-response.model';
+import type { ApiResponse } from '@/app/shared/models/api-response.model';
 import type {
   Certificate,
   DonorProfile,
@@ -8,8 +8,8 @@ import type {
   HealthQuestionnaire,
   ImpactSummary,
   NotificationPreferences,
-} from '../../shared/models/donor.model';
-import { ApiService } from '../../core/http/api.service';
+} from '@/app/shared/models/donor.model';
+import { ApiService } from '@/app/core/http/api.service';
 
 @Injectable({ providedIn: 'root' })
 export class DonorService {
@@ -36,7 +36,7 @@ export class DonorService {
   }
 
   updateNotificationPrefs(prefs: NotificationPreferences): Observable<ApiResponse<NotificationPreferences>> {
-    return this.api.put('/donors/me/notification-prefs', prefs);
+    return this.api.put('/donors/me/notification-prefs', { preferences: prefs });
   }
 
   getHealthQuestionnaire(): Observable<ApiResponse<HealthQuestionnaire>> {

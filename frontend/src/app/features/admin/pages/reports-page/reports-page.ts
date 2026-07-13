@@ -7,7 +7,7 @@ import { DatePicker } from 'primeng/datepicker';
 import { TableModule } from 'primeng/table';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import Papa from 'papaparse';
-import { AdminService } from '../../admin.service';
+import { AdminService } from '@/app/features/admin/admin.service';
 
 @Component({
   selector: 'app-reports-page',

@@ -1,28 +1,31 @@
 <div class="max-w-4xl mx-auto space-y-6">
-  <h1 class="text-2xl font-bold text-white">My Impact</h1>
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">My Impact</h1>
+    <p class="text-sm text-gray-500 mt-1">Track your donation history and see the impact you've made.</p>
+  </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <p-card styleClass="text-center">
       <ng-template pTemplate="content">
         <i class="pi pi-heart text-5xl text-primary-500 mb-4 block"></i>
-        <p class="text-4xl font-bold text-white">{{ store.impact()?.totalDonations ?? 0 }}</p>
-        <p class="text-sm text-gray-400 mt-2">Total Donations</p>
+        <p class="text-4xl font-bold text-gray-900">{{ store.impact()?.totalDonations ?? 0 }}</p>
+        <p class="text-sm text-gray-500 mt-2">Total Donations</p>
       </ng-template>
     </p-card>
 
     <p-card styleClass="text-center">
       <ng-template pTemplate="content">
         <i class="pi pi-heart-fill text-5xl text-green-500 mb-4 block"></i>
-        <p class="text-4xl font-bold text-white">{{ store.impact()?.estimatedLivesSaved ?? 0 }}</p>
-        <p class="text-sm text-gray-400 mt-2">Lives Saved</p>
+        <p class="text-4xl font-bold text-gray-900">{{ store.impact()?.estimatedLivesSaved ?? 0 }}</p>
+        <p class="text-sm text-gray-500 mt-2">Lives Saved</p>
       </ng-template>
     </p-card>
 
     <p-card styleClass="text-center">
       <ng-template pTemplate="content">
         <i class="pi pi-star-fill text-5xl text-yellow-500 mb-4 block"></i>
-        <p class="text-4xl font-bold text-white">{{ store.reliabilityScore() }}</p>
-        <p class="text-sm text-gray-400 mt-2">Reliability Score</p>
+        <p class="text-4xl font-bold text-gray-900">{{ store.reliabilityScore() }}</p>
+        <p class="text-sm text-gray-500 mt-2">Reliability Score</p>
       </ng-template>
     </p-card>
   </div>
@@ -45,9 +48,9 @@
         <div class="space-y-3">
           @for (m of store.impact()!.milestones; track m.label) {
             <div class="flex items-center gap-3" [class.opacity-50]="!m.achieved">
-              <i class="pi {{ m.achieved ? 'pi-trophy' : 'pi-circle-off' }} text-xl" [class.text-green-400]="m.achieved" [class.text-gray-600]="!m.achieved"></i>
+              <i class="pi {{ m.achieved ? 'pi-trophy' : 'pi-circle-off' }} text-xl" [class.text-yellow-500]="m.achieved" [class.text-gray-400]="!m.achieved"></i>
               <div>
-                <p class="text-sm" [class.text-white]="m.achieved" [class.text-gray-500]="!m.achieved">{{ m.label }}</p>
+                <p class="text-sm font-medium" [class.text-gray-900]="m.achieved" [class.text-gray-400]="!m.achieved">{{ m.label }}</p>
                 @if (m.achieved && m.achievedAt) {
                   <p class="text-xs text-gray-500">{{ m.achievedAt }}</p>
                 }

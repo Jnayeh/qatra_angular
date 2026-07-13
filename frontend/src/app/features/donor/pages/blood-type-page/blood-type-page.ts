@@ -3,9 +3,9 @@ import { RouterLink } from '@angular/router';
 import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { Message } from 'primeng/message';
-import type { BloodType } from '../../../../shared/models/donor.model';
-import { formatBloodType } from '../../../../shared/utils/blood-type-utils';
-import { DonorStore } from '../../donor.store';
+import type { BloodType } from '@/app/shared/models/donor.model';
+import { formatBloodType } from '@/app/shared/utils/blood-type-utils';
+import { DonorStore } from '@/app/features/donor/donor.store';
 
 const ALL_BLOOD_TYPES: BloodType[] = [
   'A_POSITIVE', 'A_NEGATIVE', 'B_POSITIVE', 'B_NEGATIVE',

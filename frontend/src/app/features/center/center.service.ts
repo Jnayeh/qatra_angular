@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
-import type { ApiResponse, Page } from '../../shared/models/api-response.model';
-import type { BloodDonationCenter, CenterDetail, CenterSummary, ClosureResult, ClosureRequest, Slot } from '../../shared/models/center.model';
-import { ApiService } from '../../core/http/api.service';
+import type { ApiResponse, Page } from '@/app/shared/models/api-response.model';
+import type { BloodDonationCenter, CenterDetail, CenterSummary, ClosureResult, ClosureRequest, Slot } from '@/app/shared/models/center.model';
+import { ApiService } from '@/app/core/http/api.service';
 
 @Injectable({ providedIn: 'root' })
 export class CenterService {

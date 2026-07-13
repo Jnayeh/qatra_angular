@@ -5,8 +5,8 @@ import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { Html5Qrcode } from 'html5-qrcode';
-import { CheckInResult } from '../../../../shared/models/appointment.model';
-import { AppointmentService } from '../../appointment.service';
+import { CheckInResult } from '@/app/shared/models/appointment.model';
+import { AppointmentService } from '@/app/features/appointment/appointment.service';
 
 @Component({
   selector: 'app-checkin-page',
@@ -77,16 +77,30 @@ export class CheckinPageComponent implements AfterViewInit {
   private handleScanResult(value: string): void {
     this.checkingIn.set(true);
     const isNumeric = /^\d+$/.test(value);
-    this.appointmentService.checkIn(isNumeric ? { appointmentId: Number(value) } : { qrCode: value }).subscribe({
-      next: (res) => {
-        this.result.set(res.data);
-        this.checkingIn.set(false);
-        this.stopScanner();
-      },
-      error: (err: any) => {
-        this.scanError.set(err.friendlyMessage ?? 'Check-in failed');
-        this.checkingIn.set(false);
-      },
-    });
+    if (isNumeric) {
+      this.appointmentService.checkIn(Number(value), '').subscribe({
+        next: (res) => {
+          this.result.set(res.data);
+          this.checkingIn.set(false);
+          this.stopScanner();
+        },
+        error: (err: any) => {
+          this.scanError.set(err.friendlyMessage ?? 'Check-in failed');
+          this.checkingIn.set(false);
+        },
+      });
+    } else {
+      this.appointmentService.checkIn(0, value).subscribe({
+        next: (res) => {
+          this.result.set(res.data);
+          this.checkingIn.set(false);
+          this.stopScanner();
+        },
+        error: (err: any) => {
+          this.scanError.set(err.friendlyMessage ?? 'Check-in failed');
+          this.checkingIn.set(false);
+        },
+      });
+    }
   }
 }

@@ -1,7 +1,7 @@
 export type AppointmentStatus =
   | 'SCHEDULED'
-  | 'CONFIRMED'
   | 'CHECKED_IN'
+  | 'IN_SCREENING'
   | 'COMPLETED'
   | 'CANCELLED'
   | 'NO_SHOW'
@@ -9,24 +9,29 @@ export type AppointmentStatus =
 
 export type AppointmentType = 'REGULAR' | 'EMERGENCY';
 
+export type DonationOutcome = 'COMPLETED' | 'CANCELLED';
+
 export interface Appointment {
   id: number;
   donorId: number;
   centerId: number;
   emergencyId: number | null;
   slotId: number;
+  completedByStaffId: number | null;
   status: AppointmentStatus;
   appointmentType: AppointmentType;
   bloodType: string | null;
   mlCollected: number | null;
   notes: string | null;
-  cancellationReason: string | null;
   qrCode: string;
-  completedByStaffId: number | null;
   createdAt: string;
+  updatedAt: string;
   checkedInAt: string | null;
+  startedAt: string | null;
   completedAt: string | null;
   cancelledAt: string | null;
+  cancellationReason: string | null;
+  outcome: DonationOutcome | null;
 }
 
 export interface AppointmentRequest {
@@ -68,17 +73,23 @@ export interface AppointmentSummary {
   appointmentType: AppointmentType;
 }
 
+export interface DonorAppointmentView extends AppointmentSummary {
+  qrCode: string;
+  centerId: number;
+  slotId: number;
+}
+
 export interface HealthScreening {
   id: number;
   appointmentId: number;
   donorId: number;
-  screenedByStaffId: number;
-  temperatureCelsius: number;
-  hemoglobinGdL: number;
+  weight: number;
   bloodPressure: string;
-  pulse: number;
-  medicalCheckPassed: boolean;
+  hemoglobin: number;
+  screenedByStaffId: number;
+  temperature: number;
   notes: string | null;
+  eligible: boolean;
   screenedAt: string;
 }
 

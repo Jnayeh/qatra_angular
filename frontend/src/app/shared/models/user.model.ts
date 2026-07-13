@@ -3,15 +3,18 @@ export type UserStatus =
   | 'INACTIVE'
   | 'SUSPENDED'
   | 'PENDING_VERIFICATION'
+  | 'PENDING_DELETION'
   | 'DELETED';
 
-export type Role = 'SYSTEM_ADMIN' | 'CENTER_ADMIN' | 'CENTER_STAFF' | 'DONOR';
+export type Role = 'SUPER_ADMIN' | 'CENTER_ADMIN' | 'CENTER_STAFF' | 'DONOR';
 
 export interface User {
   id: number;
   email: string;
   phone: string;
   displayName: string;
+  firstName: string;
+  familyName: string;
   status: UserStatus;
   emailVerified: boolean;
   roles: Role[];
@@ -36,7 +39,9 @@ export interface RegisterRequest {
   email: string;
   phone: string;
   password: string;
-  displayName: string;
+  firstName: string;
+  familyName: string;
+  displayName?: string;
   role: 'DONOR';
 }
 
@@ -52,9 +57,13 @@ export interface LoginRequest {
 }
 
 export interface TokenPair {
-  accessToken: string;
+  token: string;
+  tokenType: string;
   refreshToken: string;
-  expiresIn: number;
+  userId: number;
+  email: string;
+  displayName: string;
+  roles: Role[];
 }
 
 export interface TokenRefreshRequest {

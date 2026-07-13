@@ -6,7 +6,7 @@ import { InputText } from 'primeng/inputtext';
 import { InputNumber } from 'primeng/inputnumber';
 import { ToggleSwitch } from 'primeng/toggleswitch';
 import { Message } from 'primeng/message';
-import { DonorService } from '../../donor.service';
+import { DonorService } from '@/app/features/donor/donor.service';
 
 @Component({
   selector: 'app-location-page',

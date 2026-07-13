@@ -1,31 +1,84 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Button } from 'primeng/button';
-import { Card } from 'primeng/card';
 import { Message } from 'primeng/message';
 import { Password } from 'primeng/password';
-import { ProgressSpinner } from 'primeng/progressspinner';
-import { AuthService } from '../../../../core/auth/auth.service';
+import { AuthService } from '@/app/core/auth/auth.service';
+import { PublicNavbarComponent } from '@/app/shared/components/public-navbar/public-navbar';
+
+interface ResetTheme {
+  pageBg: string;
+  cardShadow: string;
+  accentText: string;
+  icon: string;
+  badge: string;
+  badgeClass: string;
+  dark: boolean;
+  loginLink: string;
+}
 
 @Component({
   selector: 'app-reset-password-page',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    Card,
     Button,
     Password,
     Message,
-    ProgressSpinner,
     RouterLink,
+    PublicNavbarComponent,
   ],
   templateUrl: './reset-password-page.html',
+  styleUrl: '../login-page/login-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResetPasswordPageComponent {
   private readonly authService = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
+
+  private readonly intendedRole = this.route.snapshot.data['intendedRole'] as string | undefined;
+
+  protected readonly isHiddenPortal = !!this.intendedRole && this.intendedRole !== 'DONOR';
+  protected readonly navbarMode = this.isHiddenPortal ? 'back' as const : 'default' as const;
+
+  protected readonly theme = computed((): ResetTheme => {
+    switch (this.intendedRole) {
+      case 'CENTER':
+        return {
+          pageBg: 'auth-surface-admin',
+          cardShadow: 'auth-card-admin',
+          accentText: 'text-primary-400',
+          icon: 'pi-building',
+          badge: 'Center Portal',
+          badgeClass: 'bg-slate-700 text-primary-200 border border-slate-600',
+          dark: true,
+          loginLink: '/auth/center-login',
+        };
+      case 'ADMIN':
+        return {
+          pageBg: 'auth-surface-admin',
+          cardShadow: 'auth-card-admin',
+          accentText: 'text-primary-400',
+          icon: 'pi-shield',
+          badge: 'Super Admin',
+          badgeClass: 'bg-slate-700 text-primary-200 border border-slate-600',
+          dark: true,
+          loginLink: '/auth/admin-login',
+        };
+      default:
+        return {
+          pageBg: 'auth-surface-donor',
+          cardShadow: 'auth-card-donor',
+          accentText: 'text-primary-600',
+          icon: 'pi-key',
+          badge: 'New Password',
+          badgeClass: 'bg-primary-50 text-primary-700',
+          dark: false,
+          loginLink: '/auth/login',
+        };
+    }
+  });
 
   protected readonly success = signal(false);
   protected readonly error = signal<string | null>(null);

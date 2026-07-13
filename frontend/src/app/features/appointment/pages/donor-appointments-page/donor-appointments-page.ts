@@ -1,29 +1,65 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { Tabs, TabList, Tab, TabPanel } from 'primeng/tabs';
-import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state';
+import { Dialog } from 'primeng/dialog';
+import { Button } from 'primeng/button';
+import { Router, RouterLink } from '@angular/router';
+import { AppointmentStore } from '@/app/features/appointment/appointment.store';
+import { AppointmentCardComponent } from '@/app/shared/components/appointment-card/appointment-card';
+import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-state';
+import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
+import type { DonorAppointmentView } from '@/app/shared/models/appointment.model';
 
 @Component({
   selector: 'app-donor-appointments-page',
   standalone: true,
-  imports: [Tabs, TabList, Tab, TabPanel, EmptyStateComponent],
-  template: `
-    <div class="max-w-4xl mx-auto space-y-6">
-      <h1 class="text-2xl font-bold text-white">My Appointments</h1>
-
-      <p-tabs value="0">
-        <p-tablist>
-          <p-tab value="0">Upcoming</p-tab>
-          <p-tab value="1">Past</p-tab>
-        </p-tablist>
-        <p-tabpanel value="0">
-          <app-empty-state icon="calendar" title="No upcoming appointments" message="Book your next donation at a center near you." />
-        </p-tabpanel>
-        <p-tabpanel value="1">
-          <app-empty-state icon="history" title="No past appointments" message="Your donation history will appear here." />
-        </p-tabpanel>
-      </p-tabs>
-    </div>
-  `,
+  imports: [
+    Tabs,
+    TabList,
+    Tab,
+    TabPanel,
+    Dialog,
+    Button,
+    RouterLink,
+    AppointmentCardComponent,
+    EmptyStateComponent,
+    LoadingSpinnerComponent,
+  ],
+  templateUrl: './donor-appointments-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DonorAppointmentsPageComponent {}
+export class DonorAppointmentsPageComponent implements OnInit {
+  protected readonly store = inject(AppointmentStore);
+  private readonly router = inject(Router);
+
+  protected readonly qrDialogVisible = signal(false);
+  protected readonly qrCode = signal('');
+  protected readonly cancelTarget = signal<DonorAppointmentView | null>(null);
+
+  ngOnInit(): void {
+    this.store.loadMyAppointments({ page: 0, size: 20 });
+  }
+
+  protected showQr(appointment: DonorAppointmentView): void {
+    this.qrCode.set(appointment.qrCode);
+    this.qrDialogVisible.set(true);
+  }
+
+  protected requestCancel(appointment: DonorAppointmentView): void {
+    this.cancelTarget.set(appointment);
+  }
+
+  protected confirmCancel(): void {
+    const target = this.cancelTarget();
+    if (!target) return;
+    this.store.cancelAppointment(target.id, 'Cancelled by donor');
+    this.cancelTarget.set(null);
+  }
+
+  protected downloadCertificate(appointment: DonorAppointmentView): void {
+    window.open(`/api/v1/donors/me/certificates/${appointment.id}/download`, '_blank');
+  }
+
+  protected bookAppointment(): void {
+    this.router.navigate(['/appointments/book']);
+  }
+}

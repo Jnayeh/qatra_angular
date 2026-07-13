@@ -2,26 +2,19 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Button } from 'primeng/button';
-import { Card } from 'primeng/card';
 import { InputText } from 'primeng/inputtext';
+import { Message } from 'primeng/message';
 import { Password } from 'primeng/password';
-import { ProgressSpinner } from 'primeng/progressspinner';
-import { AuthService } from '../../../../core/auth/auth.service';
-import type { RegisterRequest } from '../../../../shared/models/user.model';
+import { AuthService } from '@/app/core/auth/auth.service';
+import type { RegisterRequest } from '@/app/shared/models/user.model';
+import { PublicNavbarComponent } from '@/app/shared/components/public-navbar/public-navbar';
 
 @Component({
   selector: 'app-register-page',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    Card,
-    Button,
-    InputText,
-    Password,
-    ProgressSpinner,
-    RouterLink,
-  ],
+  imports: [ReactiveFormsModule, Button, InputText, Password, Message, RouterLink, PublicNavbarComponent],
   templateUrl: './register-page.html',
+  styleUrl: '../login-page/login-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterPageComponent {
@@ -33,7 +26,8 @@ export class RegisterPageComponent {
 
   protected readonly form = new FormGroup(
     {
-      displayName: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2), Validators.maxLength(100)] }),
+      firstName: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2), Validators.maxLength(50)] }),
+      familyName: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2), Validators.maxLength(50)] }),
       email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
       phone: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/^\+?[\d\s-]{8,15}$/)] }),
       password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8)] }),
@@ -55,7 +49,8 @@ export class RegisterPageComponent {
     this.error.set(null);
 
     const payload: RegisterRequest = {
-      displayName: this.form.value.displayName!,
+      firstName: this.form.value.firstName!,
+      familyName: this.form.value.familyName!,
       email: this.form.value.email!,
       phone: this.form.value.phone!,
       password: this.form.value.password!,

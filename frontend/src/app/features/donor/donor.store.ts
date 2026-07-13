@@ -2,8 +2,8 @@ import { inject } from '@angular/core';
 import { signalStore, withState, withMethods, withComputed, patchState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
-import type { Certificate, DonorProfile, EligibilityStatus, HealthQuestionnaire, ImpactSummary, NotificationPreferences } from '../../shared/models/donor.model';
-import { DonorService } from './donor.service';
+import type { Certificate, DonorProfile, EligibilityStatus, HealthQuestionnaire, ImpactSummary, NotificationPreferences } from '@/app/shared/models/donor.model';
+import { DonorService } from '@/app/features/donor/donor.service';
 
 interface DonorState {
   profile: DonorProfile | null;

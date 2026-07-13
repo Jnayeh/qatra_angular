@@ -3,9 +3,9 @@ import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { Divider } from 'primeng/divider';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner';
-import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge';
-import { CenterStore } from '../../center.store';
+import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
+import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge';
+import { CenterStore } from '@/app/features/center/center.store';
 
 @Component({
   selector: 'app-center-manage-page',

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { Card } from 'primeng/card';
 import { TableModule } from 'primeng/table';
-import type { AuditLogEntry } from '../../../../shared/models/analytics.model';
-import { AdminService } from '../../admin.service';
+import type { AuditLogEntry } from '@/app/shared/models/analytics.model';
+import { AdminService } from '@/app/features/admin/admin.service';
 
 @Component({
   selector: 'app-audit-logs-page',

@@ -50,12 +50,12 @@ export const UpdateAvailabilitySchema = z.object({
 
 export const HealthQuestionnaireSchema = z.object({
   hasChronicIllness: z.boolean(),
-  medicalConditionsDetails: z.string().optional(),
+  lastSurgeryAt: z.string().nullable().optional(),
+  lastTravelAt: z.string().nullable().optional(),
+  lastTattooOrPiercingAt: z.string().nullable().optional(),
   onMedication: z.boolean(),
+  medicalConditionsDetails: z.string().optional(),
   medicationDetails: z.string().optional(),
-  recentSurgery: z.boolean(),
-  recentTravel: z.boolean(),
-  recentTattooOrPiercing: z.boolean(),
 });
 
 export const NotificationPreferencesSchema = z.object({

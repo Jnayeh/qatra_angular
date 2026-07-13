@@ -24,16 +24,16 @@ export const CheckInSchema = z.object({
 });
 
 export const ScreeningSchema = z.object({
-  temperatureCelsius: z
+  temperature: z
     .number()
     .min(34, 'Temperature too low')
     .max(42, 'Temperature too high'),
-  hemoglobinGdL: z.number().min(5).max(20),
+  hemoglobin: z.number().min(5).max(20),
+  weight: z.number().min(30).max(200),
   bloodPressure: z
     .string()
     .regex(/^\d{2,3}\/\d{2,3}$/, 'Invalid blood pressure format (e.g. 120/80)'),
-  pulse: z.number().int().min(40).max(200),
-  medicalCheckPassed: z.boolean(),
+  eligible: z.boolean(),
   notes: z.string().max(500).optional(),
 });
 

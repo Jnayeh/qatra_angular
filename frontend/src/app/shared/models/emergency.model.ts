@@ -1,18 +1,14 @@
-export type EmergencyUrgency = 'CRITICAL' | 'URGENT' | 'MODERATE';
+export type EmergencyUrgency = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
 
 export type EmergencyStatus =
   | 'OPEN'
-  | 'NOTIFYING'
-  | 'IN_PROGRESS'
-  | 'RESOLVED'
+  | 'FULFILLED'
   | 'CANCELLED'
   | 'EXPIRED';
 
-export type ResponseType =
-  | 'WILLING'
-  | 'DECLINED'
-  | 'CONVERTED_TO_APPOINTMENT'
-  | 'NO_RESPONSE';
+export type ResponseStatus =
+  | 'ACCEPTED'
+  | 'DECLINED';
 
 export interface Emergency {
   id: number;
@@ -25,8 +21,9 @@ export interface Emergency {
   status: EmergencyStatus;
   matchRadius: number;
   escalationLevel: number;
-  neededBy: string;
+  expiresAt: string;
   createdAt: string;
+  updatedAt: string;
   resolvedAt: string | null;
   resolvedByUserId: number | null;
 }
@@ -49,10 +46,10 @@ export interface EmergencyResponse {
   id: number;
   emergencyId: number;
   donorId: number;
-  responseType: ResponseType;
-  message: string | null;
-  notifiedAt: string;
-  respondedAt: string | null;
+  slotId: number | null;
+  status: ResponseStatus;
+  reason: string | null;
+  respondedAt: string;
 }
 
 export interface MatchResult {
@@ -62,9 +59,13 @@ export interface MatchResult {
   donorId: number;
   radius: number;
   bloodType: string;
+  status: MatchStatus;
   escalationLevel: number;
   createdAt: string;
+  respondedAt: string | null;
 }
+
+export type MatchStatus = 'PENDING' | 'RESPONDED' | 'EXPIRED';
 
 export interface EmergencyCreateRequest {
   centerId: number;
@@ -72,17 +73,12 @@ export interface EmergencyCreateRequest {
   unitsNeeded: number;
   urgency: EmergencyUrgency;
   contactPhone: string;
-  neededBy: string;
-}
-
-export interface EmergencyRespondRequest {
-  responseType: 'WILLING' | 'DECLINED' | 'CONFIRMED';
-  slotId?: number;
+  expiresAt: string;
 }
 
 export interface EmergencyRespondResult {
   emergencyId: number;
-  responseType: ResponseType;
+  status: ResponseStatus;
   availableSlots?: SlotSummary[];
   appointmentId?: number;
   qrCode?: string;
@@ -102,6 +98,6 @@ export interface EmergencyNotificationSummary {
   status: EmergencyStatus;
   centerName: string;
   distanceKm: number | null;
-  responseType: ResponseType | null;
+  responseStatus: ResponseStatus | null;
   respondedAt: string | null;
 }

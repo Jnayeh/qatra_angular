@@ -1,44 +1,45 @@
 <div class="max-w-2xl mx-auto space-y-6">
-  <h1 class="text-2xl font-bold text-white">Notification Preferences</h1>
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Notification Preferences</h1>
+    <p class="text-sm text-gray-500 mt-1">Choose how and when you receive notifications.</p>
+  </div>
 
   <p-card>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-      <div class="flex flex-col gap-1">
-        <label class="text-sm text-gray-400">Notification Frequency</label>
+      <div class="flex flex-col gap-1.5">
+        <label for="frequency" class="text-sm font-medium text-gray-700">Notification Frequency</label>
         <p-select formControlName="frequency" [options]="frequencyOptions" optionLabel="label" optionValue="value" styleClass="w-full" />
       </div>
 
       <div class="flex items-center justify-between">
-        <span class="text-gray-300">Quiet Hours</span>
+        <span class="text-sm font-medium text-gray-700">Quiet Hours</span>
         <p-toggleswitch formControlName="enableQuietHours" />
       </div>
 
       @if (form.get('enableQuietHours')?.value) {
         <div class="grid grid-cols-2 gap-4">
-          <div class="flex flex-col gap-1">
-            <label class="text-sm text-gray-400">Start (HH:mm)</label>
-            <input pInputText formControlName="quietStart" placeholder="22:00" class="w-full" />
+          <div class="flex flex-col gap-1.5">
+            <label for="quietStart" class="text-sm font-medium text-gray-700">Start (HH:mm)</label>
+            <input pInputText id="quietStart" formControlName="quietStart" placeholder="22:00" class="w-full" />
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-sm text-gray-400">End (HH:mm)</label>
-            <input pInputText formControlName="quietEnd" placeholder="07:00" class="w-full" />
+          <div class="flex flex-col gap-1.5">
+            <label for="quietEnd" class="text-sm font-medium text-gray-700">End (HH:mm)</label>
+            <input pInputText id="quietEnd" formControlName="quietEnd" placeholder="07:00" class="w-full" />
           </div>
         </div>
       }
 
       <div class="flex items-center justify-between">
-        <span class="text-gray-300">Allow Emergency Notifications</span>
+        <span class="text-sm font-medium text-gray-700">Allow Emergency Notifications</span>
         <p-toggleswitch formControlName="allowEmergencyNotifications" />
       </div>
 
-      <div class="flex flex-col gap-1">
-        <label class="text-sm text-gray-400">Max Notification Distance (km)</label>
-        <p-inputnumber formControlName="maxNotificationDistanceKm" mode="decimal" [min]="0" [max]="1000" styleClass="w-full" />
+      <div class="flex flex-col gap-1.5">
+        <label for="maxDist" class="text-sm font-medium text-gray-700">Max Notification Distance (km)</label>
+        <p-inputnumber formControlName="maxNotificationDistanceKm" inputId="maxDist" mode="decimal" [min]="0" [max]="1000" styleClass="w-full" />
       </div>
 
-      <p-button severity="primary" type="submit" [disabled]="form.invalid">
-        Save Preferences
-      </p-button>
+      <p-button severity="primary" type="submit" [disabled]="form.invalid" class="mt-1">Save Preferences</p-button>
     </form>
   </p-card>
 </div>

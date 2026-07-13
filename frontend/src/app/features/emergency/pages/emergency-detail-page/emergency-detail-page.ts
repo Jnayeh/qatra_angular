@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/cor
 import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { ActivatedRoute } from '@angular/router';
-import { AuthStore } from '../../../../core/auth/auth.store';
-import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner';
-import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge';
-import { EmergencyStore } from '../../emergency.store';
+import { AuthStore } from '@/app/core/auth/auth.store';
+import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
+import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge';
+import { EmergencyStore } from '@/app/features/emergency/emergency.store';
 
 @Component({
   selector: 'app-emergency-detail-page',

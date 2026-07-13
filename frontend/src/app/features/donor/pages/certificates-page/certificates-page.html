@@ -1,5 +1,8 @@
 <div class="max-w-4xl mx-auto space-y-6">
-  <h1 class="text-2xl font-bold text-white">Donation Certificates</h1>
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Donation Certificates</h1>
+    <p class="text-sm text-gray-500 mt-1">Download and view your donation certificates.</p>
+  </div>
 
   @if (store.certificates().length === 0) {
     <app-empty-state
@@ -14,9 +17,9 @@
       <p-card>
         <div class="flex items-start justify-between">
           <div>
-            <p class="text-white font-medium">{{ cert.centerName }}</p>
-            <p class="text-sm text-gray-400">{{ cert.donationDate }}</p>
-            <p class="text-sm text-gray-400">{{ cert.mlCollected }} ml donated</p>
+            <p class="font-medium text-gray-900">{{ cert.centerName }}</p>
+            <p class="text-sm text-gray-500">{{ cert.donationDate }}</p>
+            <p class="text-sm text-gray-500">{{ cert.mlCollected }} ml donated</p>
           </div>
           <a [href]="cert.certificateUrl" target="_blank">
             <p-button icon="pi pi-download" severity="primary" variant="outlined" />

@@ -4,8 +4,8 @@ import { Button } from 'primeng/button';
 import { Menu } from 'primeng/menu';
 import { Router, Event, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
-import { AuthStore } from '../../../core/auth/auth.store';
-import { NotificationBellComponent } from '../../../shared/components/notification-bell/notification-bell';
+import { AuthStore } from '@/app/core/auth/auth.store';
+import { NotificationBellComponent } from '@/app/shared/components/notification-bell/notification-bell';
 
 @Component({
   selector: 'app-toolbar',

@@ -1,6 +1,6 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { ApiService } from '../http/api.service';
-import { AuthStore } from '../auth/auth.store';
+import { ApiService } from '@/app/core/http/api.service';
+import { AuthStore } from '@/app/core/auth/auth.store';
 
 interface LastPosition {
   latitude: number;

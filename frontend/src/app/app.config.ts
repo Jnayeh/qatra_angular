@@ -4,21 +4,40 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
-import { authInterceptor } from './core/auth/auth.interceptor';
-import { errorHandlerInterceptor } from './core/http/error-handler.interceptor';
-import { mockInterceptor } from './core/mock/mock.interceptor';
-import { routes } from './app.routes';
+import { definePreset } from '@primeng/themes';
+import { authInterceptor } from '@/app/core/auth/auth.interceptor';
+import { errorHandlerInterceptor } from '@/app/core/http/error-handler.interceptor';
+import { mockInterceptor } from '@/app/core/mock/mock.interceptor';
+import { routes } from '@/app/app.routes';
+
+const QatraAura = definePreset(Aura, {
+  semantic: {
+    primary: {
+      50: '#fce4e4',
+      100: '#f8baba',
+      200: '#f28b8b',
+      300: '#eb5c5c',
+      400: '#e63939',
+      500: '#cc0000',
+      600: '#b30000',
+      700: '#990000',
+      800: '#7a0000',
+      900: '#5c0000',
+      950: '#3d0000',
+    },
+  },
+});
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([mockInterceptor, authInterceptor, errorHandlerInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, mockInterceptor, errorHandlerInterceptor])),
     provideAnimations(),
     providePrimeNG({
       theme: {
-        preset: Aura,
+        preset: QatraAura,
         options: {
           darkModeSelector: false,
         },

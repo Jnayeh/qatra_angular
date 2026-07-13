@@ -1,15 +1,18 @@
 <div class="max-w-2xl mx-auto space-y-6">
-  <h1 class="text-2xl font-bold text-white">Create Emergency</h1>
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Create Emergency</h1>
+    <p class="text-sm text-gray-500 mt-1">Submit a new blood donation emergency request for a center.</p>
+  </div>
 
   @if (centerStore.isLoading()) {
     <app-loading-spinner />
   } @else {
     <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
-      <p-card class="bg-surface-card">
+      <p-card>
         <ng-template pTemplate="content">
           <div class="space-y-4">
-            <div class="flex flex-col gap-1">
-              <label for="centerId" class="text-gray-400">Center</label>
+            <div class="flex flex-col gap-1.5">
+              <label for="centerId" class="text-sm font-medium text-gray-700">Center</label>
               <p-select formControlName="centerId" id="centerId" class="w-full" [options]="centerStore.centers()" optionLabel="name" optionValue="id" />
               @if (form.get('centerId')?.hasError('required') && form.get('centerId')?.touched) {
                 <small class="text-red-500">Center is required</small>
@@ -17,16 +20,16 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="flex flex-col gap-1">
-                <label for="bloodType" class="text-gray-400">Blood Type</label>
+              <div class="flex flex-col gap-1.5">
+                <label for="bloodType" class="text-sm font-medium text-gray-700">Blood Type</label>
                 <p-select formControlName="bloodType" id="bloodType" class="w-full" [options]="bloodTypeOptions" optionLabel="label" optionValue="value" />
                 @if (form.get('bloodType')?.hasError('required') && form.get('bloodType')?.touched) {
                   <small class="text-red-500">Blood type is required</small>
                 }
               </div>
 
-              <div class="flex flex-col gap-1">
-                <label for="unitsNeeded" class="text-gray-400">Units Needed</label>
+              <div class="flex flex-col gap-1.5">
+                <label for="unitsNeeded" class="text-sm font-medium text-gray-700">Units Needed</label>
                 <input pInputText id="unitsNeeded" type="number" min="1" formControlName="unitsNeeded" class="w-full" />
                 @if (form.get('unitsNeeded')?.hasError('required') && form.get('unitsNeeded')?.touched) {
                   <small class="text-red-500">Units is required</small>
@@ -38,21 +41,21 @@
             </div>
 
             <div>
-              <label class="block text-sm text-gray-400 mb-1">Urgency</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Urgency</label>
               <div class="flex gap-4">
                 @for (opt of urgencyOptions; track opt.value) {
                   <div class="flex items-center gap-2">
                     <p-radioButton [value]="opt.value" formControlName="urgency" [inputId]="opt.value" />
-                    <label [for]="opt.value" class="text-sm">{{ opt.label }}</label>
+                    <label [for]="opt.value" class="text-sm text-gray-700">{{ opt.label }}</label>
                   </div>
                 }
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="flex flex-col gap-1">
-                <label for="contactPhone" class="text-gray-400">Contact Phone</label>
-                <input pInputText id="contactPhone" formControlName="contactPhone" placeholder="+212 6XX XXX XXX" class="w-full" />
+              <div class="flex flex-col gap-1.5">
+                <label for="contactPhone" class="text-sm font-medium text-gray-700">Contact Phone</label>
+                <input pInputText id="contactPhone" formControlName="contactPhone" placeholder="+216 XX XXX XXX" class="w-full" />
                 @if (form.get('contactPhone')?.hasError('required') && form.get('contactPhone')?.touched) {
                   <small class="text-red-500">Phone is required</small>
                 }
@@ -61,10 +64,10 @@
                 }
               </div>
 
-              <div class="flex flex-col gap-1">
-                <label for="neededBy" class="text-gray-400">Needed By</label>
-                <p-datepicker formControlName="neededBy" inputId="neededBy" class="w-full" />
-                @if (form.get('neededBy')?.hasError('required') && form.get('neededBy')?.touched) {
+              <div class="flex flex-col gap-1.5">
+                <label for="expiresAt" class="text-sm font-medium text-gray-700">Expires At</label>
+                <p-datepicker formControlName="expiresAt" inputId="expiresAt" class="w-full" />
+                @if (form.get('expiresAt')?.hasError('required') && form.get('expiresAt')?.touched) {
                   <small class="text-red-500">Deadline is required</small>
                 }
               </div>

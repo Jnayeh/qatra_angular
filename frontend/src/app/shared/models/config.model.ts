@@ -31,4 +31,4 @@ export interface DataDeletionRequest {
   processedAt: string | null;
 }
 
-export type DeletionStatus = 'PENDING' | 'APPROVED' | 'COMPLETED' | 'REJECTED';
+export type DeletionStatus = 'IN_PROGRESS' | 'CANCELED' | 'COMPLETED';

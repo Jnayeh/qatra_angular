@@ -3,10 +3,10 @@ export type NotificationType =
   | 'APPOINTMENT_REMINDER'
   | 'ELIGIBILITY_REMINDER'
   | 'PROFILE_COMPLETION'
-  | 'STAFF_MESSAGE'
+  | 'PASSWORD_RESET'
   | 'GENERAL';
 
-export type NotificationChannel = 'PUSH' | 'SMS' | 'EMAIL' | 'IN_APP';
+export type NotificationChannel = 'IN_APP' | 'PUSH' | 'EMAIL';
 
 export type NotificationStatus =
   | 'PENDING'
@@ -20,10 +20,12 @@ export interface Notification {
   userId: number;
   emergencyId: number | null;
   appointmentId: number | null;
+  email: string | null;
   type: NotificationType;
   title: string;
   body: string;
   data: Record<string, unknown> | null;
+  correlationId: string | null;
   channel: NotificationChannel;
   status: NotificationStatus;
   createdAt: string;

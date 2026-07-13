@@ -3,16 +3,17 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
+import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { ToggleSwitch } from 'primeng/toggleswitch';
 import { Divider } from 'primeng/divider';
 import { Message } from 'primeng/message';
-import { DonorStore } from '../../donor.store';
+import { DonorStore } from '@/app/features/donor/donor.store';
 
 @Component({
   selector: 'app-health-questionnaire-page',
   standalone: true,
-  imports: [ReactiveFormsModule, Card, Button, Textarea, ToggleSwitch, Divider, Message, RouterLink],
+  imports: [ReactiveFormsModule, Card, Button, InputText, Textarea, ToggleSwitch, Divider, Message, RouterLink],
   templateUrl: './health-questionnaire-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -27,9 +28,9 @@ export class HealthQuestionnairePageComponent implements OnInit {
     medicalConditionsDetails: new FormControl(''),
     onMedication: new FormControl(false, { nonNullable: true }),
     medicationDetails: new FormControl(''),
-    recentSurgery: new FormControl(false, { nonNullable: true }),
-    recentTravel: new FormControl(false, { nonNullable: true }),
-    recentTattooOrPiercing: new FormControl(false, { nonNullable: true }),
+    lastSurgeryAt: new FormControl<string | null>(null),
+    lastTravelAt: new FormControl<string | null>(null),
+    lastTattooOrPiercingAt: new FormControl<string | null>(null),
   });
 
   ngOnInit(): void {
@@ -40,9 +41,9 @@ export class HealthQuestionnairePageComponent implements OnInit {
         medicalConditionsDetails: q.medicalConditionsDetails ?? '',
         onMedication: q.onMedication,
         medicationDetails: q.medicationDetails ?? '',
-        recentSurgery: q.recentSurgery,
-        recentTravel: q.recentTravel,
-        recentTattooOrPiercing: q.recentTattooOrPiercing,
+        lastSurgeryAt: q.lastSurgeryAt ?? null,
+        lastTravelAt: q.lastTravelAt ?? null,
+        lastTattooOrPiercingAt: q.lastTattooOrPiercingAt ?? null,
       });
     } else {
       this.store.loadHealthQuestionnaire();
@@ -57,9 +58,9 @@ export class HealthQuestionnairePageComponent implements OnInit {
       medicalConditionsDetails: this.form.value.medicalConditionsDetails ?? null,
       onMedication: this.form.value.onMedication ?? false,
       medicationDetails: this.form.value.medicationDetails ?? null,
-      recentSurgery: this.form.value.recentSurgery ?? false,
-      recentTravel: this.form.value.recentTravel ?? false,
-      recentTattooOrPiercing: this.form.value.recentTattooOrPiercing ?? false,
+      lastSurgeryAt: this.form.value.lastSurgeryAt ?? null,
+      lastTravelAt: this.form.value.lastTravelAt ?? null,
+      lastTattooOrPiercingAt: this.form.value.lastTattooOrPiercingAt ?? null,
     });
   }
 }

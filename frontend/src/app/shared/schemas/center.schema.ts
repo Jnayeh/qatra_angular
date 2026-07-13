@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 const DayScheduleSchema = z.object({
-  open: z.string().regex(/^\d{2}:\d{2}$/, 'Use HH:mm format'),
-  close: z.string().regex(/^\d{2}:\d{2}$/, 'Use HH:mm format'),
+  opens: z.string().regex(/^\d{2}:\d{2}$/, 'Use HH:mm format'),
+  closes: z.string().regex(/^\d{2}:\d{2}$/, 'Use HH:mm format'),
 });
 
 export const OperatingHoursSchema = z.object({
@@ -41,7 +41,7 @@ export const CenterCreateSchema = z.object({
     'BLOOD_BANK',
     'MOBILE_UNIT',
     'COMMUNITY_CENTER',
-    'DEDICATED_CENTER',
+    'CLINIC',
   ]),
   operatingHours: OperatingHoursSchema,
   totalCapacity: z.number().int().positive(),

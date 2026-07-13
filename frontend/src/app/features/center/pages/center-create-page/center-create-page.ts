@@ -10,7 +10,7 @@ import { Card } from 'primeng/card';
       <h1 class="text-2xl font-bold text-white">Register a Center</h1>
       <p-card class="bg-surface-card">
         <ng-template pTemplate="content">
-          <p class="text-gray-400">Center registration form will be implemented here with operating hours editor, capacity settings, and location picker (Leaflet map).</p>
+          <p class="text-gray-400">Center registration form will be implemented here with operating hours editor, capacity settings, and location picker (MapLibre map).</p>
         </ng-template>
       </p-card>
     </div>

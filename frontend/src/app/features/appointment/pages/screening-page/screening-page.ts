@@ -8,8 +8,8 @@ import { InputNumber } from 'primeng/inputnumber';
 import { Textarea } from 'primeng/textarea';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { ToggleSwitch } from 'primeng/toggleswitch';
-import { ScreeningSchema } from '../../../../shared/schemas/appointment.schema';
-import { AppointmentService } from '../../appointment.service';
+import { ScreeningSchema } from '@/app/shared/schemas/appointment.schema';
+import { AppointmentService } from '@/app/features/appointment/appointment.service';
 
 @Component({
   selector: 'app-screening-page',
@@ -39,11 +39,11 @@ export class ScreeningPageComponent implements OnInit {
   private appointmentId = 0;
 
   protected form = this.fb.group({
-    temperatureCelsius: [<number | null>null, [Validators.required, Validators.min(34), Validators.max(42)]],
-    hemoglobinGdL: [<number | null>null, [Validators.required, Validators.min(5), Validators.max(20)]],
+    temperature: [<number | null>null, [Validators.required, Validators.min(34), Validators.max(42)]],
+    hemoglobin: [<number | null>null, [Validators.required, Validators.min(5), Validators.max(20)]],
     bloodPressure: ['', [Validators.required, Validators.pattern(/^\d{2,3}\/\d{2,3}$/)]],
-    pulse: [<number | null>null, [Validators.required, Validators.min(40), Validators.max(200)]],
-    medicalCheckPassed: [false, Validators.required],
+    weight: [<number | null>null, [Validators.required, Validators.min(30), Validators.max(200)]],
+    eligible: [false, Validators.required],
     notes: [''],
   });
 

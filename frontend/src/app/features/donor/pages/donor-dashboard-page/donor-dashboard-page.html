@@ -1,76 +1,206 @@
-<div class="space-y-6">
-  <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-white">Donor Dashboard</h1>
-    <span class="text-sm text-gray-400">Welcome, {{ store.profile()?.userId }}</span>
+<div class="min-h-screen pb-8">
+
+  <div class="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-500 text-white px-4 pt-8 pb-16 sm:px-6 sm:pt-10 sm:pb-20">
+    <div class="max-w-2xl mx-auto">
+      <p class="text-primary-200 text-sm font-medium">{{ greeting() }},</p>
+      <h1 class="text-2xl sm:text-3xl font-bold mt-1">{{ authStore.user()?.firstName ?? 'Donor' }} 👋</h1>
+      <p class="text-primary-100 text-sm mt-2">Ready to save some lives today?</p>
+    </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-    <p-card styleClass="text-center">
-      <ng-template pTemplate="content">
-        <i class="pi pi-heart text-4xl text-primary-500 mb-2 block"></i>
-        <span class="text-sm text-gray-400">Blood Type</span>
-        <p class="text-xl font-bold">{{ store.profile()?.bloodType ?? '—' }}</p>
-      </ng-template>
-    </p-card>
+  <div class="max-w-2xl mx-auto -mt-10 px-4 sm:px-6">
 
-    <p-card styleClass="text-center">
-      <ng-template pTemplate="content">
-        <i class="pi pi-check-circle text-4xl text-green-500 mb-2 block"></i>
-        <span class="text-sm text-gray-400">Eligibility</span>
-        <p class="text-xl font-bold" [class.text-green-400]="store.eligibility()?.eligible" [class.text-red-400]="!store.eligibility()?.eligible">
-          {{ store.eligibility()?.eligible ? 'Eligible' : 'Not Eligible' }}
-        </p>
-      </ng-template>
-    </p-card>
+    <div class="grid grid-cols-3 gap-3 mb-6">
+      <div class="bg-white rounded-2xl p-4 shadow-md text-center">
+        <div class="text-3xl mb-1">❤️</div>
+        <p class="text-2xl font-bold text-gray-900">{{ store.impact()?.totalDonations ?? 0 }}</p>
+        <p class="text-xs text-gray-500 font-medium">Donations</p>
+      </div>
+      <div class="bg-white rounded-2xl p-4 shadow-md text-center">
+        <div class="text-3xl mb-1">🫀</div>
+        <p class="text-2xl font-bold text-gray-900">{{ store.impact()?.estimatedLivesSaved ?? 0 }}</p>
+        <p class="text-xs text-gray-500 font-medium">Lives Saved</p>
+      </div>
+      <div class="bg-white rounded-2xl p-4 shadow-md text-center">
+        <div class="text-3xl mb-1">⭐</div>
+        <p class="text-2xl font-bold text-gray-900">{{ store.reliabilityScore() }}</p>
+        <p class="text-xs text-gray-500 font-medium">Reliability</p>
+      </div>
+    </div>
 
-    <p-card styleClass="text-center">
-      <ng-template pTemplate="content">
-        <i class="pi pi-star-fill text-4xl text-yellow-500 mb-2 block"></i>
-        <span class="text-sm text-gray-400">Reliability Score</span>
-        <p class="text-xl font-bold">{{ store.reliabilityScore() }}/100</p>
-      </ng-template>
-    </p-card>
-
-    <p-card styleClass="text-center">
-      <ng-template pTemplate="content">
-        <i class="pi pi-heart-fill text-4xl text-blue-500 mb-2 block"></i>
-        <span class="text-sm text-gray-400">Lives Saved</span>
-        <p class="text-xl font-bold">{{ store.impact()?.estimatedLivesSaved ?? 0 }}</p>
-      </ng-template>
-    </p-card>
-  </div>
-
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-    <p-card>
-      <ng-template pTemplate="title">Quick Actions</ng-template>
-      <ng-template pTemplate="content">
-        <div class="flex flex-col gap-2">
-          <a pButton variant="outlined" severity="primary" routerLink="/centers" class="w-full">Find a Donation Center</a>
-          <a pButton variant="outlined" severity="primary" routerLink="/donor/appointments" class="w-full">My Appointments</a>
-          <a pButton variant="outlined" severity="primary" routerLink="/donor/emergencies" class="w-full">Emergency Responses</a>
-          <a pButton variant="outlined" severity="primary" routerLink="/donor/impact" class="w-full">View Impact</a>
+    @if (!store.eligibility()?.eligible && store.eligibility()?.nextEligibleDate) {
+      <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
+        <span class="text-2xl">⏳</span>
+        <div>
+          <p class="text-sm font-semibold text-amber-800">Not eligible yet</p>
+          <p class="text-sm text-amber-600 mt-0.5">You can donate again on <strong>{{ formatDate(store.eligibility()!.nextEligibleDate!) }}</strong></p>
         </div>
-      </ng-template>
-    </p-card>
+      </div>
+    }
 
-    <p-card>
-      <ng-template pTemplate="title">Profile Status</ng-template>
-      <ng-template pTemplate="content">
-        <div class="space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-gray-400">Profile Complete</span>
-            <i class="pi {{ store.profileComplete() ? 'pi-check-circle' : 'pi-circle-off' }} text-xl" [class.text-green-400]="store.profileComplete()" [class.text-gray-600]="!store.profileComplete()"></i>
+    @if (store.eligibility()?.eligible) {
+      <div class="bg-green-50 border border-green-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
+        <span class="text-2xl">✅</span>
+        <div>
+          <p class="text-sm font-semibold text-green-800">You're eligible to donate!</p>
+          <p class="text-sm text-green-600 mt-0.5">Your next donation could save up to 3 lives</p>
+        </div>
+        <a pButton icon="pi pi-arrow-right" styleClass="p-button-success p-button-rounded p-button-text ml-auto" routerLink="/appointments/book" ariaLabel="Book now"></a>
+      </div>
+    }
+
+    <div class="bg-white rounded-2xl p-5 shadow-md mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-bold text-gray-900">Next Milestone</h2>
+        @if (nextMilestone()) {
+          <span class="text-xs bg-primary-50 text-primary-700 px-2.5 py-1 rounded-full font-semibold">{{ donationsToNextMilestone() }} to go</span>
+        }
+      </div>
+      @if (nextMilestone()) {
+        <div class="flex items-center gap-4">
+          <div class="relative w-20 h-20 shrink-0">
+            <svg class="w-20 h-20 -rotate-90" viewBox="0 0 36 36">
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#fce4e4" stroke-width="3" />
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#cc0000" stroke-width="3"
+                      [attr.stroke-dasharray]="donationProgress() + ', 100'" stroke-linecap="round" />
+            </svg>
+            <span class="absolute inset-0 flex items-center justify-center text-lg font-bold text-primary-600">
+              {{ donationProgress() }}%
+            </span>
           </div>
-          <div class="flex items-center justify-between">
-            <span class="text-gray-400">Blood Type Verified</span>
-            <i class="pi {{ store.bloodTypeVerified() ? 'pi-check-circle' : 'pi-circle-off' }} text-xl" [class.text-green-400]="store.bloodTypeVerified()" [class.text-gray-600]="!store.bloodTypeVerified()"></i>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-gray-400">Health Questionnaire</span>
-            <i class="pi {{ store.healthQuestionnaire() ? 'pi-check-circle' : 'pi-circle-off' }} text-xl" [class.text-green-400]="store.healthQuestionnaire()" [class.text-gray-600]="!store.healthQuestionnaire()"></i>
+          <div>
+            <p class="font-semibold text-gray-900">{{ nextMilestone()!.label }}</p>
+            <p class="text-sm text-gray-500 mt-0.5">{{ store.impact()?.totalDonations ?? 0 }} donations so far</p>
           </div>
         </div>
-      </ng-template>
-    </p-card>
+      } @else {
+        <div class="text-center py-4">
+          <span class="text-4xl">🏆</span>
+          <p class="font-semibold text-gray-900 mt-2">All milestones achieved!</p>
+          <p class="text-sm text-gray-500">You're a true hero</p>
+        </div>
+      }
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 mb-6">
+      <a routerLink="/appointments/book" class="bg-gradient-to-br from-primary-600 to-primary-500 text-white rounded-2xl p-5 shadow-md flex flex-col items-center text-center gap-2 hover:shadow-lg transition-shadow">
+        <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+          <i class="pi pi-calendar-plus text-xl"></i>
+        </div>
+        <span class="font-semibold text-sm">Book Appointment</span>
+      </a>
+      <a routerLink="/emergencies/list" class="bg-gradient-to-br from-amber-500 to-orange-500 text-white rounded-2xl p-5 shadow-md flex flex-col items-center text-center gap-2 hover:shadow-lg transition-shadow">
+        <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+          <i class="pi pi-exclamation-triangle text-xl"></i>
+        </div>
+        <span class="font-semibold text-sm">Emergencies</span>
+      </a>
+      <a routerLink="/centers/list" class="bg-white rounded-2xl p-5 shadow-md flex flex-col items-center text-center gap-2 hover:shadow-lg transition-shadow border border-gray-100">
+        <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
+          <i class="pi pi-map-marker text-blue-500 text-xl"></i>
+        </div>
+        <span class="font-semibold text-sm text-gray-900">Find Centers</span>
+      </a>
+      <a routerLink="/donor/impact" class="bg-white rounded-2xl p-5 shadow-md flex flex-col items-center text-center gap-2 hover:shadow-lg transition-shadow border border-gray-100">
+        <div class="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center">
+          <i class="pi pi-chart-bar text-purple-500 text-xl"></i>
+        </div>
+        <span class="font-semibold text-sm text-gray-900">My Impact</span>
+      </a>
+    </div>
+
+    <div class="bg-white rounded-2xl p-5 shadow-md mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-bold text-gray-900">Your Status</h2>
+        <span class="text-sm text-gray-500">{{ availabilityEmoji() }} {{ availabilityText() }}</span>
+      </div>
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-gray-500">Blood Type</span>
+          <span class="text-sm font-semibold text-gray-900">{{ bloodTypeNames[store.profile()?.bloodType ?? 'UNKNOWN'] ?? 'Not set' }}</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-gray-500">Location</span>
+          <span class="text-sm font-semibold text-gray-900">{{ store.profile()?.city ?? 'Not set' }}</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-gray-500">Emergency Alerts</span>
+          <span class="text-sm font-semibold" [class.text-green-600]="store.profile()?.allowEmergencyNotifications" [class.text-gray-400]="!store.profile()?.allowEmergencyNotifications">
+            {{ store.profile()?.allowEmergencyNotifications ? 'On' : 'Off' }}
+          </span>
+        </div>
+      </div>
+      <div class="mt-4 flex gap-2">
+        <a pButton label="Edit Profile" icon="pi pi-pencil" styleClass="p-button-sm p-button-text" routerLink="/donor/profile"></a>
+        <a pButton label="Availability" icon="pi pi-circle" styleClass="p-button-sm p-button-text" routerLink="/donor/availability"></a>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl p-5 shadow-md mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-bold text-gray-900">Profile Setup</h2>
+        <span class="text-xs font-semibold text-primary-600 bg-primary-50 px-2.5 py-1 rounded-full">{{ profileChecklist().percent }}%</span>
+      </div>
+      <ul class="space-y-3">
+        @for (item of profileChecklist().items; track item.label) {
+          <li>
+            <a [routerLink]="item.link" class="flex items-center gap-3 group">
+              <div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-colors"
+                   [class.bg-green-100]="item.done"
+                   [class.bg-gray-100]="!item.done">
+                @if (item.done) {
+                  <i class="pi pi-check text-green-600 text-xs"></i>
+                } @else {
+                  <i class="pi pi-arrow-right text-gray-400 text-xs group-hover:text-primary-500"></i>
+                }
+              </div>
+              <span class="text-sm" [class.font-medium]="item.done" [class.text-gray-900]="item.done" [class.text-gray-500]="!item.done">
+                {{ item.label }}
+              </span>
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3">
+      <a routerLink="/appointments/my-appointments" class="bg-white rounded-2xl p-4 shadow-md flex items-center gap-3 hover:shadow-lg transition-shadow border border-gray-100">
+        <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
+          <i class="pi pi-calendar text-indigo-500"></i>
+        </div>
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-gray-900 truncate">Appointments</p>
+          <p class="text-xs text-gray-500">View & manage</p>
+        </div>
+      </a>
+      <a routerLink="/donor/certificates" class="bg-white rounded-2xl p-4 shadow-md flex items-center gap-3 hover:shadow-lg transition-shadow border border-gray-100">
+        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
+          <i class="pi pi-verified text-emerald-500"></i>
+        </div>
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-gray-900 truncate">Certificates</p>
+          <p class="text-xs text-gray-500">Download & share</p>
+        </div>
+      </a>
+      <a routerLink="/appointments/donation-history" class="bg-white rounded-2xl p-4 shadow-md flex items-center gap-3 hover:shadow-lg transition-shadow border border-gray-100">
+        <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
+          <i class="pi pi-history text-orange-500"></i>
+        </div>
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-gray-900 truncate">History</p>
+          <p class="text-xs text-gray-500">Past donations</p>
+        </div>
+      </a>
+      <a routerLink="/donor/notification-prefs" class="bg-white rounded-2xl p-4 shadow-md flex items-center gap-3 hover:shadow-lg transition-shadow border border-gray-100">
+        <div class="w-10 h-10 rounded-xl bg-cyan-50 flex items-center justify-center shrink-0">
+          <i class="pi pi-bell text-cyan-500"></i>
+        </div>
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-gray-900 truncate">Notifications</p>
+          <p class="text-xs text-gray-500">Manage alerts</p>
+        </div>
+      </a>
+    </div>
+
   </div>
 </div>

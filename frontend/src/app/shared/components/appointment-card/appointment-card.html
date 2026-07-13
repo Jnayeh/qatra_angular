@@ -1,0 +1,40 @@
+<p-card styleClass="h-full">
+  <ng-template pTemplate="content">
+    <div class="flex flex-col gap-3">
+      <div class="flex items-start justify-between gap-2">
+        <div class="min-w-0">
+          <h3 class="font-semibold text-gray-900 truncate">{{ appointment().centerName }}</h3>
+          <p class="text-sm text-gray-500">{{ appointment().centerCity }}</p>
+        </div>
+        <app-status-badge [status]="appointment().status" />
+      </div>
+
+      <div class="flex flex-wrap gap-3 text-sm text-gray-600">
+        <span class="inline-flex items-center gap-1">
+          <i class="pi pi-calendar text-primary-500"></i>
+          {{ formatDate(appointment().date) }}
+        </span>
+        <span class="inline-flex items-center gap-1">
+          <i class="pi pi-clock text-primary-500"></i>
+          {{ formatTime(appointment().startTime) }} – {{ formatTime(appointment().endTime) }}
+        </span>
+        <span class="inline-flex items-center gap-1">
+          <i class="pi pi-tag text-primary-500"></i>
+          {{ appointment().appointmentType }}
+        </span>
+      </div>
+
+      @if (showActions()) {
+        <div class="flex flex-wrap gap-2 pt-1">
+          @if (isUpcoming(appointment().status)) {
+            <p-button label="View QR" icon="pi pi-qrcode" size="small" severity="secondary" [outlined]="true" (onClick)="viewQr.emit(appointment())" />
+            <p-button label="Cancel" icon="pi pi-times" size="small" severity="danger" [outlined]="true" (onClick)="cancel.emit(appointment())" />
+          }
+          @if (appointment().status === 'COMPLETED') {
+            <p-button label="Certificate" icon="pi pi-download" size="small" severity="secondary" [outlined]="true" (onClick)="downloadCertificate.emit(appointment())" />
+          }
+        </div>
+      }
+    </div>
+  </ng-template>
+</p-card>

@@ -2,20 +2,20 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError, timer } from 'rxjs';
 import { delay, switchMap } from 'rxjs/operators';
 
-import type { User, UserDetail, UserSummary, TokenPair, RegisterResult, Role, UserStatus } from '../../shared/models/user.model';
-import type { DonorProfile, HealthQuestionnaire, Certificate, ImpactSummary, NotificationPreferences, AvailabilityStatus, EligibilityStatus, BloodType } from '../../shared/models/donor.model';
-import type { BloodDonationCenter, CenterSummary, CenterDetail, Slot, ClosureResult, FacilityType, CenterStatus } from '../../shared/models/center.model';
-import type { Emergency, EmergencyDetail, EmergencyResponse, EmergencyCreateRequest, EmergencyRespondResult, MatchResult, ResponseStats, EmergencyUrgency, EmergencyStatus, SlotSummary, ResponseType } from '../../shared/models/emergency.model';
-import type { Appointment, AppointmentRequest, AppointmentResponse, AppointmentSummary, HealthScreening, CheckInResult, CompletionRequest, AppointmentStatus, AppointmentType } from '../../shared/models/appointment.model';
-import type { Notification, NotificationType, NotificationStatus, NotificationChannel } from '../../shared/models/notification.model';
-import type { SystemConfigEntry, FeatureFlag, DataDeletionRequest, DeletionStatus } from '../../shared/models/config.model';
-import type { AuditLogEntry, SystemDashboard, TopCenter, ServiceHealth, PlatformReport, DemandForecast } from '../../shared/models/analytics.model';
-import type { ApiResponse, Page } from '../../shared/models/api-response.model';
+import type { User, UserDetail, UserSummary, TokenPair, RegisterResult, Role, UserStatus } from '@/app/shared/models/user.model';
+import type { DonorProfile, HealthQuestionnaire, Certificate, ImpactSummary, NotificationPreferences, AvailabilityStatus, EligibilityStatus, BloodType } from '@/app/shared/models/donor.model';
+import type { BloodDonationCenter, CenterSummary, CenterDetail, Slot, ClosureResult, FacilityType, CenterStatus } from '@/app/shared/models/center.model';
+import type { Emergency, EmergencyDetail, EmergencyResponse, EmergencyCreateRequest, EmergencyRespondResult, MatchResult, ResponseStats, EmergencyUrgency, EmergencyStatus, SlotSummary, ResponseStatus } from '@/app/shared/models/emergency.model';
+import type { Appointment, AppointmentRequest, AppointmentResponse, AppointmentSummary, DonorAppointmentView, HealthScreening, CheckInResult, CompletionRequest, AppointmentStatus, AppointmentType } from '@/app/shared/models/appointment.model';
+import type { Notification, NotificationType, NotificationStatus, NotificationChannel } from '@/app/shared/models/notification.model';
+import type { SystemConfigEntry, FeatureFlag, DataDeletionRequest, DeletionStatus } from '@/app/shared/models/config.model';
+import type { AuditLogEntry, SystemDashboard, TopCenter, ServiceHealth, PlatformReport, DemandForecast } from '@/app/shared/models/analytics.model';
+import type { ApiResponse, Page } from '@/app/shared/models/api-response.model';
 
 function todayDate(): string {
   return new Date().toISOString().split('T')[0];
 }
-import type { OperatingHours, DaySchedule } from '../../shared/models/operating-hours.model';
+import type { OperatingHours, DaySchedule } from '@/app/shared/models/operating-hours.model';
 
 // ===== HELPERS =====
 
@@ -116,9 +116,9 @@ function deepClone<T>(obj: T): T {
 // ===== MOCK DATA =====
 
 let users: User[] = [
-  { id: 1, email: 'donor@qatra.com', phone: '+212612345678', displayName: 'Ahmed Benali', status: 'ACTIVE', emailVerified: true, roles: ['DONOR'], createdAt: '2026-01-15T10:00:00.000Z', lastActiveAt: daysFromNow(-1) },
-  { id: 2, email: 'staff@qatra.com', phone: '+212698765432', displayName: 'Fatima Zahra', status: 'ACTIVE', emailVerified: true, roles: ['CENTER_STAFF'], createdAt: '2026-02-01T10:00:00.000Z', lastActiveAt: daysFromNow(0) },
-  { id: 3, email: 'admin@qatra.com', phone: '+212611111111', displayName: 'Admin User', status: 'ACTIVE', emailVerified: true, roles: ['SYSTEM_ADMIN'], createdAt: '2026-01-01T10:00:00.000Z', lastActiveAt: daysFromNow(0) },
+  { id: 1, email: 'donor@qatra.com', phone: '+21621234567', displayName: 'Ahmed Benali', firstName: 'Ahmed', familyName: 'Benali', status: 'ACTIVE', emailVerified: true, roles: ['DONOR'], createdAt: '2026-01-15T10:00:00.000Z', lastActiveAt: daysFromNow(-1) },
+  { id: 2, email: 'staff@qatra.com', phone: '+21698765432', displayName: 'Fatima Zahra', firstName: 'Fatima', familyName: 'Zahra', status: 'ACTIVE', emailVerified: true, roles: ['CENTER_STAFF'], createdAt: '2026-02-01T10:00:00.000Z', lastActiveAt: daysFromNow(0) },
+  { id: 3, email: 'admin@qatra.com', phone: '+21611111111', displayName: 'Admin User', firstName: 'Admin', familyName: 'User', status: 'ACTIVE', emailVerified: true, roles: ['SUPER_ADMIN'], createdAt: '2026-01-01T10:00:00.000Z', lastActiveAt: daysFromNow(0) },
 ];
 
 let passwords: Record<number, string> = { 1: 'password123', 2: 'password123', 3: 'password123' };
@@ -130,22 +130,22 @@ function makeHours(weekday: DaySchedule, saturday: DaySchedule | null, sunday: D
   };
 }
 
-const weekdayHours: DaySchedule = { open: '08:00', close: '18:00' };
-const fridayHours: DaySchedule = { open: '08:00', close: '17:00' };
-const saturdayHours: DaySchedule = { open: '09:00', close: '14:00' };
-const mobileWeekday: DaySchedule = { open: '09:00', close: '17:00' };
-const mobileFriday: DaySchedule = { open: '09:00', close: '16:00' };
-const mobileSaturday: DaySchedule = { open: '10:00', close: '14:00' };
+const weekdayHours: DaySchedule = { opens: '08:00', closes: '18:00' };
+const fridayHours: DaySchedule = { opens: '08:00', closes: '17:00' };
+const saturdayHours: DaySchedule = { opens: '09:00', closes: '14:00' };
+const mobileWeekday: DaySchedule = { opens: '09:00', closes: '17:00' };
+const mobileFriday: DaySchedule = { opens: '09:00', closes: '16:00' };
+const mobileSaturday: DaySchedule = { opens: '10:00', closes: '14:00' };
 
 const defaultOH: OperatingHours = makeHours(weekdayHours, saturdayHours, null);
-const marrakechOH: OperatingHours = { ...makeHours(weekdayHours, saturdayHours, null), friday: fridayHours };
-const tangierOH: OperatingHours = makeHours(mobileWeekday, mobileSaturday, null);
+const tunisOH: OperatingHours = { ...makeHours(weekdayHours, saturdayHours, null), friday: fridayHours };
+const nabeulOH: OperatingHours = makeHours(mobileWeekday, mobileSaturday, null);
 
 let centers: BloodDonationCenter[] = [
-  { id: 1, createdByUserId: 2, name: 'Centre de Don de Sang Casablanca', latitude: 33.5731, longitude: -7.5898, address: '12 Rue des Hôpitaux', city: 'Casablanca', country: 'Morocco', postalCode: '20000', phone: '+212522123456', email: 'casablanca@qatra.com', operatingHours: deepClone(defaultOH), totalCapacity: 100, maxRegular: 80, slotPeriod: 60, facilityType: 'DEDICATED_CENTER', status: 'ACTIVE', createdAt: '2026-01-20T08:00:00.000Z' },
-  { id: 2, createdByUserId: 2, name: 'Banque de Sang Rabat', latitude: 34.0209, longitude: -6.8416, address: '45 Avenue Mohammed V', city: 'Rabat', country: 'Morocco', postalCode: '10000', phone: '+212537654321', email: 'rabat@qatra.com', operatingHours: deepClone(defaultOH), totalCapacity: 80, maxRegular: 60, slotPeriod: 60, facilityType: 'BLOOD_BANK', status: 'ACTIVE', createdAt: '2026-02-10T08:00:00.000Z' },
-  { id: 3, createdByUserId: 2, name: "Hôpital Ibn Sina Marrakech", latitude: 31.6295, longitude: -7.9811, address: "Rue de l'Hôpital", city: 'Marrakech', country: 'Morocco', postalCode: '40000', phone: '+212524987654', email: 'marrakech@qatra.com', operatingHours: deepClone(marrakechOH), totalCapacity: 60, maxRegular: 50, slotPeriod: 60, facilityType: 'HOSPITAL', status: 'ACTIVE', createdAt: '2026-03-05T08:00:00.000Z' },
-  { id: 4, createdByUserId: 3, name: 'Unité Mobile Tanger', latitude: 35.7673, longitude: -5.7998, address: 'Place du 9 Avril', city: 'Tangier', country: 'Morocco', postalCode: '90000', phone: '+212539876543', email: 'tanger@qatra.com', operatingHours: deepClone(tangierOH), totalCapacity: 40, maxRegular: 30, slotPeriod: 60, facilityType: 'MOBILE_UNIT', status: 'PENDING_APPROVAL', createdAt: '2026-04-01T08:00:00.000Z' },
+  { id: 1, createdByUserId: 2, name: 'Centre de Don de Sang Tunis', latitude: 36.8065, longitude: 10.1815, address: '12 Rue des Hôpitaux', city: 'Tunis', country: 'Tunisia', postalCode: '1000', phone: '+21671221234', email: 'tunis@qatra.com', operatingHours: deepClone(defaultOH), totalCapacity: 100, maxRegular: 80, slotPeriod: 60, facilityType: 'CLINIC', status: 'ACTIVE', createdAt: '2026-01-20T08:00:00.000Z', updatedAt: nowISO() },
+  { id: 2, createdByUserId: 2, name: 'Banque de Sang Sfax', latitude: 34.7406, longitude: 10.7603, address: '45 Avenue Habib Bourguiba', city: 'Sfax', country: 'Tunisia', postalCode: '3000', phone: '+21674237654', email: 'sfax@qatra.com', operatingHours: deepClone(defaultOH), totalCapacity: 80, maxRegular: 60, slotPeriod: 60, facilityType: 'BLOOD_BANK', status: 'ACTIVE', createdAt: '2026-02-10T08:00:00.000Z', updatedAt: nowISO() },
+  { id: 3, createdByUserId: 2, name: "Hôpital Farhat Hached Sousse", latitude: 35.8288, longitude: 10.6405, address: "Rue de l'Hôpital", city: 'Sousse', country: 'Tunisia', postalCode: '4000', phone: '+21673249876', email: 'sousse@qatra.com', operatingHours: deepClone(tunisOH), totalCapacity: 60, maxRegular: 50, slotPeriod: 60, facilityType: 'HOSPITAL', status: 'ACTIVE', createdAt: '2026-03-05T08:00:00.000Z', updatedAt: nowISO() },
+  { id: 4, createdByUserId: 3, name: 'Unité Mobile Kairouan', latitude: 35.6781, longitude: 10.0999, address: 'Place de la République', city: 'Kairouan', country: 'Tunisia', postalCode: '3100', phone: '+21677298765', email: 'kairouan@qatra.com', operatingHours: deepClone(nabeulOH), totalCapacity: 40, maxRegular: 30, slotPeriod: 60, facilityType: 'MOBILE_UNIT', status: 'PENDING_APPROVAL', createdAt: '2026-04-01T08:00:00.000Z', updatedAt: nowISO() },
 ];
 
 let slots: Slot[] = [];
@@ -170,6 +170,7 @@ let slots: Slot[] = [];
           maxBookings: 5, maxRegularBookings: 4,
           bookedCount: Math.floor(Math.random() * 3), regularBookedCount: Math.floor(Math.random() * 2),
           isBlocked: false,
+          createdAt: nowISO(),
         });
       }
     }
@@ -178,15 +179,17 @@ let slots: Slot[] = [];
 
 let donorProfiles: DonorProfile[] = [
   {
-    id: 1, userId: 1, displayName: 'Ahmed Benali', phone: '+212612345678',
+    id: 1, userId: 1, displayName: 'Ahmed Benali', phone: '+21621234567',
     bloodType: 'O_POSITIVE', bloodTypeVerified: true, availability: 'AVAILABLE',
-    latitude: 33.5731, longitude: -7.5898, city: 'Casablanca', country: 'Morocco',
+    allowEmergencyNotifications: true, totalDonations: 8,
+    latitude: 36.8065, longitude: 10.1815, city: 'Tunis', country: 'Tunisia',
     notificationPreferences: { frequency: 'IMMEDIATE', quietHours: null, allowEmergencyNotifications: true, maxNotificationDistanceKm: 50 },
     lastDonationDate: daysFromNow(-60), eligibleFromDate: daysFromNow(-30),
     reliabilityScore: 85, permanentlyRestricted: false, restrictionReason: null,
     profileComplete: true, flaggedForManualReview: false, consecutiveEmergencyDeclines: 0,
     createdAt: '2026-01-15T10:00:00.000Z', updatedAt: daysFromNow(-1),
-    lastAcceptAt: daysFromNow(-60), nextEligibleDate: daysFromNow(30),
+    lastAcceptAt: daysFromNow(-60), deletedAt: null, deletionRequestedAt: null,
+    nextEligibleDate: daysFromNow(30),
     eligibilityStatus: 'ELIGIBLE',
     impactSummary: { totalDonations: 8, estimatedLivesSaved: 24, milestones: [
       { label: 'First Donation', achieved: true, achievedAt: '2025-06-15T10:00:00.000Z' },
@@ -198,27 +201,27 @@ let donorProfiles: DonorProfile[] = [
 ];
 
 let appointments: Appointment[] = [
-  { id: 1, donorId: 1, centerId: 1, emergencyId: null, slotId: 1, status: 'SCHEDULED', appointmentType: 'REGULAR', bloodType: null, mlCollected: null, notes: null, cancellationReason: null, qrCode: 'QATRA-APPT-001', completedByStaffId: null, createdAt: daysFromNow(-5), checkedInAt: null, completedAt: null, cancelledAt: null },
-  { id: 2, donorId: 1, centerId: 1, emergencyId: null, slotId: 5, status: 'COMPLETED', appointmentType: 'REGULAR', bloodType: 'O_POSITIVE', mlCollected: 450, notes: 'Routine donation', cancellationReason: null, qrCode: 'QATRA-APPT-002', completedByStaffId: 2, createdAt: daysFromNow(-60), checkedInAt: daysFromNow(-60), completedAt: daysFromNow(-60), cancelledAt: null },
-  { id: 3, donorId: 1, centerId: 2, emergencyId: null, slotId: 10, status: 'CANCELLED', appointmentType: 'REGULAR', bloodType: null, mlCollected: null, notes: null, cancellationReason: 'Personal reasons', qrCode: 'QATRA-APPT-003', completedByStaffId: null, createdAt: daysFromNow(-20), checkedInAt: null, completedAt: null, cancelledAt: daysFromNow(-19) },
+  { id: 1, donorId: 1, centerId: 1, emergencyId: null, slotId: 1, status: 'SCHEDULED', appointmentType: 'REGULAR', bloodType: null, mlCollected: null, notes: null, cancellationReason: null, qrCode: 'QATRA-APPT-001', completedByStaffId: null, createdAt: daysFromNow(-5), updatedAt: nowISO(), checkedInAt: null, startedAt: null, completedAt: null, cancelledAt: null, outcome: null },
+  { id: 2, donorId: 1, centerId: 1, emergencyId: null, slotId: 5, status: 'COMPLETED', appointmentType: 'REGULAR', bloodType: 'O_POSITIVE', mlCollected: 450, notes: 'Routine donation', cancellationReason: null, qrCode: 'QATRA-APPT-002', completedByStaffId: 2, createdAt: daysFromNow(-60), updatedAt: nowISO(), checkedInAt: daysFromNow(-60), startedAt: null, completedAt: daysFromNow(-60), cancelledAt: null, outcome: 'COMPLETED' },
+  { id: 3, donorId: 1, centerId: 2, emergencyId: null, slotId: 10, status: 'CANCELLED', appointmentType: 'REGULAR', bloodType: null, mlCollected: null, notes: null, cancellationReason: 'Personal reasons', qrCode: 'QATRA-APPT-003', completedByStaffId: null, createdAt: daysFromNow(-20), updatedAt: nowISO(), checkedInAt: null, startedAt: null, completedAt: null, cancelledAt: daysFromNow(-19), outcome: 'CANCELLED' },
 ];
 
 let emergencies: Emergency[] = [
-  { id: 1, centerId: 1, createdByStaffId: 2, bloodType: 'O_NEGATIVE', unitsNeeded: 5, urgency: 'CRITICAL', contactPhone: '+212522123456', status: 'OPEN', matchRadius: 30, escalationLevel: 1, neededBy: daysFromNow(2), createdAt: daysFromNow(-1), resolvedAt: null, resolvedByUserId: null },
-  { id: 2, centerId: 2, createdByStaffId: 2, bloodType: 'A_POSITIVE', unitsNeeded: 3, urgency: 'URGENT', contactPhone: '+212537654321', status: 'IN_PROGRESS', matchRadius: 20, escalationLevel: 1, neededBy: daysFromNow(5), createdAt: daysFromNow(-3), resolvedAt: null, resolvedByUserId: null },
+  { id: 1, centerId: 1, createdByStaffId: 2, bloodType: 'O_NEGATIVE', unitsNeeded: 5, urgency: 'CRITICAL', contactPhone: '+21671221234', status: 'OPEN', matchRadius: 30, escalationLevel: 1, expiresAt: daysFromNow(2), createdAt: daysFromNow(-1), updatedAt: nowISO(), resolvedAt: null, resolvedByUserId: null },
+  { id: 2, centerId: 2, createdByStaffId: 2, bloodType: 'A_POSITIVE', unitsNeeded: 3, urgency: 'HIGH', contactPhone: '+21674237654', status: 'FULFILLED', matchRadius: 20, escalationLevel: 1, expiresAt: daysFromNow(5), createdAt: daysFromNow(-3), updatedAt: nowISO(), resolvedAt: null, resolvedByUserId: null },
 ];
 
 let emergencyResponses: Map<number, EmergencyResponse[]> = new Map([
-  [1, [{ id: 1, emergencyId: 1, donorId: 1, responseType: 'WILLING', message: 'On my way!', notifiedAt: daysFromNow(-1), respondedAt: daysFromNow(-1) }]],
+  [1, [{ id: 1, emergencyId: 1, donorId: 1, slotId: null, status: 'ACCEPTED', reason: null, respondedAt: daysFromNow(-1) }]],
   [2, []],
 ]);
 
 let notifications: Notification[] = [
-  { id: 1, userId: 1, emergencyId: 1, appointmentId: null, type: 'EMERGENCY_ALERT', title: 'Urgent: O- Blood Needed', body: 'Centre de Don de Sang Casablanca urgently needs O- blood.', data: null, channel: 'IN_APP', status: 'DELIVERED', createdAt: daysFromNow(-1), sentAt: daysFromNow(-1), readAt: null },
-  { id: 2, userId: 1, emergencyId: null, appointmentId: 1, type: 'APPOINTMENT_REMINDER', title: 'Upcoming Appointment', body: 'Reminder: You have a blood donation appointment tomorrow.', data: null, channel: 'IN_APP', status: 'SENT', createdAt: daysFromNow(-1), sentAt: daysFromNow(-1), readAt: null },
-  { id: 3, userId: 1, emergencyId: null, appointmentId: null, type: 'ELIGIBILITY_REMINDER', title: "You're Eligible to Donate", body: 'Your eligibility period has reset.', data: null, channel: 'IN_APP', status: 'READ', createdAt: daysFromNow(-30), sentAt: daysFromNow(-30), readAt: daysFromNow(-29) },
-  { id: 4, userId: 1, emergencyId: null, appointmentId: null, type: 'PROFILE_COMPLETION', title: 'Complete Your Profile', body: 'Please complete your donor profile.', data: null, channel: 'EMAIL', status: 'DELIVERED', createdAt: daysFromNow(-10), sentAt: daysFromNow(-10), readAt: null },
-  { id: 5, userId: 1, emergencyId: null, appointmentId: null, type: 'GENERAL', title: 'Welcome to Qatra', body: 'Thank you for joining Qatra!', data: null, channel: 'IN_APP', status: 'READ', createdAt: daysFromNow(-90), sentAt: daysFromNow(-90), readAt: daysFromNow(-89) },
+  { id: 1, userId: 1, emergencyId: 1, appointmentId: null, email: null, type: 'EMERGENCY_ALERT', title: 'Urgent: O- Blood Needed', body: 'Centre de Don de Sang Tunis urgently needs O- blood.', data: null, correlationId: null, channel: 'IN_APP', status: 'DELIVERED', createdAt: daysFromNow(-1), sentAt: daysFromNow(-1), readAt: null },
+  { id: 2, userId: 1, emergencyId: null, appointmentId: 1, email: null, type: 'APPOINTMENT_REMINDER', title: 'Upcoming Appointment', body: 'Reminder: You have a blood donation appointment tomorrow.', data: null, correlationId: null, channel: 'IN_APP', status: 'SENT', createdAt: daysFromNow(-1), sentAt: daysFromNow(-1), readAt: null },
+  { id: 3, userId: 1, emergencyId: null, appointmentId: null, email: null, type: 'ELIGIBILITY_REMINDER', title: "You're Eligible to Donate", body: 'Your eligibility period has reset.', data: null, correlationId: null, channel: 'IN_APP', status: 'READ', createdAt: daysFromNow(-30), sentAt: daysFromNow(-30), readAt: daysFromNow(-29) },
+  { id: 4, userId: 1, emergencyId: null, appointmentId: null, email: null, type: 'PROFILE_COMPLETION', title: 'Complete Your Profile', body: 'Please complete your donor profile.', data: null, correlationId: null, channel: 'EMAIL', status: 'DELIVERED', createdAt: daysFromNow(-10), sentAt: daysFromNow(-10), readAt: null },
+  { id: 5, userId: 1, emergencyId: null, appointmentId: null, email: null, type: 'GENERAL', title: 'Welcome to Qatra', body: 'Thank you for joining Qatra!', data: null, correlationId: null, channel: 'IN_APP', status: 'READ', createdAt: daysFromNow(-90), sentAt: daysFromNow(-90), readAt: daysFromNow(-89) },
 ];
 
 let systemConfig: SystemConfigEntry[] = [
@@ -233,7 +236,7 @@ let featureFlags: FeatureFlag[] = [
   { id: 1, featureName: 'emergencyMatching', enabled: true, rules: { enabledForRoles: null, enabledForUserIds: null, rolloutPercentage: 100 }, updatedAt: '2026-01-01T00:00:00.000Z' },
   { id: 2, featureName: 'autoScheduling', enabled: true, rules: null, updatedAt: '2026-01-01T00:00:00.000Z' },
   { id: 3, featureName: 'notifications', enabled: true, rules: null, updatedAt: '2026-01-01T00:00:00.000Z' },
-  { id: 4, featureName: 'analytics', enabled: true, rules: { enabledForRoles: ['SYSTEM_ADMIN'], enabledForUserIds: null, rolloutPercentage: null }, updatedAt: '2026-01-01T00:00:00.000Z' },
+  { id: 4, featureName: 'analytics', enabled: true, rules: { enabledForRoles: ['SUPER_ADMIN'], enabledForUserIds: null, rolloutPercentage: null }, updatedAt: '2026-01-01T00:00:00.000Z' },
 ];
 
 let auditLogs: AuditLogEntry[] = [
@@ -244,21 +247,21 @@ let auditLogs: AuditLogEntry[] = [
 ];
 
 let deletionRequests: DataDeletionRequest[] = [
-  { id: 1, requestedByUserId: 1, processedByUserId: null, status: 'PENDING', reason: 'No longer wish to participate', requestedAt: daysFromNow(-2), processedAt: null },
+  { id: 1, requestedByUserId: 1, processedByUserId: null, status: 'IN_PROGRESS', reason: 'No longer wish to participate', requestedAt: daysFromNow(-2), processedAt: null },
 ];
 
 let healthScreenings: HealthScreening[] = [
-  { id: 1, appointmentId: 2, donorId: 1, screenedByStaffId: 2, temperatureCelsius: 36.8, hemoglobinGdL: 14.5, bloodPressure: '120/80', pulse: 72, medicalCheckPassed: true, notes: 'All good', screenedAt: daysFromNow(-60) },
+  { id: 1, appointmentId: 2, donorId: 1, screenedByStaffId: 2, weight: 75.0, bloodPressure: '120/80', hemoglobin: 14.5, temperature: 36.8, notes: 'All good', eligible: true, screenedAt: daysFromNow(-60) },
 ];
 
 let healthQuestionnaires: Map<number, HealthQuestionnaire> = new Map([
-  [1, { id: 1, donorId: 1, hasChronicIllness: false, medicalConditionsDetails: null, onMedication: false, medicationDetails: null, recentSurgery: false, recentTravel: true, recentTattooOrPiercing: false, completedAt: daysFromNow(-90), updatedAt: daysFromNow(-90) }],
+  [1, { id: 1, donorId: 1, hasChronicIllness: false, medicalConditionsDetails: null, onMedication: false, medicationDetails: null, lastSurgeryAt: null, lastTravelAt: daysFromNow(-90), lastTattooOrPiercingAt: null, createdAt: daysFromNow(-90), updatedAt: daysFromNow(-90) }],
 ]);
 
 let certificates: Map<number, Certificate[]> = new Map([
   [1, [
-    { donationDate: daysFromNow(-60), centerId: 1, centerName: 'Centre de Don de Sang Casablanca', mlCollected: 450, certificateUrl: '/certificates/001.pdf' },
-    { donationDate: daysFromNow(-120), centerId: 1, centerName: 'Centre de Don de Sang Casablanca', mlCollected: 450, certificateUrl: '/certificates/002.pdf' },
+    { donationDate: daysFromNow(-60), centerId: 1, centerName: 'Centre de Don de Sang Tunis', mlCollected: 450, certificateUrl: '/certificates/001.pdf' },
+    { donationDate: daysFromNow(-120), centerId: 1, centerName: 'Centre de Don de Sang Tunis', mlCollected: 450, certificateUrl: '/certificates/002.pdf' },
   ]],
 ]);
 
@@ -292,28 +295,38 @@ function handleAuth(method: string, segments: string[], params: URLSearchParams,
     if (user.status === 'DELETED') return fail(401, 'Account deleted');
     user.lastActiveAt = nowISO();
     const td = { id: user.id, email: user.email, roles: user.roles };
-    const data: TokenPair = { accessToken: createToken(td), refreshToken: createToken({ ...td, id: user.id + 1000 }), expiresIn: 3600 };
+    const data: TokenPair = {
+      token: createToken(td),
+      tokenType: 'Bearer',
+      refreshToken: createToken({ ...td, id: user.id + 1000 }),
+      userId: user.id,
+      email: user.email,
+      displayName: user.displayName,
+      roles: user.roles,
+    };
     return ok(data);
   }
 
-  if (method === 'POST' && sub === 'register') {
-    const { email, password, displayName, phone } = body ?? {};
-    if (!email || !password || !displayName) return fail(400, 'Missing required fields');
+  if (method === 'POST' && sub === 'signup') {
+    const { email, password, firstName, familyName, displayName, phone } = body ?? {};
+    if (!email || !password || !firstName || !familyName) return fail(400, 'Missing required fields');
     if (users.find(u => u.email === email)) return fail(409, 'Email already registered');
     const id = autoIncrement.users++;
-    const nu: User = { id, email, phone: phone ?? '', displayName, status: 'PENDING_VERIFICATION', emailVerified: false, roles: ['DONOR'], createdAt: nowISO(), lastActiveAt: null };
+    const nu: User = { id, email, phone: phone ?? '', displayName: displayName ?? `${firstName} ${familyName}`, firstName, familyName, status: 'PENDING_VERIFICATION', emailVerified: false, roles: ['DONOR'], createdAt: nowISO(), lastActiveAt: null };
     users.push(nu);
     passwords[id] = password;
     donorProfiles.push({
       id, userId: id, displayName, phone: phone ?? '',
       bloodType: 'UNKNOWN', bloodTypeVerified: false, availability: 'AVAILABLE',
+      allowEmergencyNotifications: true, totalDonations: 0,
       latitude: null, longitude: null, city: null, country: null,
       notificationPreferences: { frequency: 'IMMEDIATE', quietHours: null, allowEmergencyNotifications: true, maxNotificationDistanceKm: 50 },
       lastDonationDate: null, eligibleFromDate: null,
       reliabilityScore: 0, permanentlyRestricted: false, restrictionReason: null,
       profileComplete: false, flaggedForManualReview: false, consecutiveEmergencyDeclines: 0,
       createdAt: nowISO(), updatedAt: nowISO(),
-      lastAcceptAt: null, nextEligibleDate: null, eligibilityStatus: 'UNKNOWN', impactSummary: null,
+      lastAcceptAt: null, deletedAt: null, deletionRequestedAt: null,
+      nextEligibleDate: null, eligibilityStatus: 'UNKNOWN', impactSummary: null,
     });
     return ok<RegisterResult>({ userId: id, email, emailVerificationSent: true });
   }
@@ -326,7 +339,15 @@ function handleAuth(method: string, segments: string[], params: URLSearchParams,
     const user = users.find(u => u.id === (payload.id >= 1000 ? payload.id - 1000 : payload.id));
     if (!user) return fail(401, 'User not found');
     const td = { id: user.id, email: user.email, roles: user.roles };
-    const data: TokenPair = { accessToken: createToken(td), refreshToken: createToken({ ...td, id: user.id + 1000 }), expiresIn: 3600 };
+    const data: TokenPair = {
+      token: createToken(td),
+      tokenType: 'Bearer',
+      refreshToken: createToken({ ...td, id: user.id + 1000 }),
+      userId: user.id,
+      email: user.email,
+      displayName: user.displayName,
+      roles: user.roles,
+    };
     return ok(data);
   }
 
@@ -413,7 +434,7 @@ function handleUsers(method: string, segments: string[], params: URLSearchParams
     deletionRequests.push({
       id: autoIncrement.deletionRequests++,
       requestedByUserId: id, processedByUserId: null,
-      status: 'PENDING', reason: 'User requested deletion',
+      status: 'IN_PROGRESS', reason: 'User requested deletion',
       requestedAt: nowISO(), processedAt: null,
     });
     return ok({ message: 'User deleted successfully' });
@@ -483,16 +504,16 @@ function handleDonors(method: string, segments: string[], params: URLSearchParam
     const existing = healthQuestionnaires.get(userId);
     if (existing) {
       Object.assign(existing, body ?? {}, { donorId: userId, updatedAt: nowISO() });
-      if (!existing.completedAt) existing.completedAt = nowISO();
+      if (!existing.createdAt) existing.createdAt = nowISO();
     } else {
       const b = body ?? {};
       healthQuestionnaires.set(userId, {
         id: userId, donorId: userId,
         hasChronicIllness: b.hasChronicIllness ?? false, medicalConditionsDetails: b.medicalConditionsDetails ?? null,
         onMedication: b.onMedication ?? false, medicationDetails: b.medicationDetails ?? null,
-        recentSurgery: b.recentSurgery ?? false, recentTravel: b.recentTravel ?? false,
-        recentTattooOrPiercing: b.recentTattooOrPiercing ?? false,
-        completedAt: nowISO(), updatedAt: nowISO(),
+        lastSurgeryAt: b.lastSurgeryAt ?? null, lastTravelAt: b.lastTravelAt ?? null,
+        lastTattooOrPiercingAt: b.lastTattooOrPiercingAt ?? null,
+        createdAt: nowISO(), updatedAt: nowISO(),
       });
     }
     return ok(healthQuestionnaires.get(userId)!);
@@ -532,7 +553,7 @@ function handleDonors(method: string, segments: string[], params: URLSearchParam
 
 function handleCenters(method: string, segments: string[], params: URLSearchParams, body: any, userId: number): Observable<HttpResponse<unknown>> {
   if (!userId) return unauthorized();
-  const isStaffOrAdmin = users.some(u => u.id === userId && (u.roles.includes('CENTER_STAFF') || u.roles.includes('SYSTEM_ADMIN') || u.roles.includes('CENTER_ADMIN')));
+  const isStaffOrAdmin = users.some(u => u.id === userId && (u.roles.includes('CENTER_STAFF') || u.roles.includes('SUPER_ADMIN') || u.roles.includes('CENTER_ADMIN')));
 
   if (method === 'GET' && segments.length === 0) {
     let filtered = [...centers];
@@ -545,7 +566,7 @@ function handleCenters(method: string, segments: string[], params: URLSearchPara
     const page = parseIntParam(params.get('page'), 0);
     const size = parseIntParam(params.get('size'), 20);
     const summaries: CenterSummary[] = filtered.map(c => ({
-      id: c.id, name: c.name, city: c.city, country: c.country,
+      id: c.id, name: c.name, latitude: c.latitude, longitude: c.longitude, city: c.city, country: c.country,
       facilityType: c.facilityType, status: c.status,
       distanceKm: null, isOperatingNow: true, availableSlots: slots.filter(s => s.centerId === c.id && !s.isBlocked && new Date(s.date) >= new Date()).length,
     }));
@@ -566,12 +587,12 @@ function handleCenters(method: string, segments: string[], params: URLSearchPara
     const nc: BloodDonationCenter = {
       id, createdByUserId: userId, name: b.name ?? 'New Center',
       latitude: b.latitude ?? 0, longitude: b.longitude ?? 0,
-      address: b.address ?? '', city: b.city ?? '', country: b.country ?? 'Morocco',
+      address: b.address ?? '', city: b.city ?? '', country: b.country ?? 'Tunisia',
       postalCode: b.postalCode ?? '', phone: b.phone ?? '', email: b.email ?? '',
       operatingHours: deepClone(defaultOH), totalCapacity: b.totalCapacity ?? 50,
       maxRegular: b.maxRegular ?? 40, slotPeriod: b.slotPeriod ?? 60,
       facilityType: b.facilityType ?? 'COMMUNITY_CENTER', status: 'PENDING_APPROVAL',
-      createdAt: nowISO(),
+      createdAt: nowISO(), updatedAt: nowISO(),
     };
     centers.push(nc);
     return ok(nc);
@@ -647,7 +668,7 @@ function handleCenters(method: string, segments: string[], params: URLSearchPara
 function handleEmergencies(method: string, segments: string[], params: URLSearchParams, body: any, userId: number): Observable<HttpResponse<unknown>> {
   if (!userId) return unauthorized();
   const user = users.find(u => u.id === userId);
-  const isStaff = user?.roles.includes('CENTER_STAFF') || user?.roles.includes('CENTER_ADMIN') || user?.roles.includes('SYSTEM_ADMIN');
+  const isStaff = user?.roles.includes('CENTER_STAFF') || user?.roles.includes('CENTER_ADMIN') || user?.roles.includes('SUPER_ADMIN');
 
   if (method === 'GET' && segments.length === 1 && segments[0] === 'my-responses') {
     const allResponses: EmergencyResponse[] = [];
@@ -701,9 +722,9 @@ function handleEmergencies(method: string, segments: string[], params: URLSearch
     const ne: Emergency = {
       id, centerId: b.centerId, createdByStaffId: userId,
       bloodType: b.bloodType ?? 'O_NEGATIVE', unitsNeeded: b.unitsNeeded ?? 1,
-      urgency: b.urgency ?? 'MODERATE', contactPhone: b.contactPhone ?? '',
-      status: 'OPEN', matchRadius: 30, escalationLevel: 1, neededBy: b.neededBy ?? daysFromNow(7),
-      createdAt: nowISO(), resolvedAt: null, resolvedByUserId: null,
+      urgency: b.urgency ?? 'MEDIUM', contactPhone: b.contactPhone ?? '',
+      status: 'OPEN', matchRadius: 30, escalationLevel: 1, expiresAt: b.expiresAt ?? daysFromNow(7),
+      createdAt: nowISO(), updatedAt: nowISO(), resolvedAt: null, resolvedByUserId: null,
     };
     emergencies.push(ne);
     emergencyResponses.set(ne.id, []);
@@ -728,34 +749,34 @@ function handleEmergencies(method: string, segments: string[], params: URLSearch
     const eid = parseInt(segments[0], 10);
     const e = emergencies.find(x => x.id === eid);
     if (!e) return notFound();
-    const b = (body ?? {}) as { responseType: 'WILLING' | 'DECLINED' | 'CONFIRMED'; slotId?: number };
+    const b = (body ?? {}) as { status: 'ACCEPTED' | 'DECLINED'; slotId?: number };
     const responses = emergencyResponses.get(eid) ?? [];
     const existingResponse = responses.find(r => r.donorId === userId);
     if (existingResponse) return fail(409, 'Already responded');
 
-    const responseType: ResponseType = b.responseType === 'CONFIRMED' ? 'CONVERTED_TO_APPOINTMENT' : b.responseType;
     const er: EmergencyResponse = {
       id: autoIncrement.emergencyResponses++,
       emergencyId: eid, donorId: userId,
-      responseType, message: null,
-      notifiedAt: nowISO(), respondedAt: nowISO(),
+      slotId: b.slotId ?? null, status: b.status,
+      reason: null,
+      respondedAt: nowISO(),
     };
     responses.push(er);
     emergencyResponses.set(eid, responses);
 
     let appointmentId: number | undefined;
     let qrCode: string | undefined;
-    if (b.slotId && b.responseType !== 'DECLINED') {
+    if (b.slotId && b.status !== 'DECLINED') {
       const slot = slots.find(s => s.id === b.slotId);
       if (slot) {
         const aid = autoIncrement.appointments++;
         qrCode = `QATRA-APPT-${String(aid).padStart(3, '0')}`;
         const apt: Appointment = {
           id: aid, donorId: userId, centerId: e.centerId, emergencyId: eid,
-          slotId: b.slotId, status: 'CONFIRMED', appointmentType: 'EMERGENCY',
+          slotId: b.slotId, status: 'SCHEDULED', appointmentType: 'EMERGENCY',
           bloodType: e.bloodType, mlCollected: null, notes: null,
           cancellationReason: null, qrCode, completedByStaffId: null,
-          createdAt: nowISO(), checkedInAt: null, completedAt: null, cancelledAt: null,
+          createdAt: nowISO(), updatedAt: nowISO(), checkedInAt: null, startedAt: null, completedAt: null, cancelledAt: null, outcome: null,
         };
         appointments.push(apt);
         slot.bookedCount++;
@@ -765,11 +786,11 @@ function handleEmergencies(method: string, segments: string[], params: URLSearch
 
     const result: EmergencyRespondResult = {
       emergencyId: eid,
-      responseType: er.responseType,
+      status: er.status,
       appointmentId,
       qrCode,
     };
-    if (b.responseType === 'WILLING' || b.responseType === 'CONFIRMED') {
+    if (b.status === 'ACCEPTED') {
       const centerSlots = slots.filter(s => s.centerId === e.centerId && !s.isBlocked && s.date >= todayDate() && s.bookedCount < s.maxBookings);
       result.availableSlots = centerSlots.map(s => ({ slotId: s.id, startTime: s.startTime, endTime: s.endTime, availableCount: s.maxBookings - s.bookedCount }));
     }
@@ -786,8 +807,8 @@ function handleEmergencies(method: string, segments: string[], params: URLSearch
         matches.push({
           id: matches.length + 1, emergencyId: eid, centerId: e.centerId,
           donorId: dp.userId, radius: e.matchRadius,
-          bloodType: dp.bloodType, escalationLevel: e.escalationLevel,
-          createdAt: nowISO(),
+          bloodType: dp.bloodType, status: 'PENDING' as const, escalationLevel: e.escalationLevel,
+          createdAt: nowISO(), respondedAt: null,
         });
       }
     }
@@ -800,23 +821,43 @@ function handleEmergencies(method: string, segments: string[], params: URLSearch
 function emergencyResponseStats(emergencyId: number): ResponseStats {
   const responses = emergencyResponses.get(emergencyId) ?? [];
   return {
-    willing: responses.filter(r => r.responseType === 'WILLING').length,
-    declined: responses.filter(r => r.responseType === 'DECLINED').length,
+    willing: responses.filter(r => r.status === 'ACCEPTED').length,
+    declined: responses.filter(r => r.status === 'DECLINED').length,
     noResponse: 0,
-    convertedToAppointment: responses.filter(r => r.responseType === 'CONVERTED_TO_APPOINTMENT').length,
+    convertedToAppointment: 0,
   };
 }
 
 // ===== APPOINTMENT HANDLERS =====
 
+function appointmentToDonorView(a: Appointment): DonorAppointmentView {
+  const slot = slots.find(s => s.id === a.slotId);
+  const center = centers.find(c => c.id === a.centerId);
+  return {
+    id: a.id,
+    date: slot?.date ?? '',
+    startTime: slot?.startTime ?? '',
+    endTime: slot?.endTime ?? '',
+    centerName: center?.name ?? '',
+    centerCity: center?.city ?? '',
+    status: a.status,
+    appointmentType: a.appointmentType,
+    qrCode: a.qrCode,
+    centerId: a.centerId,
+    slotId: a.slotId,
+  };
+}
+
 function handleAppointments(method: string, segments: string[], params: URLSearchParams, body: any, userId: number): Observable<HttpResponse<unknown>> {
   if (!userId) return unauthorized();
   const user = users.find(u => u.id === userId);
-  const isStaffOrAdmin = user?.roles.includes('CENTER_STAFF') || user?.roles.includes('CENTER_ADMIN') || user?.roles.includes('SYSTEM_ADMIN');
+  const isStaffOrAdmin = user?.roles.includes('CENTER_STAFF') || user?.roles.includes('CENTER_ADMIN') || user?.roles.includes('SUPER_ADMIN');
 
   if (method === 'GET' && segments.length === 1 && segments[0] === 'my') {
-    const myAppts = appointments.filter(a => a.donorId === userId);
-    return ok(myAppts);
+    const page = parseIntParam(params.get('page'), 0);
+    const size = parseIntParam(params.get('size'), 20);
+    const myAppts = appointments.filter(a => a.donorId === userId).map(appointmentToDonorView);
+    return ok(paginate(myAppts, page, size));
   }
 
   if (method === 'GET' && segments.length === 1 && segments[0] === 'center-queue') {
@@ -875,7 +916,7 @@ function handleAppointments(method: string, segments: string[], params: URLSearc
       status: 'SCHEDULED', appointmentType: b.appointmentType ?? 'REGULAR',
       bloodType: null, mlCollected: null, notes: null,
       cancellationReason: null, qrCode, completedByStaffId: null,
-      createdAt: nowISO(), checkedInAt: null, completedAt: null, cancelledAt: null,
+      createdAt: nowISO(), updatedAt: nowISO(), checkedInAt: null, startedAt: null, completedAt: null, cancelledAt: null, outcome: null,
     };
     appointments.push(apt);
     slot.bookedCount++;
@@ -945,9 +986,9 @@ function handleAppointments(method: string, segments: string[], params: URLSearc
     const sid = autoIncrement.healthScreenings++;
     const screening: HealthScreening = {
       id: sid, appointmentId: id, donorId: apt.donorId, screenedByStaffId: userId,
-      temperatureCelsius: b.temperatureCelsius ?? 36.5, hemoglobinGdL: b.hemoglobinGdL ?? 14.0,
-      bloodPressure: b.bloodPressure ?? '120/80', pulse: b.pulse ?? 72,
-      medicalCheckPassed: b.medicalCheckPassed ?? true, notes: b.notes ?? null,
+      weight: b.weight ?? 75.0, bloodPressure: b.bloodPressure ?? '120/80', hemoglobin: b.hemoglobin ?? 14.0,
+      temperature: b.temperature ?? 36.5, notes: b.notes ?? null,
+      eligible: b.eligible ?? true,
       screenedAt: nowISO(),
     };
     healthScreenings.push(screening);
@@ -991,23 +1032,24 @@ function handleNotifications(method: string, segments: string[], params: URLSear
     return ok({ count });
   }
 
-  if (method === 'PUT' && segments.length === 1 && segments[0] === 'read-all') {
+  if ((method === 'PUT' || method === 'PATCH') && segments.length === 1 && segments[0] === 'read-all') {
     notifications.forEach(n => { if (n.userId === userId && n.status !== 'READ') { n.status = 'READ'; n.readAt = nowISO(); } });
     return ok({ message: 'All notifications marked as read' });
   }
 
   if (method === 'GET' && segments.length === 0) {
     let filtered = notifications.filter(n => n.userId === userId);
-    const status = params.get('status');
-    const ntype = params.get('type');
-    if (status) filtered = filtered.filter(n => n.status === status);
-    if (ntype) filtered = filtered.filter(n => n.type === ntype);
+    const type = params.get('type');
+    const readParam = params.get('read');
+    if (type) filtered = filtered.filter(n => n.type === type);
+    if (readParam === 'true') filtered = filtered.filter(n => n.status === 'READ');
+    if (readParam === 'false') filtered = filtered.filter(n => n.status !== 'READ');
     const page = parseIntParam(params.get('page'), 0);
     const size = parseIntParam(params.get('size'), 20);
     return ok(paginate(filtered, page, size));
   }
 
-  if (method === 'PUT' && segments.length === 2 && /^\d+$/.test(segments[0]) && segments[1] === 'read') {
+  if ((method === 'PUT' || method === 'PATCH') && segments.length === 2 && /^\d+$/.test(segments[0]) && segments[1] === 'read') {
     const id = parseInt(segments[0], 10);
     const n = notifications.find(x => x.id === id && x.userId === userId);
     if (!n) return notFound();
@@ -1024,13 +1066,13 @@ function handleNotifications(method: string, segments: string[], params: URLSear
 function handleAdmin(method: string, segments: string[], params: URLSearchParams, body: any, userId: number): Observable<HttpResponse<unknown>> {
   if (!userId) return unauthorized();
   const user = users.find(u => u.id === userId);
-  if (!user?.roles.includes('SYSTEM_ADMIN')) return fail(403, 'Forbidden');
+  if (!user?.roles.includes('SUPER_ADMIN')) return fail(403, 'Forbidden');
 
   const sub = segments.join('/');
 
   if (method === 'GET' && sub === 'dashboard') {
     const stats: SystemDashboard = {
-      activeEmergencies: emergencies.filter(e => e.status === 'OPEN' || e.status === 'IN_PROGRESS').length,
+      activeEmergencies: emergencies.filter(e => e.status === 'OPEN').length,
       totalDonors: users.filter(u => u.roles.includes('DONOR')).length,
       responseRate30d: 72,
       topCenters: centers.filter(c => c.status === 'ACTIVE').slice(0, 3).map(c => ({ id: c.id, name: c.name, donations: Math.floor(Math.random() * 50) + 10 })),
@@ -1133,9 +1175,9 @@ function handleAdmin(method: string, segments: string[], params: URLSearchParams
     const bloodType = params.get('bloodType');
     const region = params.get('region');
     let forecasts: DemandForecast[] = [
-      { id: 1, bloodType: 'O_NEGATIVE', region: 'Casablanca-Settat', forecastedUnits: 45, forecastDate: daysFromNow(7), validUntil: daysFromNow(14), basedOnEmergencyCount: 3, generatedAt: nowISO() },
-      { id: 2, bloodType: 'A_POSITIVE', region: 'Rabat-Salé', forecastedUnits: 30, forecastDate: daysFromNow(7), validUntil: daysFromNow(14), basedOnEmergencyCount: 2, generatedAt: nowISO() },
-      { id: 3, bloodType: 'O_POSITIVE', region: 'Marrakech-Safi', forecastedUnits: 25, forecastDate: daysFromNow(7), validUntil: daysFromNow(14), basedOnEmergencyCount: 1, generatedAt: nowISO() },
+      { id: 1, bloodType: 'O_NEGATIVE', region: 'Tunis', forecastedUnits: 45, forecastDate: daysFromNow(7), validUntil: daysFromNow(14), basedOnEmergencyCount: 3, generatedAt: nowISO() },
+      { id: 2, bloodType: 'A_POSITIVE', region: 'Sfax', forecastedUnits: 30, forecastDate: daysFromNow(7), validUntil: daysFromNow(14), basedOnEmergencyCount: 2, generatedAt: nowISO() },
+      { id: 3, bloodType: 'O_POSITIVE', region: 'Sousse', forecastedUnits: 25, forecastDate: daysFromNow(7), validUntil: daysFromNow(14), basedOnEmergencyCount: 1, generatedAt: nowISO() },
     ];
     if (bloodType) forecasts = forecasts.filter(f => f.bloodType === bloodType);
     if (region) forecasts = forecasts.filter(f => f.region.toLowerCase().includes(region.toLowerCase()));

@@ -7,9 +7,9 @@ import { InputNumber } from 'primeng/inputnumber';
 import { Select } from 'primeng/select';
 import { Textarea } from 'primeng/textarea';
 import { ProgressSpinner } from 'primeng/progressspinner';
-import { CompletionSchema } from '../../../../shared/schemas/appointment.schema';
-import { BLOOD_TYPE_NAMES } from '../../../../shared/utils/blood-type-utils';
-import { AppointmentService } from '../../appointment.service';
+import { CompletionSchema } from '@/app/shared/schemas/appointment.schema';
+import { BLOOD_TYPE_NAMES } from '@/app/shared/utils/blood-type-utils';
+import { AppointmentService } from '@/app/features/appointment/appointment.service';
 
 @Component({
   selector: 'app-completion-page',

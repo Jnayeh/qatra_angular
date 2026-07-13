@@ -7,11 +7,11 @@ import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { RadioButton } from 'primeng/radiobutton';
 import { Router, RouterLink } from '@angular/router';
-import { EmergencyCreateSchema } from '../../../../shared/schemas/emergency.schema';
-import { BLOOD_TYPE_NAMES } from '../../../../shared/utils/blood-type-utils';
-import { CenterStore } from '../../../center/center.store';
-import { EmergencyStore } from '../../emergency.store';
-import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner';
+import { EmergencyCreateSchema } from '@/app/shared/schemas/emergency.schema';
+import { BLOOD_TYPE_NAMES } from '@/app/shared/utils/blood-type-utils';
+import { CenterStore } from '@/app/features/center/center.store';
+import { EmergencyStore } from '@/app/features/emergency/emergency.store';
+import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
 
 @Component({
   selector: 'app-emergency-create-page',
@@ -42,8 +42,9 @@ export class EmergencyCreatePageComponent implements OnInit {
 
   protected readonly urgencyOptions = [
     { value: 'CRITICAL', label: 'Critical' },
-    { value: 'URGENT', label: 'Urgent' },
-    { value: 'MODERATE', label: 'Moderate' },
+    { value: 'HIGH', label: 'High' },
+    { value: 'MEDIUM', label: 'Medium' },
+    { value: 'LOW', label: 'Low' },
   ];
 
   protected form = this.fb.group({
@@ -52,7 +53,7 @@ export class EmergencyCreatePageComponent implements OnInit {
     unitsNeeded: [<number | null>null, [Validators.required, Validators.min(1)]],
     urgency: [<string | null>null, Validators.required],
     contactPhone: ['', [Validators.required, Validators.pattern(/^\+?[\d\s-]{8,15}$/)]],
-    neededBy: [<string | null>null, Validators.required],
+    expiresAt: [<string | null>null, Validators.required],
   });
 
   ngOnInit(): void {

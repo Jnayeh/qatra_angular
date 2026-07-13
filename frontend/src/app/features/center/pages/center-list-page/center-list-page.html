@@ -1,6 +1,9 @@
 <div class="space-y-6">
-  <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-white">Donation Centers</h1>
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Donation Centers</h1>
+      <p class="text-sm text-gray-500 mt-1">Find nearby blood donation centers and check their availability.</p>
+    </div>
     <div class="flex items-center gap-2">
       <input pInputText [formControl]="cityFilter" (keyup.enter)="search()" placeholder="Search city..." class="w-48" />
       <p-button label="Search" (click)="search()" severity="primary"></p-button>
@@ -23,19 +26,19 @@
       } @else {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           @for (center of store.centers(); track center.id) {
-            <p-card class="bg-surface-card cursor-pointer hover:bg-surface-hover transition-colors" [routerLink]="['/centers', center.id]">
+            <p-card class="cursor-pointer hover:shadow-md transition-all" [routerLink]="['/centers', center.id]">
               <ng-template pTemplate="content">
                 <div class="flex items-start justify-between mb-2">
-                  <h3 class="text-white font-medium">{{ center.name }}</h3>
+                  <h3 class="text-gray-900 font-semibold">{{ center.name }}</h3>
                   <app-status-badge [status]="center.status" />
                 </div>
-                <p class="text-sm text-gray-400">{{ center.city }}, {{ center.country }}</p>
-                <p class="text-xs text-gray-500">{{ center.facilityType }}</p>
-                <div class="flex items-center gap-4 mt-3 text-xs text-gray-400">
+                <p class="text-sm text-gray-500">{{ center.city }}, {{ center.country }}</p>
+                <p class="text-xs text-gray-400">{{ center.facilityType }}</p>
+                <div class="flex items-center gap-4 mt-3 text-xs text-gray-500">
                   @if (center.distanceKm != null) {
                     <span>{{ center.distanceKm.toFixed(1) }} km away</span>
                   }
-                  <span [class.text-green-400]="center.isOperatingNow">● {{ center.isOperatingNow ? 'Open' : 'Closed' }}</span>
+                  <span [class.text-green-600]="center.isOperatingNow" [class.text-gray-400]="!center.isOperatingNow">● {{ center.isOperatingNow ? 'Open' : 'Closed' }}</span>
                 </div>
               </ng-template>
             </p-card>

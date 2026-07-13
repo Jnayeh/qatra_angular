@@ -1,6 +1,6 @@
 export interface DaySchedule {
-  open: string;
-  close: string;
+  opens: string;
+  closes: string;
 }
 
 export interface ClosureWindow {

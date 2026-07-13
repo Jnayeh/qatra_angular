@@ -1,42 +1,39 @@
 <div class="max-w-2xl mx-auto space-y-6">
-  <h1 class="text-2xl font-bold text-white">My Profile</h1>
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">My Profile</h1>
+    <p class="text-sm text-gray-500 mt-1">Manage your personal information and account settings.</p>
+  </div>
 
   <p-card>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-      <div class="flex flex-col gap-1">
-        <label class="text-sm text-gray-400">Display Name</label>
-        <input pInputText formControlName="displayName" class="w-full" />
+      <div class="flex flex-col gap-1.5">
+        <label for="displayName" class="text-sm font-medium text-gray-700">Display Name</label>
+        <input pInputText id="displayName" formControlName="displayName" class="w-full" />
         @if (form.get('displayName')?.invalid && form.get('displayName')?.touched) {
-          <p-message severity="error" variant="outlined" size="small">Name is required (min 2 characters)</p-message>
+          <small class="text-red-500">Display name is required (min 2 characters)</small>
         }
       </div>
 
-      <div class="flex flex-col gap-1">
-        <label class="text-sm text-gray-400">Phone</label>
-        <input pInputText formControlName="phone" class="w-full" />
+      <div class="flex flex-col gap-1.5">
+        <label for="phone" class="text-sm font-medium text-gray-700">Phone</label>
+        <input pInputText id="phone" formControlName="phone" class="w-full" />
         @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
-          <p-message severity="error" variant="outlined" size="small">Invalid phone number</p-message>
+          <small class="text-red-500">Invalid phone number</small>
         }
       </div>
 
-      <div class="flex gap-4">
-        <p-button severity="primary" type="submit" [disabled]="form.invalid || isLoading()">
-          Save Changes
-        </p-button>
+      <div class="flex gap-4 pt-2">
+        <p-button severity="primary" type="submit" [disabled]="form.invalid || isLoading()">Save Changes</p-button>
         <p-button severity="secondary" variant="outlined" routerLink="/donor/dashboard">Cancel</p-button>
       </div>
     </form>
   </p-card>
 
-  <p-card styleClass="border border-red-900">
-    <ng-template pTemplate="title"><span class="text-red-400">Danger Zone</span></ng-template>
+  <p-card styleClass="border border-red-200">
+    <ng-template pTemplate="title"><span class="text-red-600">Danger Zone</span></ng-template>
     <ng-template pTemplate="content">
-      <p class="text-sm text-gray-400 mb-4">
-        Request permanent deletion of your account and all associated data (GDPR).
-      </p>
-      <p-button severity="danger" (click)="requestDeletion()">
-        Request Account Deletion
-      </p-button>
+      <p class="text-sm text-gray-500 mb-4">Request permanent deletion of your account and all associated data (GDPR).</p>
+      <p-button severity="danger" (click)="requestDeletion()">Request Account Deletion</p-button>
     </ng-template>
   </p-card>
 </div>

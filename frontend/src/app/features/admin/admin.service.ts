@@ -1,37 +1,37 @@
 import { inject, Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
-import type { ApiResponse, Page } from '../../shared/models/api-response.model';
-import type { UserDetail, UserSummary } from '../../shared/models/user.model';
-import type { AuditLogEntry, SystemDashboard, SystemHealth, PlatformReport, DemandForecast } from '../../shared/models/analytics.model';
-import type { SystemConfigEntry, FeatureFlag, DataDeletionRequest } from '../../shared/models/config.model';
-import { ApiService } from '../../core/http/api.service';
+import type { ApiResponse, Page } from '@/app/shared/models/api-response.model';
+import type { UserDetail, UserSummary } from '@/app/shared/models/user.model';
+import type { AuditLogEntry, SystemDashboard, SystemHealth, PlatformReport, DemandForecast } from '@/app/shared/models/analytics.model';
+import type { SystemConfigEntry, FeatureFlag, DataDeletionRequest } from '@/app/shared/models/config.model';
+import { ApiService } from '@/app/core/http/api.service';
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private readonly api = inject(ApiService);
 
   getDashboard(): Observable<ApiResponse<SystemDashboard>> {
-    return this.api.get('/admin/dashboard');
+    return this.api.get('/api/v1/analytics/metrics');
   }
 
   getUsers(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<Page<UserSummary>>> {
-    return this.api.getPage('/users', params);
+    return this.api.getPage('/admin/users', params);
   }
 
   getUser(id: number): Observable<ApiResponse<UserDetail>> {
-    return this.api.get(`/users/${id}`);
+    return this.api.get(`/admin/users/${id}`);
   }
 
   updateUserStatus(id: number, status: string): Observable<ApiResponse<UserSummary>> {
-    return this.api.patch(`/users/${id}/status`, { status });
+    return this.api.patch(`/admin/users/${id}/status`, { status });
   }
 
   assignRole(id: number, role: string, action: 'ASSIGN' | 'REVOKE'): Observable<ApiResponse<{ userId: number; roles: string[] }>> {
-    return this.api.patch(`/users/${id}/roles`, { role, action });
+    return this.api.patch(`/admin/users/${id}/roles`, { role, action });
   }
 
   deleteUser(id: number): Observable<ApiResponse<{ message: string }>> {
-    return this.api.delete(`/users/${id}`);
+    return this.api.delete(`/admin/users/${id}`);
   }
 
   getAuditLogs(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<Page<AuditLogEntry>>> {
@@ -67,14 +67,14 @@ export class AdminService {
   }
 
   getSystemHealth(): Observable<ApiResponse<SystemHealth>> {
-    return this.api.get('/admin/metrics/system');
+    return this.api.get('/api/v1/analytics/health');
   }
 
   getReports(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<PlatformReport>> {
-    return this.api.get('/admin/reports', params);
+    return this.api.get('/api/v1/analytics/reports', params);
   }
 
   getForecasts(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<DemandForecast[]>> {
-    return this.api.get('/admin/forecasts', params);
+    return this.api.get('/api/v1/analytics/forecasts', params);
   }
 }

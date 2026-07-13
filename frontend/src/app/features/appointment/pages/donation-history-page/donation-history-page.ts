@@ -4,9 +4,9 @@ import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { DatePicker } from 'primeng/datepicker';
 import { TableModule } from 'primeng/table';
-import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner';
-import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state';
-import { AppointmentService } from '../../appointment.service';
+import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
+import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-state';
+import { AppointmentService } from '@/app/features/appointment/appointment.service';
 
 interface DonationRecord {
   date: string;

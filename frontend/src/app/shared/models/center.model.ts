@@ -1,11 +1,11 @@
-import type { OperatingHours } from './operating-hours.model';
+import type { OperatingHours } from '@/app/shared/models/operating-hours.model';
 
 export type FacilityType =
   | 'HOSPITAL'
   | 'BLOOD_BANK'
   | 'MOBILE_UNIT'
   | 'COMMUNITY_CENTER'
-  | 'DEDICATED_CENTER';
+  | 'CLINIC';
 
 export type CenterStatus =
   | 'PENDING_APPROVAL'
@@ -32,11 +32,14 @@ export interface BloodDonationCenter {
   facilityType: FacilityType;
   status: CenterStatus;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface CenterSummary {
   id: number;
   name: string;
+  latitude: number;
+  longitude: number;
   city: string;
   country: string;
   facilityType: FacilityType;
@@ -61,6 +64,7 @@ export interface Slot {
   bookedCount: number;
   regularBookedCount: number;
   isBlocked: boolean;
+  createdAt: string;
 }
 
 export interface ClosureRequest {

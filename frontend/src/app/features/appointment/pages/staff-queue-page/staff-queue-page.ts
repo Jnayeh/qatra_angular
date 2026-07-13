@@ -3,10 +3,10 @@ import { Router } from '@angular/router';
 import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { Tabs, TabList, Tab, TabPanel } from 'primeng/tabs';
-import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner';
-import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state';
-import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge';
-import { AppointmentService } from '../../appointment.service';
+import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
+import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-state';
+import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge';
+import { AppointmentService } from '@/app/features/appointment/appointment.service';
 
 interface QueueItem {
   appointment: any;

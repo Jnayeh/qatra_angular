@@ -3,14 +3,13 @@ import { signalStore, withState, withMethods, patchState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import type { Observable } from 'rxjs';
-import type { ApiResponse } from '../../shared/models/api-response.model';
-import type { Emergency, EmergencyDetail, EmergencyCreateRequest } from '../../shared/models/emergency.model';
-import { EmergencyService } from './emergency.service';
+import type { ApiResponse } from '@/app/shared/models/api-response.model';
+import type { Emergency, EmergencyDetail, EmergencyCreateRequest } from '@/app/shared/models/emergency.model';
+import { EmergencyService } from '@/app/features/emergency/emergency.service';
 
 interface EmergencyState {
   emergencies: Emergency[];
   selectedEmergency: EmergencyDetail | null;
-  myEmergencies: Array<{ emergencyId: number; bloodType: string; urgency: string; status: string; centerName: string; distanceKm: number | null; responseType: string | null; respondedAt: string | null }>;
   isLoading: boolean;
   error: string | null;
 }
@@ -18,7 +17,6 @@ interface EmergencyState {
 const initialState: EmergencyState = {
   emergencies: [],
   selectedEmergency: null,
-  myEmergencies: [],
   isLoading: false,
   error: null,
 };
@@ -55,26 +53,16 @@ export const EmergencyStore = signalStore(
       ),
     ),
 
-    loadMyEmergencies: rxMethod<void>(
-      pipe(
-        tap(() => patchState(store, { isLoading: true })),
-        switchMap(() =>
-          emergencyService.getMyEmergencies().pipe(
-            tap({
-              next: (res) => patchState(store, { myEmergencies: res.data, isLoading: false }),
-              error: () => patchState(store, { isLoading: false, error: 'Failed to load your emergencies' }),
-            }),
-          ),
-        ),
-      ),
-    ),
-
     createEmergency(data: EmergencyCreateRequest): Observable<ApiResponse<EmergencyDetail>> {
       return emergencyService.create(data);
     },
 
-    respondToEmergency(id: number, responseType: 'WILLING' | 'DECLINED', slotId?: number) {
-      return emergencyService.respond(id, { responseType, slotId } as any);
+    acceptEmergency(id: number) {
+      return emergencyService.accept(id);
+    },
+
+    declineEmergency(id: number, reason: string) {
+      return emergencyService.decline(id, reason);
     },
   })),
 );

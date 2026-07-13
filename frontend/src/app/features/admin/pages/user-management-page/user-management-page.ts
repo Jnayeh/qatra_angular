@@ -3,9 +3,9 @@ import { Card } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { RouterLink } from '@angular/router';
-import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge';
-import type { UserSummary } from '../../../../shared/models/user.model';
-import { AdminService } from '../../admin.service';
+import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge';
+import type { UserSummary } from '@/app/shared/models/user.model';
+import { AdminService } from '@/app/features/admin/admin.service';
 
 @Component({
   selector: 'app-user-management-page',

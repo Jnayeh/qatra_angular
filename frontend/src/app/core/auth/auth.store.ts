@@ -2,9 +2,9 @@ import { computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { signalStore, withState, withComputed, withMethods, patchState } from '@ngrx/signals';
 import { catchError, switchMap, tap, throwError } from 'rxjs';
-import type { User } from '../../shared/models/user.model';
-import { ApiService } from '../http/api.service';
-import { AuthService } from './auth.service';
+import type { User } from '@/app/shared/models/user.model';
+import { ApiService } from '@/app/core/http/api.service';
+import { AuthService } from '@/app/core/auth/auth.service';
 
 interface AuthState {
   user: User | null;
@@ -26,8 +26,9 @@ const initialState: AuthState = {
 
 const ROLE_MAP: Record<string, string[]> = {
   DONOR: ['DONOR'],
-  STAFF: ['CENTER_STAFF', 'CENTER_ADMIN', 'SYSTEM_ADMIN'],
-  ADMIN: ['SYSTEM_ADMIN'],
+  CENTER: ['CENTER_STAFF', 'CENTER_ADMIN'],
+  CENTER_ADMIN: ['CENTER_ADMIN'],
+  ADMIN: ['SUPER_ADMIN'],
 };
 
 export const AuthStore = signalStore(
@@ -35,7 +36,7 @@ export const AuthStore = signalStore(
   withState(initialState),
   withComputed((store) => ({
     userRoles: computed(() => store.user()?.roles ?? []),
-    isSuperAdmin: computed(() => store.user()?.roles.includes('SYSTEM_ADMIN') ?? false),
+    isSuperAdmin: computed(() => store.user()?.roles.includes('SUPER_ADMIN') ?? false),
     isCenterAdmin: computed(() => store.user()?.roles.includes('CENTER_ADMIN') ?? false),
     isCenterStaff: computed(() => store.user()?.roles.includes('CENTER_STAFF') ?? false),
     isDonor: computed(() => store.user()?.roles.includes('DONOR') ?? false),
@@ -47,12 +48,12 @@ export const AuthStore = signalStore(
         switchMap((res) => {
           const data = res.data;
           patchState(store, {
-            accessToken: data.accessToken,
+            accessToken: data.token,
             refreshToken: data.refreshToken,
             isAuthenticated: true,
             isLoading: false,
           });
-          localStorage.setItem('accessToken', data.accessToken);
+          localStorage.setItem('accessToken', data.token);
           localStorage.setItem('refreshToken', data.refreshToken);
 
           return api.get<User>('/users/me');
@@ -73,10 +74,10 @@ export const AuthStore = signalStore(
                 isLoading: false,
                 error:
                   intendedRole === 'DONOR'
-                    ? 'This login is for donors only. Staff and admins, please use the staff or admin login page.'
-                    : intendedRole === 'STAFF'
-                      ? 'This login is for staff only. Please use the donor login page.'
-                      : 'This login is for admins only.',
+                    ? 'This login is for donors only. Please use the correct portal for your role.'
+                    : intendedRole === 'CENTER'
+                      ? 'This portal is for center staff and administrators only.'
+                      : 'This portal is for super administrators only.',
               });
               return;
             }

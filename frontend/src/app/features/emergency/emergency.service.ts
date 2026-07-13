@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
-import type { ApiResponse, Page } from '../../shared/models/api-response.model';
-import type { Emergency, EmergencyDetail, EmergencyCreateRequest, EmergencyRespondRequest, EmergencyRespondResult, EmergencyResponse, MatchResult } from '../../shared/models/emergency.model';
-import { ApiService } from '../../core/http/api.service';
+import type { ApiResponse, Page } from '@/app/shared/models/api-response.model';
+import type { Emergency, EmergencyDetail, EmergencyCreateRequest, EmergencyRespondResult, EmergencyResponse, MatchResult } from '@/app/shared/models/emergency.model';
+import { ApiService } from '@/app/core/http/api.service';
 
 @Injectable({ providedIn: 'root' })
 export class EmergencyService {
@@ -28,19 +28,15 @@ export class EmergencyService {
     return this.api.post(`/emergencies/${id}/resolve`, { notes });
   }
 
-  getMatches(id: number): Observable<ApiResponse<MatchResult[]>> {
-    return this.api.get(`/emergencies/${id}/matches`);
+  getResponses(id: number): Observable<ApiResponse<MatchResult[]>> {
+    return this.api.get(`/emergencies/${id}/responses`);
   }
 
-  respond(id: number, data: EmergencyRespondRequest): Observable<ApiResponse<EmergencyRespondResult>> {
-    return this.api.post(`/emergencies/${id}/respond`, data);
+  accept(id: number): Observable<ApiResponse<EmergencyRespondResult>> {
+    return this.api.post(`/emergencies/${id}/accept`);
   }
 
-  getHistory(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<Page<Emergency>>> {
-    return this.api.getPage('/emergencies/history', params);
-  }
-
-  getMyEmergencies(): Observable<ApiResponse<Array<{ emergencyId: number; bloodType: string; urgency: string; status: string; centerName: string; distanceKm: number | null; responseType: string | null; respondedAt: string | null }>>> {
-    return this.api.get('/donors/me/emergencies');
+  decline(id: number, reason: string): Observable<ApiResponse<EmergencyRespondResult>> {
+    return this.api.post(`/emergencies/${id}/decline`, { reason });
   }
 }

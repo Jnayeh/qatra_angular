@@ -1,5 +1,5 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
-import { AuthStore } from '../auth/auth.store';
+import { AuthStore } from '@/app/core/auth/auth.store';
 import { Client, type IMessage } from '@stomp/stompjs';
 
 @Injectable({ providedIn: 'root' })

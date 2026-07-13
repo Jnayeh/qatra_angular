@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state';
+import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-state';
 
 @Component({
   selector: 'app-forecasts-page',

@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
-import type { ApiResponse, Page } from '../../shared/models/api-response.model';
-import type { Appointment, AppointmentResponse, AppointmentRequest, CheckInResult, HealthScreening, CompletionRequest } from '../../shared/models/appointment.model';
-import { ApiService } from '../../core/http/api.service';
+import type { ApiResponse, Page } from '@/app/shared/models/api-response.model';
+import type { Appointment, AppointmentResponse, AppointmentRequest, CheckInResult, CompletionRequest, DonorAppointmentView, HealthScreening } from '@/app/shared/models/appointment.model';
+import { ApiService } from '@/app/core/http/api.service';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentService {
@@ -20,16 +20,16 @@ export class AppointmentService {
     return this.api.get(`/appointments/${id}`);
   }
 
-  reschedule(id: number, newSlotId: number): Observable<ApiResponse<AppointmentResponse>> {
-    return this.api.patch(`/appointments/${id}/reschedule`, { newSlotId });
+  reschedule(id: number, slotId: number): Observable<ApiResponse<Appointment>> {
+    return this.api.put(`/appointments/${id}/reschedule`, { slotId });
   }
 
-  cancel(id: number, reason: string): Observable<ApiResponse<{ message: string }>> {
-    return this.api.post(`/appointments/${id}/cancel`, { cancellationReason: reason });
+  cancel(id: number, reason: string): Observable<ApiResponse<Appointment>> {
+    return this.api.post(`/appointments/${id}/cancel`, { reason });
   }
 
-  checkIn(data: { qrCode?: string; appointmentId?: number }): Observable<ApiResponse<CheckInResult>> {
-    return this.api.post('/appointments/checkin', data);
+  checkIn(id: number, qrCode: string): Observable<ApiResponse<CheckInResult>> {
+    return this.api.post(`/appointments/${id}/check-in`, { qrCode });
   }
 
   markNoShow(id: number): Observable<ApiResponse<Appointment>> {
@@ -37,15 +37,15 @@ export class AppointmentService {
   }
 
   addScreening(id: number, data: Partial<HealthScreening>): Observable<ApiResponse<HealthScreening>> {
-    return this.api.post(`/appointments/${id}/screening`, data);
+    return this.api.post(`/screening-results`, { appointmentId: id, ...data });
   }
 
   complete(id: number, data: CompletionRequest): Observable<ApiResponse<Appointment>> {
     return this.api.post(`/appointments/${id}/complete`, data);
   }
 
-  getMyAppointments(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<Page<Appointment>>> {
-    return this.api.getPage('/donors/me/appointments', params);
+  getMyAppointments(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<Page<DonorAppointmentView>>> {
+    return this.api.getPage('/appointments/my', params);
   }
 
   getMyDonations(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<Page<{ date: string; center: string; mlCollected: number; certificateUrl: string }>>> {

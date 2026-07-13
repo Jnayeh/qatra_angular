@@ -2,25 +2,24 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Button } from 'primeng/button';
-import { Card } from 'primeng/card';
 import { InputText } from 'primeng/inputtext';
 import { Message } from 'primeng/message';
-import { ProgressSpinner } from 'primeng/progressspinner';
-import { AuthService } from '../../../../core/auth/auth.service';
+import { AuthService } from '@/app/core/auth/auth.service';
+import { PublicNavbarComponent } from '@/app/shared/components/public-navbar/public-navbar';
 
 @Component({
   selector: 'app-verify-email-page',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    Card,
     Button,
     InputText,
     Message,
-    ProgressSpinner,
     RouterLink,
+    PublicNavbarComponent,
   ],
   templateUrl: './verify-email-page.html',
+  styleUrl: '../login-page/login-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifyEmailPageComponent {

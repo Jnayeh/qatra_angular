@@ -13,15 +13,15 @@ export const EmergencyCreateSchema = z.object({
     'O_NEGATIVE',
   ]),
   unitsNeeded: z.number().int().min(1, 'At least 1 unit required').positive(),
-  urgency: z.enum(['CRITICAL', 'URGENT', 'MODERATE']),
+  urgency: z.enum(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']),
   contactPhone: z
     .string()
     .regex(/^\+?[\d\s-]{8,15}$/, 'Invalid phone number'),
-  neededBy: z.string().min(1, 'Deadline is required'),
+  expiresAt: z.string().min(1, 'Deadline is required'),
 });
 
 export const EmergencyRespondSchema = z.object({
-  responseType: z.enum(['WILLING', 'DECLINED', 'CONFIRMED']),
+  status: z.enum(['ACCEPTED', 'DECLINED']),
   slotId: z.number().positive().optional(),
 });
 

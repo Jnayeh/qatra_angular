@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, viewChild } from '@angular/core';
 import { Card } from 'primeng/card';
 import { Chart, registerables } from 'chart.js';
-import { DonorStore } from '../../donor.store';
+import { DonorStore } from '@/app/features/donor/donor.store';
 
 Chart.register(...registerables);
 

@@ -1,16 +1,21 @@
-<div class="min-h-screen flex items-center justify-center bg-surface-dark p-4">
-  <p-card class="w-full max-w-md bg-surface-card">
-    <ng-template pTemplate="header">
-      <div class="flex flex-col items-center pb-4 pt-4">
-        <a routerLink="/" class="text-3xl font-bold text-primary-500 mb-1 hover:opacity-80 transition-opacity">Qatra</a>
-        <p class="text-sm text-gray-400">{{ subtitle() }}</p>
-      </div>
-    </ng-template>
+@if (!isHiddenPortal) {<app-public-navbar />}
+<div class="min-h-screen flex items-center justify-center " [class]="theme().pageBg">
+  <div class="w-full max-w-md rounded-2xl bg-white overflow-hidden" [class]="theme().cardShadow">
+    <div class="px-6 pt-4 pb-2 text-center" [class.bg-slate-900]="theme().dark" [class.text-white]="theme().dark">
+        <p class="text-3xl font-bold mb-1" [class]="theme().accentText">Qatra</p>
 
-    <ng-template pTemplate="content">
+      <p class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full mb-4" [class]="theme().badgeClass">
+        <i class="pi {{ theme().icon }} text-xs"></i>
+        {{ theme().badge }}
+      </p>
+      <h1 class="text-2xl font-bold mt-2" [class.text-gray-900]="!theme().dark" [class.text-white]="theme().dark">{{ title() }}</h1>
+      <p class="text-sm mt-1 max-w-xs mx-auto" [class.text-gray-500]="!theme().dark" [class.text-slate-400]="theme().dark">{{ subtitle() }}</p>
+    </div>
+
+    <div class="px-6 pb-8 pt-4">
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-        <div class="flex flex-col gap-1">
-          <label for="email">Email</label>
+        <div class="flex flex-col gap-1.5">
+          <label for="email" class="text-sm font-medium text-gray-700">Email</label>
           <input pInputText id="email" type="email" formControlName="email" placeholder="your@email.com" class="w-full" [class.ng-invalid]="form.get('email')?.invalid && form.get('email')?.touched" />
           @if (form.get('email')?.invalid && form.get('email')?.touched) {
             @if (form.get('email')?.hasError('email')) {
@@ -22,9 +27,9 @@
           }
         </div>
 
-        <div class="flex flex-col gap-1">
-          <label for="password">Password</label>
-          <p-password formControlName="password" [feedback]="false" [toggleMask]="true" styleClass="w-full" inputStyleClass="w-full" [inputId]="'password'"></p-password>
+        <div class="flex flex-col gap-1.5">
+          <label for="password" class="text-sm font-medium text-gray-700">Password</label>
+          <p-password formControlName="password" [feedback]="false" [toggleMask]="true" styleClass="w-full" inputStyleClass="w-full" inputId="password"></p-password>
           @if (form.get('password')?.invalid && form.get('password')?.touched) {
             @if (form.get('password')?.hasError('minlength')) {
               <small class="text-red-500">Password must be at least 8 characters</small>
@@ -39,15 +44,27 @@
           <p-message severity="error" variant="simple" size="small">{{ authStore.error() }}</p-message>
         }
 
-        <p-button label="{{ title() }}" severity="primary" type="submit" class="w-full" [disabled]="form.invalid || authStore.isLoading()" [loading]="authStore.isLoading()"></p-button>
+        <p-button
+          [label]="title()"
+          [severity]="theme().dark ? 'primary' : 'primary'"
+          type="submit"
+          class="w-full mt-1"
+          styleClass="w-full"
+          [disabled]="form.invalid || authStore.isLoading()"
+          [loading]="authStore.isLoading()"
+        ></p-button>
 
-        <div class="flex justify-between text-sm mt-2">
-          <a routerLink="/auth/forgot-password" class="text-primary-400 hover:underline">Forgot password?</a>
+        <div class="flex justify-between text-sm mt-1">
+          <a [routerLink]="intendedRole === 'ADMIN' ? '/auth/admin-forgot-password' : intendedRole === 'CENTER' ? '/auth/center-forgot-password' : '/auth/forgot-password'" class="text-primary-500 hover:underline">Forgot password?</a>
           @if (showRegisterLink) {
-            <a routerLink="/auth/register" class="text-primary-400 hover:underline">Create account</a>
+            <a routerLink="/auth/register" class="text-primary-500 hover:underline">Create account</a>
           }
         </div>
+
+        @if (isHiddenPortal) {
+          <p class="text-xs text-center text-gray-400 mt-2">Authorized personnel only. This portal is not listed publicly.</p>
+        }
       </form>
-    </ng-template>
-  </p-card>
+    </div>
+  </div>
 </div>

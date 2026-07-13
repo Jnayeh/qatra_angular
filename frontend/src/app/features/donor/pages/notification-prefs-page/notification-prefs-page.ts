@@ -6,8 +6,8 @@ import { InputText } from 'primeng/inputtext';
 import { InputNumber } from 'primeng/inputnumber';
 import { Select } from 'primeng/select';
 import { ToggleSwitch } from 'primeng/toggleswitch';
-import { DonorService } from '../../donor.service';
-import { DonorStore } from '../../donor.store';
+import { DonorService } from '@/app/features/donor/donor.service';
+import { DonorStore } from '@/app/features/donor/donor.store';
 
 @Component({
   selector: 'app-notification-prefs-page',

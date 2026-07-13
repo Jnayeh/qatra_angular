@@ -1,62 +1,63 @@
 <div class="max-w-2xl mx-auto space-y-6">
-  <h1 class="text-2xl font-bold text-white">Health Questionnaire</h1>
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Health Questionnaire</h1>
+    <p class="text-sm text-gray-500 mt-1">Complete your health screening before booking a donation appointment.</p>
+  </div>
 
   <p-card>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
       <div class="flex items-center justify-between">
-        <span class="text-gray-300">Have a chronic illness?</span>
+        <span class="text-sm font-medium text-gray-700">Have a chronic illness?</span>
         <p-toggleswitch formControlName="hasChronicIllness" />
       </div>
 
       @if (form.get('hasChronicIllness')?.value) {
-        <div class="flex flex-col gap-1">
-          <label class="text-sm text-gray-400">Medical Conditions Details</label>
+        <div class="flex flex-col gap-1.5">
+          <label for="medicalConditionsDetails" class="text-sm font-medium text-gray-700">Medical Conditions Details</label>
           <textarea pTextarea formControlName="medicalConditionsDetails" rows="3" class="w-full"></textarea>
-        </div>
-      }
-
-      <p-divider class="border-gray-700" />
-
-      <div class="flex items-center justify-between">
-        <span class="text-gray-300">On any medication?</span>
-        <p-toggleswitch formControlName="onMedication" />
-      </div>
-
-      @if (form.get('onMedication')?.value) {
-        <div class="flex flex-col gap-1">
-          <label class="text-sm text-gray-400">Medication Details</label>
-          <textarea pTextarea formControlName="medicationDetails" rows="3" placeholder="List your medications..." class="w-full"></textarea>
-          @if (form.get('medicationDetails')?.invalid && form.get('medicationDetails')?.touched) {
-            <p-message severity="error" variant="outlined" size="small">Medication details are required</p-message>
-          }
         </div>
       }
 
       <p-divider />
 
       <div class="flex items-center justify-between">
-        <span class="text-gray-300">Had surgery recently?</span>
-        <p-toggleswitch formControlName="recentSurgery" />
+        <span class="text-sm font-medium text-gray-700">On any medication?</span>
+        <p-toggleswitch formControlName="onMedication" />
       </div>
 
-      <div class="flex items-center justify-between">
-        <span class="text-gray-300">Traveled recently?</span>
-        <p-toggleswitch formControlName="recentTravel" />
+      @if (form.get('onMedication')?.value) {
+        <div class="flex flex-col gap-1.5">
+          <label for="medicationDetails" class="text-sm font-medium text-gray-700">Medication Details</label>
+          <textarea pTextarea formControlName="medicationDetails" rows="3" placeholder="List your medications..." class="w-full"></textarea>
+          @if (form.get('medicationDetails')?.invalid && form.get('medicationDetails')?.touched) {
+            <small class="text-red-500">Medication details are required</small>
+          }
+        </div>
+      }
+
+      <p-divider />
+
+      <div class="flex flex-col gap-1.5">
+        <label for="lastSurgeryAt" class="text-sm font-medium text-gray-700">When did you last have surgery?</label>
+        <input pInputText type="date" formControlName="lastSurgeryAt" class="w-full" />
       </div>
 
-      <div class="flex items-center justify-between">
-        <span class="text-gray-300">Recent tattoo or piercing?</span>
-        <p-toggleswitch formControlName="recentTattooOrPiercing" />
+      <div class="flex flex-col gap-1.5">
+        <label for="lastTravelAt" class="text-sm font-medium text-gray-700">When did you last travel?</label>
+        <input pInputText type="date" formControlName="lastTravelAt" class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="lastTattooOrPiercingAt" class="text-sm font-medium text-gray-700">When did you last get a tattoo or piercing?</label>
+        <input pInputText type="date" formControlName="lastTattooOrPiercingAt" class="w-full" />
       </div>
 
       @if (error()) {
-        <p-message severity="error" variant="outlined">{{ error() }}</p-message>
+        <p-message severity="error" variant="simple" size="small">{{ error() }}</p-message>
       }
 
       <div class="flex gap-4 pt-4">
-        <p-button severity="primary" type="submit" [disabled]="isLoading()">
-          Save Questionnaire
-        </p-button>
+        <p-button severity="primary" type="submit" [disabled]="isLoading()">Save Questionnaire</p-button>
         <p-button severity="secondary" variant="outlined" routerLink="/donor/dashboard">Cancel</p-button>
       </div>
     </form>

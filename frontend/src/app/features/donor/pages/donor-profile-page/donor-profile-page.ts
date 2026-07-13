@@ -5,8 +5,8 @@ import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Message } from 'primeng/message';
-import { DonorService } from '../../donor.service';
-import { DonorStore } from '../../donor.store';
+import { DonorService } from '@/app/features/donor/donor.service';
+import { DonorStore } from '@/app/features/donor/donor.store';
 
 @Component({
   selector: 'app-donor-profile-page',

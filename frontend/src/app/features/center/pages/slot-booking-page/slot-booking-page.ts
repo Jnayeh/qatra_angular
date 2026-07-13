@@ -5,11 +5,11 @@ import { Button } from 'primeng/button';
 import { DatePicker } from 'primeng/datepicker';
 import { RadioButton } from 'primeng/radiobutton';
 import { ActivatedRoute, Router } from '@angular/router';
-import { formatTime } from '../../../../shared/utils/date-utils';
-import { AppointmentService } from '../../../appointment/appointment.service';
-import { CenterStore } from '../../center.store';
-import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner';
-import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state';
+import { formatTime } from '@/app/shared/utils/date-utils';
+import { AppointmentService } from '@/app/features/appointment/appointment.service';
+import { CenterStore } from '@/app/features/center/center.store';
+import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
+import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-state';
 
 @Component({
   selector: 'app-slot-booking-page',

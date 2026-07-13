@@ -1,33 +1,38 @@
 import type { Routes } from '@angular/router';
+import { roleGuard } from '@/app/core/auth/guards/role.guard';
 
 export default [
   { path: '', redirectTo: 'my-appointments', pathMatch: 'full' },
   {
     path: 'book',
-    loadComponent: () => import('./pages/appointment-booking-page/appointment-booking-page').then((m) => m.AppointmentBookingPageComponent),
+    loadComponent: () => import('@/app/features/appointment/pages/appointment-booking-page/appointment-booking-page').then((m) => m.AppointmentBookingPageComponent),
   },
   {
     path: 'my-appointments',
-    loadComponent: () => import('./pages/donor-appointments-page/donor-appointments-page').then((m) => m.DonorAppointmentsPageComponent),
+    loadComponent: () => import('@/app/features/appointment/pages/donor-appointments-page/donor-appointments-page').then((m) => m.DonorAppointmentsPageComponent),
   },
   {
     path: 'staff-queue',
-    loadComponent: () => import('./pages/staff-queue-page/staff-queue-page').then((m) => m.StaffQueuePageComponent),
+    canActivate: [roleGuard('CENTER_STAFF', 'CENTER_ADMIN')],
+    loadComponent: () => import('@/app/features/appointment/pages/staff-queue-page/staff-queue-page').then((m) => m.StaffQueuePageComponent),
   },
   {
     path: 'checkin',
-    loadComponent: () => import('./pages/checkin-page/checkin-page').then((m) => m.CheckinPageComponent),
+    canActivate: [roleGuard('CENTER_STAFF', 'CENTER_ADMIN')],
+    loadComponent: () => import('@/app/features/appointment/pages/checkin-page/checkin-page').then((m) => m.CheckinPageComponent),
   },
   {
     path: ':id/screening',
-    loadComponent: () => import('./pages/screening-page/screening-page').then((m) => m.ScreeningPageComponent),
+    canActivate: [roleGuard('CENTER_STAFF', 'CENTER_ADMIN')],
+    loadComponent: () => import('@/app/features/appointment/pages/screening-page/screening-page').then((m) => m.ScreeningPageComponent),
   },
   {
     path: ':id/complete',
-    loadComponent: () => import('./pages/completion-page/completion-page').then((m) => m.CompletionPageComponent),
+    canActivate: [roleGuard('CENTER_STAFF', 'CENTER_ADMIN')],
+    loadComponent: () => import('@/app/features/appointment/pages/completion-page/completion-page').then((m) => m.CompletionPageComponent),
   },
   {
     path: 'donation-history',
-    loadComponent: () => import('./pages/donation-history-page/donation-history-page').then((m) => m.DonationHistoryPageComponent),
+    loadComponent: () => import('@/app/features/appointment/pages/donation-history-page/donation-history-page').then((m) => m.DonationHistoryPageComponent),
   },
 ] as Routes;

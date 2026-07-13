@@ -1,8 +1,8 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, switchMap, throwError } from 'rxjs';
-import { AuthService } from './auth.service';
-import { AuthStore } from './auth.store';
+import { AuthService } from '@/app/core/auth/auth.service';
+import { AuthStore } from '@/app/core/auth/auth.store';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authStore = inject(AuthStore);
@@ -24,9 +24,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           return authService.refreshToken(refreshToken).pipe(
             switchMap((res) => {
               const data = res.data;
-              authStore.refreshTokens(data.accessToken, data.refreshToken);
+              authStore.refreshTokens(data.token, data.refreshToken);
               const retryReq = req.clone({
-                setHeaders: { Authorization: `Bearer ${data.accessToken}` },
+                setHeaders: { Authorization: `Bearer ${data.token}` },
               });
               return next(retryReq);
             }),

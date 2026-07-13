@@ -3,8 +3,8 @@ import { JsonPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Card } from 'primeng/card';
 import { ToggleSwitch } from 'primeng/toggleswitch';
-import type { FeatureFlag } from '../../../../shared/models/config.model';
-import { AdminService } from '../../admin.service';
+import type { FeatureFlag } from '@/app/shared/models/config.model';
+import { AdminService } from '@/app/features/admin/admin.service';
 
 @Component({
   selector: 'app-feature-flags-page',

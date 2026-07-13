@@ -15,6 +15,12 @@ export type AvailabilityStatus =
   | 'VACATION_MODE'
   | 'PERMANENTLY_RESTRICTED';
 
+export type DonorStatus =
+  | 'ACTIVE'
+  | 'PENDING_DELETION'
+  | 'INACTIVE'
+  | 'DELETED';
+
 export type NotificationFrequency =
   | 'IMMEDIATE'
   | 'DAILY_DIGEST'
@@ -36,30 +42,34 @@ export interface NotificationPreferences {
 export interface DonorProfile {
   id: number;
   userId: number;
-  displayName: string;
-  phone: string;
   bloodType: BloodType;
   bloodTypeVerified: boolean;
+  profileComplete: boolean;
+  allowEmergencyNotifications: boolean;
+  consecutiveEmergencyDeclines: number;
+  flaggedForManualReview: boolean;
+  permanentlyRestricted: boolean;
+  restrictionReason: string | null;
+  reliabilityScore: number;
+  totalDonations: number;
   availability: AvailabilityStatus;
   latitude: number | null;
   longitude: number | null;
   city: string | null;
-  country: string | null;
-  notificationPreferences: NotificationPreferences;
   lastDonationDate: string | null;
   eligibleFromDate: string | null;
-  reliabilityScore: number;
-  permanentlyRestricted: boolean;
-  restrictionReason: string | null;
-  profileComplete: boolean;
-  flaggedForManualReview: boolean;
-  consecutiveEmergencyDeclines: number;
+  notificationPreferences: NotificationPreferences;
   createdAt: string;
   updatedAt: string;
   lastAcceptAt: string | null;
+  deletedAt: string | null;
+  deletionRequestedAt: string | null;
   nextEligibleDate: string | null;
   eligibilityStatus: string;
   impactSummary: ImpactSummary | null;
+  displayName: string;
+  phone: string;
+  country: string | null;
 }
 
 export interface ImpactSummary {
@@ -78,13 +88,13 @@ export interface HealthQuestionnaire {
   id: number;
   donorId: number;
   hasChronicIllness: boolean;
-  medicalConditionsDetails: string | null;
+  lastSurgeryAt: string | null;
+  lastTravelAt: string | null;
+  lastTattooOrPiercingAt: string | null;
   onMedication: boolean;
+  medicalConditionsDetails: string | null;
   medicationDetails: string | null;
-  recentSurgery: boolean;
-  recentTravel: boolean;
-  recentTattooOrPiercing: boolean;
-  completedAt: string | null;
+  createdAt: string;
   updatedAt: string;
 }
 

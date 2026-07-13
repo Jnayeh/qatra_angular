@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
-import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state';
-import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge';
-import { NotificationStore } from '../../notification.store';
+import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-state';
+import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge';
+import { NotificationStore } from '@/app/features/notifications/notification.store';
 
 @Component({
   selector: 'app-notification-center-page',
@@ -25,7 +25,7 @@ export class NotificationCenterPageComponent implements OnInit {
       APPOINTMENT_REMINDER: 'pi-calendar',
       ELIGIBILITY_REMINDER: 'pi-heart',
       PROFILE_COMPLETION: 'pi-check-circle',
-      STAFF_MESSAGE: 'pi-envelope',
+      PASSWORD_RESET: 'pi-envelope',
       GENERAL: 'pi-bell',
     };
     return icons[type] ?? 'pi-bell';

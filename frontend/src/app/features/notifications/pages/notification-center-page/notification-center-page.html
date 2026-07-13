@@ -1,39 +1,42 @@
-    <div class="max-w-4xl mx-auto space-y-6">
-      <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold text-white">Notifications</h1>
-        @if (store.notifications().length > 0) {
-          <p-button severity="secondary" styleClass="p-button-outlined" (click)="store.markAllAsRead()">
-            <i class="pi pi-check-circle"></i> Mark All Read
-          </p-button>
-        }
-      </div>
+<div class="max-w-4xl mx-auto space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Notifications</h1>
+      <p class="text-sm text-gray-500 mt-1">Stay updated on your donations and emergency responses.</p>
+    </div>
+    @if (store.notifications().length > 0) {
+      <p-button severity="secondary" styleClass="p-button-outlined" (click)="store.markAllAsRead()">
+        <i class="pi pi-check-circle"></i> Mark All Read
+      </p-button>
+    }
+  </div>
 
-      @if (store.notifications().length === 0) {
-        <app-empty-state icon="bell" title="No notifications" message="You're all caught up!" />
-      } @else {
-        <div class="space-y-2">
-          @for (n of store.notifications(); track n.id) {
-            <p-card
-              class="bg-surface-card cursor-pointer hover:bg-surface-hover"
-              [class.border-l-4]="n.status !== 'READ'"
-              [class.border-primary-500]="n.status !== 'READ'"
-              (click)="store.markAsRead(n.id)"
-            >
-              <ng-template pTemplate="content">
-                <div class="flex items-start gap-3">
-                  <i class="pi {{ notificationIcon(n.type) }} mt-1 text-xl" [class.text-primary-400]="n.status !== 'READ'" [class.text-gray-600]="n.status === 'READ'"></i>
-                  <div class="flex-1">
-                    <div class="flex items-center justify-between">
-                      <p class="text-white font-medium" [class.font-bold]="n.status !== 'READ'">{{ n.title }}</p>
-                      <app-status-badge [status]="n.status" />
-                    </div>
-                    <p class="text-sm text-gray-400 mt-1">{{ n.body }}</p>
-                    <p class="text-xs text-gray-600 mt-1">{{ n.createdAt }}</p>
-                  </div>
+  @if (store.notifications().length === 0) {
+    <app-empty-state icon="bell" title="No notifications" message="You're all caught up!" />
+  } @else {
+    <div class="space-y-2">
+      @for (n of store.notifications(); track n.id) {
+        <p-card
+          class="cursor-pointer hover:shadow-md transition-all"
+          [class.border-l-4]="n.status !== 'READ'"
+          [class.border-primary-500]="n.status !== 'READ'"
+          (click)="store.markAsRead(n.id)"
+        >
+          <ng-template pTemplate="content">
+            <div class="flex items-start gap-3">
+              <i class="pi {{ notificationIcon(n.type) }} mt-1 text-xl" [class.text-primary-500]="n.status !== 'READ'" [class.text-gray-400]="n.status === 'READ'"></i>
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <p class="text-gray-900 font-medium" [class.font-bold]="n.status !== 'READ'">{{ n.title }}</p>
+                  <app-status-badge [status]="n.status" />
                 </div>
-              </ng-template>
-            </p-card>
-          }
-        </div>
+                <p class="text-sm text-gray-500 mt-1">{{ n.body }}</p>
+                <p class="text-xs text-gray-400 mt-1">{{ n.createdAt }}</p>
+              </div>
+            </div>
+          </ng-template>
+        </p-card>
       }
     </div>
+  }
+</div>

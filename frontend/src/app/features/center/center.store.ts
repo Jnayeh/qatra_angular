@@ -2,8 +2,8 @@ import { inject } from '@angular/core';
 import { signalStore, withState, withMethods, patchState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
-import type { CenterDetail, CenterSummary, Slot } from '../../shared/models/center.model';
-import { CenterService } from './center.service';
+import type { CenterDetail, CenterSummary, Slot } from '@/app/shared/models/center.model';
+import { CenterService } from '@/app/features/center/center.service';
 
 interface CenterState {
   centers: CenterSummary[];

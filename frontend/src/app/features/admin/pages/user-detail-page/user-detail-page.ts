@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@ang
 import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge';
-import type { UserDetail } from '../../../../shared/models/user.model';
-import { AdminService } from '../../admin.service';
+import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge';
+import type { UserDetail } from '@/app/shared/models/user.model';
+import { AdminService } from '@/app/features/admin/admin.service';
 
 @Component({
   selector: 'app-user-detail-page',
