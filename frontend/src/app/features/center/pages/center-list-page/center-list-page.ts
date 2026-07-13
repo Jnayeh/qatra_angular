@@ -1,8 +1,9 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
+import { Slider } from 'primeng/slider';
 import { Tooltip } from 'primeng/tooltip';
 import { Router, RouterLink } from '@angular/router';
 import maplibregl from 'maplibre-gl';
@@ -10,17 +11,19 @@ import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-s
 import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
 import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge';
 import type { CenterSummary } from '@/app/shared/models/center.model';
-import { CenterStore } from '@/app/features/center/center.store';
+import { CenterService } from '@/app/features/center/center.service';
 import { initMapLibre } from '@/app/shared/utils/map-init';
 
 @Component({
   selector: 'app-center-list-page',
   standalone: true,
   imports: [
+    FormsModule,
     ReactiveFormsModule,
     Card,
     Button,
     InputText,
+    Slider,
     Tooltip,
     RouterLink,
     LoadingSpinnerComponent,
@@ -30,21 +33,39 @@ import { initMapLibre } from '@/app/shared/utils/map-init';
   templateUrl: './center-list-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CenterListPageComponent implements OnInit, AfterViewInit {
-  protected readonly store = inject(CenterStore);
+export class CenterListPageComponent implements OnInit, OnDestroy {
+  private readonly centerService = inject(CenterService);
   private readonly router = inject(Router);
-  protected readonly cityFilter = new FormControl('');
-  protected readonly showMap = signal(true);
+
+  protected readonly viewMode = signal<'map' | 'list'>('map');
+  protected readonly isLoading = signal(false);
   protected readonly mapEl = viewChild<ElementRef<HTMLDivElement>>('mapContainer');
   private map: maplibregl.Map | null = null;
   private markers: maplibregl.Marker[] = [];
 
+  // Map state: all centers loaded at once
+  protected readonly mapCenters = signal<CenterSummary[]>([]);
+
+  // List state: paginated with distance filter
+  protected readonly listCenters = signal<CenterSummary[]>([]);
+  protected readonly listPage = signal(0);
+  protected readonly listTotalPages = signal(0);
+  protected readonly listTotalElements = signal(0);
+  protected readonly pageSize = 12;
+
+  protected readonly distanceKm = signal(50);
+  protected readonly cityFilter = new FormControl('');
+
   ngOnInit(): void {
-    this.store.loadCenters({ page: 0, size: 50 });
+    this.loadMapCenters();
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => this.initMap(), 300);
+  }
+
+  ngOnDestroy(): void {
+    this.map?.remove();
   }
 
   private initMap(): void {
@@ -57,6 +78,11 @@ export class CenterListPageComponent implements OnInit, AfterViewInit {
       center: [10.1815, 36.8065],
       zoom: 6,
     });
+    this.map.on('moveend', () => this.onMapMove());
+    this.addMarkers();
+  }
+
+  private onMapMove(): void {
     this.addMarkers();
   }
 
@@ -64,15 +90,24 @@ export class CenterListPageComponent implements OnInit, AfterViewInit {
     if (!this.map) return;
     this.markers.forEach((m) => m.remove());
     this.markers = [];
-    for (const c of this.store.centers()) {
+
+    const bounds = this.map.getBounds();
+    const visible = this.mapCenters().filter((c) => {
+      if (c.latitude == null || c.longitude == null) return false;
+      return bounds.contains([c.longitude, c.latitude]);
+    });
+
+    for (const c of visible) {
       const el = document.createElement('div');
-      el.style.cssText = 'width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;';
-      el.innerHTML = `<svg viewBox="0 0 24 24" width="28" height="28" fill="#cc0000"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>`;
+      el.style.cssText = 'width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;';
+      el.innerHTML = `<svg viewBox="0 0 24 24" width="32" height="32" fill="#cc0000"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>`;
       const popup = new maplibregl.Popup({ offset: 15 }).setHTML(
-        `<div dir="auto"><b>${c.name}</b><br/>${c.city}</div><a href="/centers/${c.id}" style="display:block;margin-top:4px;color:#cc0000;">View details</a>`,
+        `<div style="min-width:140px"><b>${c.name}</b><br/><span style="color:#6b7280;font-size:12px">${c.city}</span>` +
+        `<br/><span style="color:#6b7280;font-size:12px">${c.availableSlots} slots</span>` +
+        `<a href="/centers/${c.id}" style="display:block;margin-top:4px;color:#cc0000;font-size:12px">View details</a></div>`,
       );
       const marker = new maplibregl.Marker({ element: el })
-        .setLngLat([c.longitude ?? 0, c.latitude ?? 0])
+        .setLngLat([c.longitude!, c.latitude!])
         .setPopup(popup)
         .addTo(this.map!);
       el.addEventListener('click', () => this.router.navigate(['/centers', c.id]));
@@ -80,16 +115,64 @@ export class CenterListPageComponent implements OnInit, AfterViewInit {
     }
   }
 
-  protected search(): void {
-    const params: Record<string, string | number | boolean | undefined> = { page: 0, size: 50 };
-    if (this.cityFilter.value) {
-      params['city'] = this.cityFilter.value;
-    }
-    this.store.loadCenters(params);
+  private loadMapCenters(): void {
+    this.isLoading.set(true);
+    this.centerService.getCenters({ page: 0, size: 1000, status: 'ACTIVE' }).subscribe({
+      next: (res) => {
+        this.mapCenters.set(res.data);
+        this.isLoading.set(false);
+        setTimeout(() => this.addMarkers(), 100);
+      },
+      error: () => this.isLoading.set(false),
+    });
   }
 
-  protected toggleMap(): void {
-    this.showMap.update((v) => !v);
-    if (this.showMap()) setTimeout(() => this.map?.resize());
+  protected loadListPage(page: number): void {
+    this.isLoading.set(true);
+    this.listPage.set(page);
+    const params: Record<string, string | number | boolean | undefined> = {
+      page,
+      size: this.pageSize,
+    };
+    const city = this.cityFilter.value?.trim();
+    if (city) params['city'] = city;
+    params['radiusKm'] = this.distanceKm();
+
+    this.centerService.getCenters(params).subscribe({
+      next: (res) => {
+        this.listCenters.set(res.data);
+        this.listTotalPages.set(res.page?.totalPages ?? 0);
+        this.listTotalElements.set(res.page?.totalElements ?? 0);
+        this.isLoading.set(false);
+      },
+      error: () => this.isLoading.set(false),
+    });
+  }
+
+  protected onDistanceChange(value: number): void {
+    this.distanceKm.set(value);
+    this.loadListPage(0);
+  }
+
+  protected onCitySearch(): void {
+    this.loadListPage(0);
+  }
+
+  protected switchToList(): void {
+    this.viewMode.set('list');
+    this.loadListPage(0);
+  }
+
+  protected switchToMap(): void {
+    this.viewMode.set('map');
+    setTimeout(() => {
+      this.map?.resize();
+      this.addMarkers();
+    }, 100);
+  }
+
+  protected formatDistance(km: number | null): string {
+    if (km == null) return '';
+    return km < 1 ? `${(km * 1000).toFixed(0)} m` : `${km.toFixed(1)} km`;
   }
 }

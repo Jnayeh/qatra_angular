@@ -18,7 +18,7 @@ export class CenterApprovalPageComponent implements OnInit {
   protected readonly pendingCenters = signal<CenterSummary[]>([]);
 
   ngOnInit(): void {
-    this.centerService.getPendingCenters().subscribe((res) => this.pendingCenters.set(res.data.content));
+    this.centerService.getPendingCenters().subscribe((res) => this.pendingCenters.set(res.data));
   }
 
   protected approve(id: number, approved: boolean): void {

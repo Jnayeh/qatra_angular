@@ -59,7 +59,13 @@
       <p-card>
         <ng-template pTemplate="title">Location</ng-template>
         <ng-template pTemplate="content">
-          <div #mapDetail class="w-full h-64 rounded-md"></div>
+          @defer (on viewport) {
+            <div #mapDetail class="w-full h-64 rounded-md"></div>
+          } @placeholder {
+            <div class="flex items-center justify-center h-64 bg-gray-50 rounded-md">
+              <p class="text-sm text-gray-400">Loading map...</p>
+            </div>
+          }
         </ng-template>
       </p-card>
     </div>

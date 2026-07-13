@@ -35,7 +35,7 @@ export const CenterStore = signalStore(
         switchMap((params) =>
           centerService.getCenters(params).pipe(
             tap({
-              next: (res) => patchState(store, { centers: res.data.content, totalPages: res.data.totalPages, totalElements: res.data.totalElements, isLoading: false }),
+              next: (res) => patchState(store, { centers: res.data, totalPages: res.page?.totalPages ?? 0, totalElements: res.page?.totalElements ?? 0, isLoading: false }),
               error: () => patchState(store, { isLoading: false, error: 'Failed to load centers' }),
             }),
           ),
