@@ -43,10 +43,10 @@ export const AppointmentStore = signalStore(
             tap({
               next: (res) =>
                 patchState(store, {
-                  myAppointments: res.data.content,
-                  totalPages: res.data.totalPages,
-                  totalElements: res.data.totalElements,
-                  currentPage: res.data.number,
+                  myAppointments: res.data,
+                  totalPages: res.page?.totalPages ?? 0,
+                  totalElements: res.page?.totalElements ?? 0,
+                  currentPage: res.page?.number ?? 0,
                   isLoading: false,
                 }),
               error: () => patchState(store, { isLoading: false, error: 'Failed to load appointments' }),

@@ -1,6 +1,5 @@
 import { inject } from '@angular/core';
 import { signalStore, withState, withMethods, withComputed, withHooks, patchState } from '@ngrx/signals';
-import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import type { Notification } from '@/app/shared/models/notification.model';
 import { AuthStore } from '@/app/core/auth/auth.store';
@@ -10,13 +9,19 @@ import { NotificationService } from '@/app/features/notifications/notification.s
 interface NotificationState {
   notifications: Notification[];
   unreadCount: number;
+  currentPage: number;
+  totalPages: number;
   isLoading: boolean;
+  isLoadingMore: boolean;
 }
 
 const initialState: NotificationState = {
   notifications: [],
   unreadCount: 0,
+  currentPage: 0,
+  totalPages: 0,
   isLoading: false,
+  isLoadingMore: false,
 };
 
 export const NotificationStore = signalStore(
@@ -26,38 +31,44 @@ export const NotificationStore = signalStore(
     recentUnread: () => store.notifications().filter((n) => n.status !== 'READ').slice(0, 5),
   })),
   withMethods((store, notificationService = inject(NotificationService), socketService = inject(SocketService), authStore = inject(AuthStore)) => ({
-    loadNotifications: rxMethod<void>(
-      pipe(
-        tap(() => patchState(store, { isLoading: true })),
-        switchMap(() =>
-          notificationService.getNotifications({ page: 0, size: 20 }).pipe(
-            tap({
-              next: (res) =>
-                patchState(store, {
-                  notifications: res.data.content,
-                  isLoading: false,
-                  unreadCount: res.data.content.filter((n) => n.status !== 'READ').length,
-                }),
-              error: () => patchState(store, { isLoading: false }),
-            }),
-          ),
-        ),
-      ),
-    ),
+    loadNotifications(): void {
+      patchState(store, { isLoading: true, notifications: [], currentPage: 0 });
+      notificationService.getNotifications({ page: 0, size: 20, sort: 'createdAt,desc' }).subscribe({
+        next: (res) =>
+          patchState(store, {
+            notifications: res.data,
+            currentPage: res.page?.number ?? 0,
+            totalPages: res.page?.totalPages ?? 0,
+            unreadCount: res.data.filter((n) => n.status !== 'READ').length,
+            isLoading: false,
+          }),
+        error: () => patchState(store, { isLoading: false }),
+      });
+    },
 
-    loadUnreadCount: rxMethod<void>(
-      pipe(
-        switchMap(() =>
-          notificationService.getUnreadCount().pipe(
-            tap({
-              next: (res) => patchState(store, { unreadCount: res.data.count }),
-            }),
-          ),
-        ),
-      ),
-    ),
+    loadMore(): void {
+      if (store.isLoadingMore() || store.currentPage() >= store.totalPages() - 1) return;
+      patchState(store, { isLoadingMore: true });
+      const nextPage = store.currentPage() + 1;
+      notificationService.getNotifications({ page: nextPage, size: 20, sort: 'createdAt,desc' }).subscribe({
+        next: (res) =>
+          patchState(store, {
+            notifications: [...store.notifications(), ...res.data],
+            currentPage: res.page?.number ?? 0,
+            totalPages: res.page?.totalPages ?? 0,
+            isLoadingMore: false,
+          }),
+        error: () => patchState(store, { isLoadingMore: false }),
+      });
+    },
 
-    markAsRead(id: number) {
+    loadUnreadCount(): void {
+      notificationService.getUnreadCount().subscribe({
+        next: (res) => patchState(store, { unreadCount: res.data.count }),
+      });
+    },
+
+    markAsRead(id: number): void {
       notificationService.markAsRead(id).subscribe({
         next: () => {
           patchState(store, {
@@ -70,7 +81,7 @@ export const NotificationStore = signalStore(
       });
     },
 
-    markAllAsRead() {
+    markAllAsRead(): void {
       notificationService.markAllAsRead().subscribe({
         next: () => {
           patchState(store, {
@@ -81,13 +92,13 @@ export const NotificationStore = signalStore(
       });
     },
 
-    initSocket() {
+    initSocket(): void {
       const token = authStore.accessToken() ?? localStorage.getItem('accessToken');
       if (!token) return;
       socketService.connect();
       socketService.subscribe('/user/queue/notifications', (msg) => {
         try {
-          const notification = JSON.parse(msg.body) as Notification;
+          const notification = msg as Notification;
           patchState(store, {
             notifications: [notification, ...store.notifications()],
             unreadCount: store.unreadCount() + 1,
@@ -98,15 +109,8 @@ export const NotificationStore = signalStore(
       });
     },
 
-    destroySocket() {
+    destroySocket(): void {
       socketService.disconnect();
-    },
-
-    addNotificationFromSocket(notification: Notification) {
-      patchState(store, {
-        notifications: [notification, ...store.notifications()],
-        unreadCount: store.unreadCount() + 1,
-      });
     },
   })),
   withHooks({

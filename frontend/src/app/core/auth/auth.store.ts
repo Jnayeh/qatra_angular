@@ -56,7 +56,7 @@ export const AuthStore = signalStore(
           localStorage.setItem('accessToken', data.token);
           localStorage.setItem('refreshToken', data.refreshToken);
 
-          return api.get<User>('/users/me');
+          return api.get<User>('/api/v1/users/me');
         }),
         tap({
           next: (res) => {

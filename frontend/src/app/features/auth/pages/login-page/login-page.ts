@@ -104,6 +104,7 @@ export class LoginPageComponent {
     this.authStore.login(email!, password!, this.intendedRole).subscribe({
       next: () => {
         if (this.authStore.error()) return;
+
         if (this.authStore.isSuperAdmin()) {
           this.router.navigate(['/admin/dashboard']);
         } else if (this.authStore.isCenterAdmin()) {
@@ -111,8 +112,13 @@ export class LoginPageComponent {
         } else if (this.authStore.isCenterStaff()) {
           this.router.navigate(['/appointments/staff-queue']);
         } else if (this.authStore.isDonor()) {
-          this.router.navigate(['/donor/dashboard']);
+          this.router.navigate(['/donor/home']);
+        } else {
+          this.router.navigate(['/']);
         }
+      },
+      error: () => {
+        this.authStore.setError('Login failed. Please try again.');
       },
     });
   }

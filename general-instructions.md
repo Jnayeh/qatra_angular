@@ -20,7 +20,6 @@
 - PrimeIcons
 - Angular Service Worker (PWA)
 - Angular Animations
-- SCSS
 - CSS Variables
 - Typed Reactive Forms
 
@@ -62,7 +61,8 @@ Rounded corners:
 Soft shadows only.
 
 Avoid heavy gradients.
-
+when possible have background gradiants go from --p-primary-700 to --p-primary-500 with white text
+I want some parts of the UI to bring attention
 ---
 
 # Design Inspiration
@@ -263,8 +263,6 @@ Login
 Register
 
 Forgot password
-
-OTP verification
 
 Reset password
 

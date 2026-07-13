@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
-import type { ApiResponse, Page } from '@/app/shared/models/api-response.model';
+import type { ApiResponse } from '@/app/shared/models/api-response.model';
 import type { Emergency, EmergencyDetail, EmergencyCreateRequest, EmergencyRespondResult, EmergencyResponse, MatchResult } from '@/app/shared/models/emergency.model';
 import { ApiService } from '@/app/core/http/api.service';
 
@@ -9,34 +9,34 @@ export class EmergencyService {
   private readonly api = inject(ApiService);
 
   create(data: EmergencyCreateRequest): Observable<ApiResponse<EmergencyDetail>> {
-    return this.api.post('/emergencies', data);
+    return this.api.post('/api/v1/emergencies', data);
   }
 
-  getList(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<Page<Emergency>>> {
-    return this.api.getPage('/emergencies', params);
+  getList(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<Emergency[]>> {
+    return this.api.getPage('/api/v1/emergencies', params);
   }
 
   getDetail(id: number): Observable<ApiResponse<EmergencyDetail>> {
-    return this.api.get(`/emergencies/${id}`);
+    return this.api.get(`/api/v1/emergencies/${id}`);
   }
 
   updateStatus(id: number, action: string, deadlineExtension?: string): Observable<ApiResponse<EmergencyDetail>> {
-    return this.api.patch(`/emergencies/${id}/status`, { action, deadlineExtension });
+    return this.api.patch(`/api/v1/emergencies/${id}/status`, { action, deadlineExtension });
   }
 
   resolve(id: number, notes: string): Observable<ApiResponse<EmergencyDetail>> {
-    return this.api.post(`/emergencies/${id}/resolve`, { notes });
+    return this.api.post(`/api/v1/emergencies/${id}/resolve`, { notes });
   }
 
   getResponses(id: number): Observable<ApiResponse<MatchResult[]>> {
-    return this.api.get(`/emergencies/${id}/responses`);
+    return this.api.get(`/api/v1/emergencies/${id}/responses`);
   }
 
   accept(id: number): Observable<ApiResponse<EmergencyRespondResult>> {
-    return this.api.post(`/emergencies/${id}/accept`);
+    return this.api.post(`/api/v1/emergencies/${id}/accept`);
   }
 
   decline(id: number, reason: string): Observable<ApiResponse<EmergencyRespondResult>> {
-    return this.api.post(`/emergencies/${id}/decline`, { reason });
+    return this.api.post(`/api/v1/emergencies/${id}/decline`, { reason });
   }
 }

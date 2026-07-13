@@ -1,0 +1,136 @@
+<div class="space-y-6 max-w-2xl">
+  <div>
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Reschedule Appointment</h1>
+    <p class="mt-1 text-sm text-gray-500">Pick a new date and time for your donation.</p>
+  </div>
+
+  @if (successMessage()) {
+    <p-message severity="success" [text]="successMessage()" styleClass="w-full" />
+  }
+
+  @if (errorMessage()) {
+    <p-message severity="error" [text]="errorMessage()" styleClass="w-full" />
+  }
+
+  @if (isLoadingAppointment()) {
+    <app-loading-spinner />
+  } @else if (appointment()) {
+    <p-card>
+      <ng-template pTemplate="title">Current Appointment</ng-template>
+      <ng-template pTemplate="content">
+        <dl class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <dt class="text-gray-500">Appointment ID</dt>
+            <dd class="font-medium text-gray-900">#{{ appointment()!.id }}</dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-gray-500">Status</dt>
+            <dd class="font-medium text-gray-900">{{ appointment()!.status }}</dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-gray-500">Type</dt>
+            <dd class="font-medium text-gray-900">{{ appointment()!.appointmentType }}</dd>
+          </div>
+        </dl>
+      </ng-template>
+    </p-card>
+
+    <p-card>
+      <ng-template pTemplate="title">Select New Date</ng-template>
+      <ng-template pTemplate="content">
+        <div class="flex justify-center">
+          <p-datepicker
+            [formControl]="dateControl"
+            (onSelect)="onDateChange($event)"
+            [minDate]="minDate"
+            [showIcon]="true"
+            inline
+          />
+        </div>
+      </ng-template>
+    </p-card>
+
+    @if (selectedDate()) {
+      <p-card>
+        <ng-template pTemplate="title">Available Time Slots</ng-template>
+        <ng-template pTemplate="content">
+          @if (isLoadingSlots()) {
+            <app-loading-spinner />
+          } @else if (slots().length === 0) {
+            <app-empty-state
+              icon="calendar-times"
+              title="No slots available"
+              message="Try a different date."
+              actionLabel="Change date"
+              (action)="selectedDate.set(null)"
+            />
+          } @else {
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              @for (slot of slots(); track slot.id) {
+                <button
+                  type="button"
+                  class="rounded-xl border p-4 text-center transition-all hover:border-primary-400 hover:shadow-sm"
+                  [class.border-primary-500]="selectedSlot()?.id === slot.id"
+                  [class.bg-primary-50]="selectedSlot()?.id === slot.id"
+                  [class.border-gray-200]="selectedSlot()?.id !== slot.id"
+                  (click)="selectSlot(slot)"
+                >
+                  <p class="font-semibold text-gray-900">
+                    {{ formatTime(slot.startTime) }} – {{ formatTime(slot.endTime) }}
+                  </p>
+                  <p class="text-xs text-gray-500 mt-1">
+                    {{ slot.maxBookings - slot.bookedCount }} / {{ slot.maxBookings }} available
+                  </p>
+                </button>
+              }
+            </div>
+          }
+        </ng-template>
+      </p-card>
+    }
+
+    @if (selectedSlot()) {
+      <p-card>
+        <ng-template pTemplate="title">Confirm Reschedule</ng-template>
+        <ng-template pTemplate="content">
+          <dl class="space-y-3 text-sm">
+            <div class="flex justify-between">
+              <dt class="text-gray-500">New Date</dt>
+              <dd class="font-medium text-gray-900">{{ selectedDate() | date:'mediumDate' }}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-gray-500">New Time</dt>
+              <dd class="font-medium text-gray-900">
+                {{ formatTime(selectedSlot()!.startTime) }} – {{ formatTime(selectedSlot()!.endTime) }}
+              </dd>
+            </div>
+          </dl>
+
+          <div class="flex gap-2 mt-6">
+            <p-button
+              label="Cancel"
+              severity="secondary"
+              [outlined]="true"
+              (onClick)="goBack()"
+            />
+            <p-button
+              label="Confirm Reschedule"
+              icon="pi pi-check"
+              [loading]="isRescheduling()"
+              (onClick)="confirmReschedule()"
+              class="flex-1"
+            />
+          </div>
+        </ng-template>
+      </p-card>
+    }
+  } @else if (!errorMessage()) {
+    <app-empty-state
+      icon="exclamation-triangle"
+      title="Appointment not found"
+      message="The appointment could not be loaded."
+      actionLabel="Back to Appointments"
+      (action)="goBack()"
+    />
+  }
+</div>

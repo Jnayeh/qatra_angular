@@ -31,7 +31,7 @@ export const EmergencyStore = signalStore(
         switchMap((params) =>
           emergencyService.getList(params).pipe(
             tap({
-              next: (res) => patchState(store, { emergencies: res.data.content, isLoading: false }),
+              next: (res) => patchState(store, { emergencies: res.data, isLoading: false }),
               error: () => patchState(store, { isLoading: false, error: 'Failed to load emergencies' }),
             }),
           ),

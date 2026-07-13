@@ -4,6 +4,11 @@ import { roleGuard } from '@/app/core/auth/guards/role.guard';
 export default [
   { path: '', redirectTo: 'my-appointments', pathMatch: 'full' },
   {
+    path: 'staff-dashboard',
+    canActivate: [roleGuard('CENTER_STAFF', 'CENTER_ADMIN')],
+    loadComponent: () => import('@/app/features/appointment/pages/staff-dashboard-page/staff-dashboard-page').then((m) => m.StaffDashboardPageComponent),
+  },
+  {
     path: 'book',
     loadComponent: () => import('@/app/features/appointment/pages/appointment-booking-page/appointment-booking-page').then((m) => m.AppointmentBookingPageComponent),
   },
@@ -30,6 +35,10 @@ export default [
     path: ':id/complete',
     canActivate: [roleGuard('CENTER_STAFF', 'CENTER_ADMIN')],
     loadComponent: () => import('@/app/features/appointment/pages/completion-page/completion-page').then((m) => m.CompletionPageComponent),
+  },
+  {
+    path: ':id/reschedule',
+    loadComponent: () => import('@/app/features/appointment/pages/reschedule-page/reschedule-page').then((m) => m.ReschedulePageComponent),
   },
   {
     path: 'donation-history',

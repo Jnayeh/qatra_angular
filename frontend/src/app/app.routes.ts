@@ -8,6 +8,10 @@ export const routes: Routes = [
     loadComponent: () => import('@/app/features/landing/pages/landing-page/landing-page').then((m) => m.LandingPageComponent),
   },
   {
+    path: 'reset-password',
+    loadComponent: () => import('@/app/features/auth/pages/reset-password-page/reset-password-page').then((m) => m.ResetPasswordPageComponent),
+  },
+  {
     path: 'auth',
     loadChildren: () => import('@/app/features/auth/auth.routes'),
   },
@@ -16,11 +20,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('@/app/layouts/main-layout/main-layout').then((m) => m.MainLayoutComponent),
     children: [
-      {
-        path: 'donor',
-        canActivate: [roleGuard('DONOR')],
-        loadChildren: () => import('@/app/features/donor/donor.routes'),
-      },
       {
         path: 'centers',
         loadChildren: () => import('@/app/features/center/center.routes'),
@@ -41,6 +40,18 @@ export const routes: Routes = [
       {
         path: 'notifications',
         loadChildren: () => import('@/app/features/notifications/notification.routes'),
+      },
+    ],
+  },
+  {
+    path: '',
+    canActivate: [authGuard],
+    loadComponent: () => import('@/app/layouts/donor-layout/donor-layout').then((m) => m.DonorLayoutComponent),
+    children: [
+      {
+        path: 'donor',
+        canActivate: [roleGuard('DONOR')],
+        loadChildren: () => import('@/app/features/donor/donor.routes'),
       },
     ],
   },

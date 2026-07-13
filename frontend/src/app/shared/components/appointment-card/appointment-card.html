@@ -28,6 +28,7 @@
         <div class="flex flex-wrap gap-2 pt-1">
           @if (isUpcoming(appointment().status)) {
             <p-button label="View QR" icon="pi pi-qrcode" size="small" severity="secondary" [outlined]="true" (onClick)="viewQr.emit(appointment())" />
+            <p-button label="Reschedule" icon="pi pi-refresh" size="small" severity="secondary" [outlined]="true" (onClick)="reschedule.emit(appointment())" />
             <p-button label="Cancel" icon="pi pi-times" size="small" severity="danger" [outlined]="true" (onClick)="cancel.emit(appointment())" />
           }
           @if (appointment().status === 'COMPLETED') {

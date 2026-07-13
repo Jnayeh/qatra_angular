@@ -135,7 +135,7 @@ export class GeolocationService {
           timestamp: new Date(position.timestamp).toISOString(),
         });
         this.permissionStatus.set('granted');
-        this.api.put('/donors/me/location', { latitude, longitude }).subscribe();
+        this.api.put('/api/v1/donors/me/location', { latitude, longitude }).subscribe();
       },
       (error) => {
         if (error.code === error.PERMISSION_DENIED) {

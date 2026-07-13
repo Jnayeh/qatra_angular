@@ -46,7 +46,7 @@ export class DonationHistoryPageComponent implements OnInit {
   private loadHistory(): void {
     this.appointmentService.getMyDonations({ page: 0, size: 100 }).subscribe({
       next: (res) => {
-        this.allDonations = res.data.content;
+        this.allDonations = res.data;
         this.donations.set(this.allDonations);
         this.isLoading.set(false);
       },

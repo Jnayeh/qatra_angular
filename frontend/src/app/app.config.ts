@@ -1,13 +1,13 @@
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { type ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { definePreset } from '@primeng/themes';
 import { authInterceptor } from '@/app/core/auth/auth.interceptor';
 import { errorHandlerInterceptor } from '@/app/core/http/error-handler.interceptor';
-import { mockInterceptor } from '@/app/core/mock/mock.interceptor';
+
 import { routes } from '@/app/app.routes';
 
 const QatraAura = definePreset(Aura, {
@@ -33,8 +33,8 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor, mockInterceptor, errorHandlerInterceptor])),
-    provideAnimations(),
+    provideHttpClient(withInterceptors([authInterceptor, errorHandlerInterceptor])),
+    provideAnimationsAsync(),
     providePrimeNG({
       theme: {
         preset: QatraAura,

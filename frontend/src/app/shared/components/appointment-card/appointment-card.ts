@@ -17,6 +17,7 @@ export class AppointmentCardComponent {
   readonly showActions = input(true);
 
   readonly cancel = output<DonorAppointmentView>();
+  readonly reschedule = output<DonorAppointmentView>();
   readonly viewQr = output<DonorAppointmentView>();
   readonly downloadCertificate = output<DonorAppointmentView>();
 

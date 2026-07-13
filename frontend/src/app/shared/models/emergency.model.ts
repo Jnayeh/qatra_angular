@@ -96,8 +96,13 @@ export interface EmergencyNotificationSummary {
   bloodType: string;
   urgency: EmergencyUrgency;
   status: EmergencyStatus;
+  centerId: number;
   centerName: string;
   distanceKm: number | null;
+  unitsNeeded: number;
+  matchedDonorCount: number;
   responseStatus: ResponseStatus | null;
   respondedAt: string | null;
+  createdAt: string;
+  expiresAt: string;
 }

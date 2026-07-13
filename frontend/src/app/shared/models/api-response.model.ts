@@ -4,15 +4,12 @@ export interface ApiResponse<T> {
   message?: string;
   errors?: string[];
   timestamp: string;
+  page?: Page;
 }
 
-export interface Page<T> {
-  content: T[];
+export interface Page {
+  number: number;
+  size: number;
   totalPages: number;
   totalElements: number;
-  size: number;
-  number: number;
-  first: boolean;
-  last: boolean;
-  empty: boolean;
 }
