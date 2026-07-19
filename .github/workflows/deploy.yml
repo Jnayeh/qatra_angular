@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [master,qatra-pp]
+    branches: [master]
 
 jobs:
   deploy:
