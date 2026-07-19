@@ -55,7 +55,7 @@ export class OnboardingPageComponent implements OnInit {
   });
 
   protected readonly prefsForm = new FormGroup({
-    frequency: new FormControl('WHEN_NEEDED', { nonNullable: true }),
+    frequency: new FormControl('EMERGENCY_ONLY', { nonNullable: true }),
     allowEmergencyNotifications: new FormControl(true, { nonNullable: true }),
   });
 
@@ -95,9 +95,26 @@ export class OnboardingPageComponent implements OnInit {
       medicalConditionsDetails: this.healthForm.value.medicalConditionsDetails ?? null,
       onMedication: this.healthForm.value.onMedication ?? false,
       medicationDetails: this.healthForm.value.medicationDetails ?? null,
-      lastSurgeryAt: this.healthForm.value.lastSurgeryAt ?? null,
-      lastTravelAt: this.healthForm.value.lastTravelAt ?? null,
-      lastTattooOrPiercingAt: this.healthForm.value.lastTattooOrPiercingAt ?? null,
+      lastSurgeryAt: this.healthForm.value.lastSurgeryAt ? `${this.healthForm.value.lastSurgeryAt}T00:00:00Z` : null,
+      lastTravelAt: this.healthForm.value.lastTravelAt ? `${this.healthForm.value.lastTravelAt}T00:00:00Z` : null,
+      lastTattooOrPiercingAt: this.healthForm.value.lastTattooOrPiercingAt ? `${this.healthForm.value.lastTattooOrPiercingAt}T00:00:00Z` : null,
+    });
+
+    const loc = this.locationForm.value;
+    if (loc.latitude != null && loc.longitude != null) {
+      this.store.updateLocation({
+        latitude: loc.latitude,
+        longitude: loc.longitude,
+        city: loc.city ?? undefined,
+        country: loc.country ?? undefined,
+      });
+    }
+
+    this.store.updateNotificationPrefs({
+      frequency: this.prefsForm.value.frequency as any,
+      allowEmergencyNotifications: this.prefsForm.value.allowEmergencyNotifications ?? true,
+      quietHours: null,
+      maxNotificationDistanceKm: 25,
     });
 
     this.router.navigate(['/donor/home']);

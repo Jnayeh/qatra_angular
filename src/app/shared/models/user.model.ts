@@ -26,9 +26,6 @@ export interface UserSummary {
   phone: string;
   displayName: string;
   status: UserStatus;
-  emailVerified: boolean;
-  roles: Role[];
-  createdAt: string;
 }
 
 export interface UserDetail extends User {

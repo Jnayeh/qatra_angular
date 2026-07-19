@@ -1,12 +1,16 @@
 import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import type { Observable } from 'rxjs';
 import type { ApiResponse } from '@/app/shared/models/api-response.model';
 import type { BloodDonationCenter, CenterDetail, CenterSummary, ClosureResult, ClosureRequest, Slot, StaffProfile, CenterAdminProfile } from '@/app/shared/models/center.model';
 import { ApiService } from '@/app/core/http/api.service';
+import { environment } from '@/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CenterService {
   private readonly api = inject(ApiService);
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = environment.baseUrl;
 
   getCenters(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<CenterSummary[]>> {
     return this.api.getPage('/api/v1/centers', params);
@@ -69,6 +73,9 @@ export class CenterService {
   }
 
   getReport(centerId: number, startDate: string, endDate: string): Observable<Blob> {
-    return this.api.get(`/api/v1/centers/${centerId}/report?startDate=${startDate}&endDate=${endDate}`) as any;
+    return this.http.get(`${this.baseUrl}/api/v1/centers/${centerId}/report`, {
+      params: { startDate, endDate },
+      responseType: 'blob',
+    });
   }
 }

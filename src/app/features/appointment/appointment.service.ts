@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
 import type { ApiResponse } from '@/app/shared/models/api-response.model';
-import type { Appointment, AppointmentRequest, AppointmentResponse, HealthScreening, CompletionRequest } from '@/app/shared/models/appointment.model';
+import type { Appointment, AppointmentRequest, HealthScreening, CompletionRequest, ScreeningRequest } from '@/app/shared/models/appointment.model';
 import { ApiService } from '@/app/core/http/api.service';
 import { DonorStore } from '@/app/features/donor/donor.store';
 
@@ -10,7 +10,7 @@ export class AppointmentService {
   private readonly api = inject(ApiService);
   private readonly donorStore = inject(DonorStore);
 
-  create(data: AppointmentRequest): Observable<ApiResponse<AppointmentResponse>> {
+  create(data: AppointmentRequest): Observable<ApiResponse<Appointment>> {
     return this.api.post('/api/v1/appointments', data);
   }
 
@@ -38,7 +38,7 @@ export class AppointmentService {
     return this.api.post(`/api/v1/appointments/${id}/no-show`);
   }
 
-  addScreening(id: number, data: Partial<HealthScreening>): Observable<ApiResponse<HealthScreening>> {
+  addScreening(id: number, data: ScreeningRequest): Observable<ApiResponse<HealthScreening>> {
     return this.api.post(`/api/v1/appointments/${id}/screening-results`, data);
   }
 

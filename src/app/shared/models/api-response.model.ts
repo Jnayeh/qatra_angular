@@ -2,14 +2,16 @@ export interface ApiResponse<T> {
   success: boolean;
   data: T;
   message?: string;
-  errors?: string[];
+  code?: string;
   timestamp: string;
-  page?: Page;
+  page?: Paginated;
 }
 
-export interface Page {
+export interface Paginated {
   number: number;
   size: number;
   totalPages: number;
   totalElements: number;
 }
+
+export type Page = Paginated;

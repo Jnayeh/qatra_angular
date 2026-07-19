@@ -123,5 +123,19 @@ export const DonorStore = signalStore(
         error: (err) => patchState(store, { error: err.friendlyMessage }),
       });
     },
+
+    updateLocation(data: { latitude: number; longitude: number; city?: string; country?: string }): void {
+      donorService.updateLocation(data).subscribe({
+        next: (res) => patchState(store, { profile: res.data }),
+        error: (err) => patchState(store, { error: err.friendlyMessage }),
+      });
+    },
+
+    updateNotificationPrefs(prefs: NotificationPreferences): void {
+      donorService.updateNotificationPrefs(prefs).subscribe({
+        next: (res) => patchState(store, { profile: res.data }),
+        error: (err) => patchState(store, { error: err.friendlyMessage }),
+      });
+    },
   })),
 );

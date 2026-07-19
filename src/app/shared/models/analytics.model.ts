@@ -10,18 +10,12 @@ export interface AuditLogEntry {
   timestamp: string;
 }
 
-export interface SystemDashboard {
-  activeEmergencies: number;
-  totalDonors: number;
-  responseRate30d: number;
-  topCenters: TopCenter[];
-  recentAlerts: string[];
-}
-
-export interface TopCenter {
-  id: number;
-  name: string;
-  donations: number;
+export interface MetricsResponse {
+  metricName: string;
+  total: number;
+  today: number;
+  thisWeek: number;
+  thisMonth: number;
 }
 
 export interface CenterMetrics {
@@ -39,11 +33,11 @@ export interface CenterMetrics {
   responseRate30d: number;
   totalMlCollected: number;
   activeEmergencies: number;
-  appointmentsByDay: ChartDataPoint[];
-  emergenciesByDay: ChartDataPoint[];
+  appointmentsByDay: DayCount[];
+  emergenciesByDay: DayCount[];
 }
 
-export interface ChartDataPoint {
+export interface DayCount {
   date: string;
   count: number;
 }
@@ -56,4 +50,21 @@ export interface RestrictedUser {
   donorId: number;
   permanentlyRestricted: boolean;
   restrictionReason: string | null;
+}
+
+export interface DemandForecast {
+  id: number;
+  bloodType: string;
+  region: string;
+  forecastedUnits: number;
+  forecastDate: string;
+  validUntil: string;
+  basedOnEmergencyCount: number;
+}
+
+export interface SystemHealth {
+  services: { name: string; status: string; details?: string }[];
+  errorRates: { total: number; byEndpoint: Record<string, number> };
+  apiUsage: { requestsPerMinute: number; topEndpoints: string[] };
+  dbPoolStats: { active: number; idle: number; max: number };
 }

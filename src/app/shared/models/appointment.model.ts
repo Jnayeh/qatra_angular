@@ -21,6 +21,7 @@ export interface Appointment {
   status: AppointmentStatus;
   appointmentType: AppointmentType;
   bloodType: string | null;
+  outcome: DonationOutcome | null;
   mlCollected: number | null;
   notes: string | null;
   qrCode: string;
@@ -31,7 +32,6 @@ export interface Appointment {
   completedAt: string | null;
   cancelledAt: string | null;
   cancellationReason: string | null;
-  outcome: DonationOutcome | null;
 }
 
 export interface AppointmentRequest {
@@ -39,44 +39,6 @@ export interface AppointmentRequest {
   donorId: number;
   slotId: number;
   emergencyId?: number;
-}
-
-export interface AppointmentResponse {
-  id: number;
-  qrCode: string;
-  status: AppointmentStatus;
-  slot: SlotSummary;
-  center: CenterSummary;
-}
-
-export interface SlotSummary {
-  id: number;
-  startTime: string;
-  endTime: string;
-  availableCount: number;
-}
-
-export interface CenterSummary {
-  id: number;
-  name: string;
-  city: string;
-}
-
-export interface AppointmentSummary {
-  id: number;
-  date: string;
-  startTime: string;
-  endTime: string;
-  centerName: string;
-  centerCity: string;
-  status: AppointmentStatus;
-  appointmentType: AppointmentType;
-}
-
-export interface DonorAppointmentView extends AppointmentSummary {
-  qrCode: string;
-  centerId: number;
-  slotId: number;
 }
 
 export interface HealthScreening {
@@ -99,9 +61,11 @@ export interface CompletionRequest {
   notes?: string;
 }
 
-export interface AppointmentTask {
-  appointment: AppointmentSummary;
-  donor: string;
-  slotTime: string;
-  status: AppointmentStatus;
+export interface ScreeningRequest {
+  weight: number;
+  bloodPressure?: string;
+  hemoglobin: number;
+  temperature: number;
+  eligible: boolean;
+  notes?: string;
 }

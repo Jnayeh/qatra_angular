@@ -8,3 +8,15 @@ export interface DataDeletionRequest {
 }
 
 export type DeletionStatus = 'IN_PROGRESS' | 'CANCELED' | 'COMPLETED';
+
+export interface SystemConfigEntry {
+  key: string;
+  value: unknown;
+  description: string;
+}
+
+export interface FeatureFlag {
+  featureName: string;
+  enabled: boolean;
+  rules: Record<string, unknown>;
+}

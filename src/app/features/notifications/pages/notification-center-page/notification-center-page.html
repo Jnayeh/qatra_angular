@@ -217,7 +217,7 @@
         <div class="grid grid-cols-2 gap-3 text-sm">
           <div>
             <p class="text-gray-500">Center</p>
-            <p class="text-gray-900 font-medium">{{ emerg.centerName }}</p>
+            <p class="text-gray-900 font-medium">#{{ emerg.centerId }}</p>
           </div>
           <div>
             <p class="text-gray-500">Units Needed</p>
@@ -230,16 +230,6 @@
           <div>
             <p class="text-gray-500">Expires</p>
             <p class="text-gray-900 font-medium">{{ formatDate(emerg.expiresAt) }}</p>
-          </div>
-          @if (emerg.distanceKm != null) {
-            <div>
-              <p class="text-gray-500">Distance</p>
-              <p class="text-gray-900 font-medium">{{ emerg.distanceKm | number:'1.1-1' }} km</p>
-            </div>
-          }
-          <div>
-            <p class="text-gray-500">Matched Donors</p>
-            <p class="text-gray-900 font-medium">{{ emerg.matchedDonorCount }}</p>
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ import { NotificationStore } from '@/app/features/notifications/notification.sto
 import { EmergencyService } from '@/app/features/emergency/emergency.service';
 import { CenterService } from '@/app/features/center/center.service';
 import { AppointmentService } from '@/app/features/appointment/appointment.service';
+import { DonorStore } from '@/app/features/donor/donor.store';
 import type { Notification } from '@/app/shared/models/notification.model';
 import type { EmergencyNotificationSummary, EmergencyDetail } from '@/app/shared/models/emergency.model';
 import type { Slot } from '@/app/shared/models/center.model';
@@ -30,6 +31,7 @@ export class NotificationCenterPageComponent implements OnInit, AfterViewInit, O
   private readonly emergencyService = inject(EmergencyService);
   private readonly centerService = inject(CenterService);
   private readonly appointmentService = inject(AppointmentService);
+  private readonly donorStore = inject(DonorStore);
   private readonly scrollContainer = viewChild<ElementRef<HTMLDivElement>>('scrollContainer');
   private observer: IntersectionObserver | null = null;
   private sentinelEl: HTMLElement | null = null;
@@ -143,11 +145,9 @@ export class NotificationCenterPageComponent implements OnInit, AfterViewInit, O
       next: (res) => {
         const detail = res.data;
         const now = new Date();
-        const expires = new Date(detail.expiresAt);
         const today = now.toISOString().split('T')[0];
-        const expiryDate = expires.toISOString().split('T')[0];
 
-        this.centerService.getSlots(detail.centerId, { dateFrom: today, dateTo: expiryDate }).subscribe({
+        this.centerService.getSlots(detail.centerId, { date: today }).subscribe({
           next: (slotRes) => {
             const available = slotRes.data.filter(
               (s) => !s.isBlocked && s.bookedCount < s.maxBookings && new Date(`${s.date}T${s.endTime}`) > now,
@@ -177,11 +177,10 @@ export class NotificationCenterPageComponent implements OnInit, AfterViewInit, O
     this.emergencyService.accept(data.emergencyId).subscribe({
       next: () => {
         if (slotId) {
-          const center = this.activeEmergency();
           this.appointmentService.create({
-            centerId: center?.centerId ?? 0,
+            donorId: this.donorStore.profile()?.id ?? 0,
             slotId,
-            appointmentType: 'EMERGENCY',
+            type: 'EMERGENCY',
             emergencyId: data.emergencyId,
           }).subscribe({
             next: (apptRes) => {

@@ -58,9 +58,9 @@ export class HealthQuestionnairePageComponent implements OnInit {
       medicalConditionsDetails: this.form.value.medicalConditionsDetails ?? null,
       onMedication: this.form.value.onMedication ?? false,
       medicationDetails: this.form.value.medicationDetails ?? null,
-      lastSurgeryAt: this.form.value.lastSurgeryAt ?? null,
-      lastTravelAt: this.form.value.lastTravelAt ?? null,
-      lastTattooOrPiercingAt: this.form.value.lastTattooOrPiercingAt ?? null,
+      lastSurgeryAt: this.form.value.lastSurgeryAt ? `${this.form.value.lastSurgeryAt}T00:00:00Z` : null,
+      lastTravelAt: this.form.value.lastTravelAt ? `${this.form.value.lastTravelAt}T00:00:00Z` : null,
+      lastTattooOrPiercingAt: this.form.value.lastTattooOrPiercingAt ? `${this.form.value.lastTattooOrPiercingAt}T00:00:00Z` : null,
     });
   }
 }

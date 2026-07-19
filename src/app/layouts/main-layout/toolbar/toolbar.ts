@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, ElementRef, inject, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router, RouterLink, Event as RouterEvent, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs';
 import { Toolbar } from 'primeng/toolbar';
 import { Button } from 'primeng/button';
 import { Menu } from 'primeng/menu';
-import { Router, Event, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs';
+import { Badge } from 'primeng/badge';
 import { AuthStore } from '@/app/core/auth/auth.store';
-import { NotificationBellComponent } from '@/app/shared/components/notification-bell/notification-bell';
+import { NotificationStore } from '@/app/features/notifications/notification.store';
 
 @Component({
   selector: 'app-toolbar',
@@ -15,7 +16,8 @@ import { NotificationBellComponent } from '@/app/shared/components/notification-
     Toolbar,
     Button,
     Menu,
-    NotificationBellComponent,
+    Badge,
+    RouterLink,
   ],
   templateUrl: './toolbar.html',
   styleUrl: './toolbar.css',
@@ -24,9 +26,12 @@ import { NotificationBellComponent } from '@/app/shared/components/notification-
 export class ToolbarComponent {
   readonly menuToggle = output<void>();
   readonly authStore = inject(AuthStore);
+  readonly store = inject(NotificationStore);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly hostRef = inject(ElementRef);
 
+  protected readonly panelOpen = signal(false);
   protected readonly title = signal('Qatra');
 
   protected readonly menuItems = computed(() => [
@@ -42,10 +47,24 @@ export class ToolbarComponent {
     },
   ]);
 
+  protected togglePanel(event: PointerEvent): void {
+    event.stopPropagation();
+    this.panelOpen.update((v) => !v);
+  }
+
+  protected markAllRead(event: PointerEvent): void {
+    event.stopPropagation();
+    this.store.markAllAsRead();
+  }
+
+  protected openNotification(n: { id: number }): void {
+    this.store.markAsRead(n.id);
+  }
+
   constructor() {
     this.router.events
       .pipe(
-        filter((e: Event): e is NavigationEnd => e instanceof NavigationEnd),
+        filter((e: RouterEvent): e is NavigationEnd => e instanceof NavigationEnd),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((e) => {
@@ -60,5 +79,13 @@ export class ToolbarComponent {
         };
         this.title.set(titles[segment] ?? 'Qatra');
       });
+
+    if (typeof document !== 'undefined') {
+      document.addEventListener('click', (e: MouseEvent) => {
+        if (this.panelOpen() && !this.hostRef.nativeElement.contains(e.target)) {
+          this.panelOpen.set(false);
+        }
+      });
+    }
   }
 }

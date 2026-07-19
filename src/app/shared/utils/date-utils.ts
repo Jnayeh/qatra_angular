@@ -1,14 +1,13 @@
-export function nowUTC(): TemporalInstant {
-  return Temporal.Now.instant();
+export function nowUTC(): Date {
+  return new Date();
 }
 
-export function todayUTC(): TemporalPlainDate {
-  return Temporal.Now.plainDateISO();
+export function todayUTC(): string {
+  return new Date().toISOString().split('T')[0];
 }
 
 export function formatDateTime(iso: string): string {
-  const instant = Temporal.Instant.from(iso);
-  return instant.toLocaleString('en-US', {
+  return new Date(iso).toLocaleString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -18,8 +17,7 @@ export function formatDateTime(iso: string): string {
 }
 
 export function formatDate(iso: string): string {
-  const plain = Temporal.PlainDate.from(iso);
-  return plain.toLocaleString('en-US', {
+  return new Date(iso).toLocaleString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -28,44 +26,46 @@ export function formatDate(iso: string): string {
 
 export function formatTime(hhmm: string): string {
   const [h, m] = hhmm.split(':').map(Number);
-  const dt = Temporal.PlainTime.from({ hour: h, minute: m });
+  const dt = new Date(2000, 0, 1, h, m);
   return dt.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
 }
 
 export function isAfterNowUTC(iso: string): boolean {
-  return Temporal.Instant.compare(Temporal.Instant.from(iso), nowUTC()) > 0;
+  return new Date(iso).getTime() > Date.now();
 }
 
 export function isBeforeNowUTC(iso: string): boolean {
-  return Temporal.Instant.compare(Temporal.Instant.from(iso), nowUTC()) < 0;
+  return new Date(iso).getTime() < Date.now();
 }
 
-export function daysFromNow(days: number): TemporalInstant {
-  return nowUTC().add({ days });
+export function daysFromNow(days: number): Date {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d;
 }
 
-export function toIsoDate(instant: TemporalInstant): string {
-  return instant.toZonedDateTimeISO('UTC').toPlainDate().toString();
+export function toIsoDate(date: Date): string {
+  return date.toISOString().split('T')[0];
 }
 
-export function toIsoDateTime(instant: TemporalInstant): string {
-  return instant.toString();
+export function toIsoDateTime(date: Date): string {
+  return date.toISOString();
 }
 
 export function addDays(iso: string, days: number): string {
-  const dt = Temporal.PlainDate.from(iso);
-  return dt.add({ days }).toString();
+  const d = new Date(iso);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().split('T')[0];
 }
 
 export function diffInDays(isoA: string, isoB: string): number {
-  const a = Temporal.PlainDate.from(isoA);
-  const b = Temporal.PlainDate.from(isoB);
-  return Temporal.PlainDate.compare(a, b) >= 0
-    ? a.since(b).days
-    : b.since(a).days;
+  const a = new Date(isoA);
+  const b = new Date(isoB);
+  const diffMs = Math.abs(a.getTime() - b.getTime());
+  return Math.round(diffMs / (1000 * 60 * 60 * 24));
 }
 
-export function parseHHmm(hhmm: string): TemporalPlainTime {
+export function parseHHmm(hhmm: string): { hour: number; minute: number } {
   const [h, m] = hhmm.split(':').map(Number);
-  return Temporal.PlainTime.from({ hour: h, minute: m });
+  return { hour: h, minute: m };
 }

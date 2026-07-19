@@ -13,7 +13,7 @@
           <i class="pi pi-exclamation-triangle text-red-500 text-lg sm:text-xl"></i>
         </div>
         <div class="min-w-0">
-          <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ dashboard()?.activeEmergencies ?? 0 }}</p>
+          <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ getMetric('active_emergencies')?.total ?? 0 }}</p>
           <p class="text-xs sm:text-sm text-gray-500">Active Emergencies</p>
         </div>
       </div>
@@ -22,11 +22,11 @@
     <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-          <i class="pi pi-users text-blue-500 text-lg sm:text-xl"></i>
+          <i class="pi pi-calendar text-blue-500 text-lg sm:text-xl"></i>
         </div>
         <div class="min-w-0">
-          <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ dashboard()?.totalDonors ?? 0 }}</p>
-          <p class="text-xs sm:text-sm text-gray-500">Total Donors</p>
+          <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ getMetric('total_appointments')?.total ?? 0 }}</p>
+          <p class="text-xs sm:text-sm text-gray-500">Total Appointments</p>
         </div>
       </div>
     </div>
@@ -37,8 +37,8 @@
           <i class="pi pi-chart-line text-green-500 text-lg sm:text-xl"></i>
         </div>
         <div class="min-w-0">
-          <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ dashboard()?.responseRate30d != null ? (dashboard()!.responseRate30d + '%') : 'ÔÇö' }}</p>
-          <p class="text-xs sm:text-sm text-gray-500">Response Rate</p>
+          <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ getMetric('total_emergencies')?.today ?? 0 }}</p>
+          <p class="text-xs sm:text-sm text-gray-500">Today's Emergencies</p>
         </div>
       </div>
     </div>
@@ -46,11 +46,11 @@
     <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-yellow-50 flex items-center justify-center shrink-0">
-          <i class="pi pi-building text-yellow-500 text-lg sm:text-xl"></i>
+          <i class="pi pi-clock text-yellow-500 text-lg sm:text-xl"></i>
         </div>
         <div class="min-w-0">
-          <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ dashboard()?.topCenters?.length ?? 0 }}</p>
-          <p class="text-xs sm:text-sm text-gray-500">Active Centers</p>
+          <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ getMetric('total_appointments')?.today ?? 0 }}</p>
+          <p class="text-xs sm:text-sm text-gray-500">Today's Appointments</p>
         </div>
       </div>
     </div>
@@ -66,9 +66,9 @@
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
     @defer (on viewport) {
       <p-card styleClass="shadow-sm">
-        <ng-template pTemplate="title">Top Centers by Donations</ng-template>
+        <ng-template pTemplate="title">Metrics Overview</ng-template>
         <ng-template pTemplate="content">
-          @if (dashboard()?.topCenters?.length) {
+          @if (metrics().length) {
             <canvas #barChart></canvas>
           } @else {
             <div class="text-center py-8 text-gray-400">
@@ -80,12 +80,14 @@
       </p-card>
 
       <p-card styleClass="shadow-sm">
-        <ng-template pTemplate="title">Emergency Response Rate (30d)</ng-template>
+        <ng-template pTemplate="title">Appointment Completion Rate</ng-template>
         <ng-template pTemplate="content">
           <canvas #pieChart></canvas>
           <div class="text-center mt-4">
-            <p class="text-3xl font-bold text-gray-900">{{ dashboard()?.responseRate30d ?? 0 }}%</p>
-            <p class="text-sm text-gray-500">Donor response rate in the last 30 days</p>
+            @let completed = getMetric('completed_appointments');
+            @let total = getMetric('total_appointments');
+            <p class="text-3xl font-bold text-gray-900">{{ total && total.total > 0 ? ((completed?.total ?? 0) * 100 / total.total | number:'1.0-0') : 0 }}%</p>
+            <p class="text-sm text-gray-500">Appointment completion rate</p>
           </div>
         </ng-template>
       </p-card>
@@ -95,20 +97,4 @@
       </div>
     }
   </div>
-
-  @if (dashboard()?.recentAlerts?.length) {
-    <p-card styleClass="shadow-sm">
-      <ng-template pTemplate="title">Recent Alerts</ng-template>
-      <ng-template pTemplate="content">
-        <ul class="space-y-2">
-          @for (alert of dashboard()!.recentAlerts; track $index) {
-            <li class="flex items-start gap-2 text-sm text-gray-600">
-              <i class="pi pi-info-circle text-primary-500 mt-0.5"></i>
-              <span>{{ alert }}</span>
-            </li>
-          }
-        </ul>
-      </ng-template>
-    </p-card>
-  }
 </div>

@@ -3,7 +3,7 @@ import { signalStore, withState, withMethods, withComputed, withHooks, patchStat
 import { pipe, switchMap, tap } from 'rxjs';
 import type { Notification } from '@/app/shared/models/notification.model';
 import { AuthStore } from '@/app/core/auth/auth.store';
-import { SocketService } from '@/app/core/socket/socket.service';
+import { SocketService } from '@/app/core/http/socket.service';
 import { NotificationService } from '@/app/features/notifications/notification.service';
 
 interface NotificationState {
@@ -33,7 +33,7 @@ export const NotificationStore = signalStore(
   withMethods((store, notificationService = inject(NotificationService), socketService = inject(SocketService), authStore = inject(AuthStore)) => ({
     loadNotifications(): void {
       patchState(store, { isLoading: true, notifications: [], currentPage: 0 });
-      notificationService.getNotifications({ page: 0, size: 20, sort: 'createdAt,desc' }).subscribe({
+      notificationService.getNotifications({ page: 1, size: 20 }).subscribe({
         next: (res) =>
           patchState(store, {
             notifications: res.data,
@@ -50,7 +50,7 @@ export const NotificationStore = signalStore(
       if (store.isLoadingMore() || store.currentPage() >= store.totalPages() - 1) return;
       patchState(store, { isLoadingMore: true });
       const nextPage = store.currentPage() + 1;
-      notificationService.getNotifications({ page: nextPage, size: 20, sort: 'createdAt,desc' }).subscribe({
+      notificationService.getNotifications({ page: nextPage, size: 20 }).subscribe({
         next: (res) =>
           patchState(store, {
             notifications: [...store.notifications(), ...res.data],

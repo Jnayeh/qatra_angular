@@ -86,21 +86,38 @@ export class SlotManagementPageComponent implements OnInit {
   private loadSlots(): void {
     const start = new Date(this.selectedDate());
     start.setDate(start.getDate() - start.getDay() + 1);
-    const end = new Date(start);
-    end.setDate(end.getDate() + 6);
 
-    const params: Record<string, string | number | boolean | undefined> = {
-      dateFrom: start.toISOString().split('T')[0],
-      dateTo: end.toISOString().split('T')[0],
-    };
-
-    this.centerService.getSlots(this.centerId, params).subscribe({
-      next: (res) => {
-        this.allSlots.set(res.data);
-        this.isLoading.set(false);
-      },
-      error: () => this.isLoading.set(false),
+    const weekDates = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(start);
+      d.setDate(d.getDate() + i);
+      return d.toISOString().split('T')[0];
     });
+
+    const allSlots$ = weekDates.map((date) =>
+      this.centerService.getSlots(this.centerId, { date }),
+    );
+
+    let loaded = 0;
+    const results: any[] = [];
+    for (const obs of allSlots$) {
+      obs.subscribe({
+        next: (res) => {
+          results.push(...res.data);
+          loaded++;
+          if (loaded === 7) {
+            this.allSlots.set(results);
+            this.isLoading.set(false);
+          }
+        },
+        error: () => {
+          loaded++;
+          if (loaded === 7) {
+            this.allSlots.set(results);
+            this.isLoading.set(false);
+          }
+        },
+      });
+    }
   }
 
   protected onDayChange(index: number): void {

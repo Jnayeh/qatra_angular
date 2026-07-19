@@ -117,7 +117,7 @@ export class CenterListPageComponent implements OnInit, OnDestroy {
 
   private loadMapCenters(): void {
     this.isLoading.set(true);
-    this.centerService.getCenters({ page: 0, size: 1000, status: 'ACTIVE' }).subscribe({
+    this.centerService.getCenters({ page: 1, size: 1000 }).subscribe({
       next: (res) => {
         this.mapCenters.set(res.data);
         this.isLoading.set(false);
@@ -131,12 +131,11 @@ export class CenterListPageComponent implements OnInit, OnDestroy {
     this.isLoading.set(true);
     this.listPage.set(page);
     const params: Record<string, string | number | boolean | undefined> = {
-      page,
+      page: page + 1,
       size: this.pageSize,
     };
     const city = this.cityFilter.value?.trim();
-    if (city) params['city'] = city;
-    params['radiusKm'] = this.distanceKm();
+    if (city) params['search'] = city;
 
     this.centerService.getCenters(params).subscribe({
       next: (res) => {

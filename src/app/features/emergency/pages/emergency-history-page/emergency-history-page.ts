@@ -30,8 +30,10 @@ export class EmergencyHistoryPageComponent implements OnInit {
 
   protected readonly filterOptions = [
     { value: 'ALL', label: 'All' },
-    { value: 'ACCEPTED', label: 'Accepted' },
-    { value: 'DECLINED', label: 'Declined' },
+    { value: 'OPEN', label: 'Open' },
+    { value: 'FULFILLED', label: 'Fulfilled' },
+    { value: 'CANCELLED', label: 'Cancelled' },
+    { value: 'EXPIRED', label: 'Expired' },
   ];
 
   ngOnInit(): void {
@@ -48,10 +50,12 @@ export class EmergencyHistoryPageComponent implements OnInit {
     return (BLOOD_TYPE_NAMES as any)[bt] ?? bt;
   }
 
-  protected responseBadgeClass(type: string | null): string {
-    switch (type) {
-      case 'ACCEPTED': return 'bg-green-900 text-green-300';
-      case 'DECLINED': return 'bg-red-900 text-red-300';
+  protected responseBadgeClass(status: string): string {
+    switch (status) {
+      case 'OPEN': return 'bg-blue-900 text-blue-300';
+      case 'FULFILLED': return 'bg-green-900 text-green-300';
+      case 'CANCELLED': return 'bg-gray-800 text-gray-400';
+      case 'EXPIRED': return 'bg-red-900 text-red-300';
       default: return 'bg-gray-800 text-gray-400';
     }
   }

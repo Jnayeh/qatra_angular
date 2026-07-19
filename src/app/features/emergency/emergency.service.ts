@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
 import type { ApiResponse } from '@/app/shared/models/api-response.model';
-import type { Emergency, EmergencyDetail, EmergencyCreateRequest, EmergencyRespondResult, EmergencyResponse, MatchResult } from '@/app/shared/models/emergency.model';
+import type { Emergency, EmergencyDetail, EmergencyCreateRequest, DonorResponseDTO } from '@/app/shared/models/emergency.model';
 import { ApiService } from '@/app/core/http/api.service';
 
 @Injectable({ providedIn: 'root' })
@@ -33,15 +33,15 @@ export class EmergencyService {
     return this.api.post(`/api/v1/emergencies/${id}/resolve`, { notes });
   }
 
-  getResponses(id: number): Observable<ApiResponse<MatchResult[]>> {
+  getResponses(id: number): Observable<ApiResponse<DonorResponseDTO[]>> {
     return this.api.get(`/api/v1/emergencies/${id}/responses`);
   }
 
-  accept(id: number, slotId?: number | null): Observable<ApiResponse<EmergencyRespondResult>> {
+  accept(id: number, slotId?: number | null): Observable<ApiResponse<DonorResponseDTO>> {
     return this.api.post(`/api/v1/emergencies/${id}/responses/accept`, { slotId: slotId ?? undefined });
   }
 
-  decline(id: number, reason: string): Observable<ApiResponse<EmergencyRespondResult>> {
+  decline(id: number, reason: string): Observable<ApiResponse<DonorResponseDTO>> {
     return this.api.post(`/api/v1/emergencies/${id}/responses/decline`, { reason });
   }
 }

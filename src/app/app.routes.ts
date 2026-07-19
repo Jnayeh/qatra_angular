@@ -16,6 +16,10 @@ export const routes: Routes = [
     loadComponent: () => import('@/app/features/auth/pages/verify-email-page/verify-email-page').then((m) => m.VerifyEmailPageComponent),
   },
   {
+    path: 'contact',
+    loadComponent: () => import('@/app/features/contact/pages/contact-page/contact-page').then((m) => m.ContactPageComponent),
+  },
+  {
     path: 'auth',
     loadChildren: () => import('@/app/features/auth/auth.routes'),
   },

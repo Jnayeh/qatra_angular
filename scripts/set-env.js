@@ -21,13 +21,13 @@ const get = (key, fallback) => envConfig[key] || fallback;
 
 const devContent = `export const environment = {
   baseUrl: '${get('BASE_URL', 'http://localhost:80/')}',
-  wsBaseUrl: '${get('WS_BASE_URL', 'http://localhost:80/ws/')}',
+  wsBaseUrl: '${get('WS_BASE_URL', 'ws://localhost:80/ws')}',
 };
 `;
 
 const prodContent = `export const environment = {
   baseUrl: '${get('BASE_URL', 'http://localhost:80/')}',
-  wsBaseUrl: '${get('WS_BASE_URL', 'http://localhost:80/ws/')}',
+  wsBaseUrl: '${get('WS_BASE_URL', 'ws://localhost:80/ws')}',
 };
 `;
 

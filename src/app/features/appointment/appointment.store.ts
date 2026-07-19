@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { signalStore, withState, withMethods, withComputed, patchState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
-import type { Appointment, AppointmentResponse } from '@/app/shared/models/appointment.model';
+import type { Appointment } from '@/app/shared/models/appointment.model';
 import { AppointmentService } from '@/app/features/appointment/appointment.service';
 import { DonorStore } from '@/app/features/donor/donor.store';
 
@@ -11,7 +11,7 @@ interface AppointmentState {
   totalPages: number;
   totalElements: number;
   currentPage: number;
-  lastBooking: AppointmentResponse | null;
+  lastBooking: Appointment | null;
   isLoading: boolean;
   error: string | null;
 }

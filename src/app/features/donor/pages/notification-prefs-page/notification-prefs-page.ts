@@ -54,9 +54,12 @@ export class NotificationPrefsPageComponent implements OnInit {
     if (this.form.invalid) return;
 
     const v = this.form.value;
+    const quietStart = v.quietStart?.length === 5 ? `${v.quietStart}:00` : v.quietStart;
+    const quietEnd = v.quietEnd?.length === 5 ? `${v.quietEnd}:00` : v.quietEnd;
+
     this.donorService.updateNotificationPrefs({
       frequency: v.frequency as any,
-      quietHours: v.enableQuietHours ? { start: v.quietStart!, end: v.quietEnd! } : null,
+      quietHours: v.enableQuietHours ? { start: quietStart!, end: quietEnd! } : null,
       allowEmergencyNotifications: v.allowEmergencyNotifications ?? true,
       maxNotificationDistanceKm: v.maxNotificationDistanceKm ?? 25,
     }).subscribe();

@@ -38,6 +38,7 @@ export class SidebarComponent {
     notifications: 'pi-bell',
     chart: 'pi-chart-bar',
     center: 'pi-building',
+    envelope: 'pi-envelope',
   };
 
   protected iconClass(icon: string): string {
@@ -72,6 +73,7 @@ export class SidebarComponent {
     { label: 'Forecasts', path: '/admin/forecasts', icon: 'pi-chart-line', roles: ['SUPER_ADMIN'] },
     { label: 'Audit Logs', path: '/admin/audit-logs', icon: 'history', roles: ['SUPER_ADMIN'] },
     { label: 'Notifications', path: '/notifications/list', icon: 'notifications', roles: ['DONOR', 'CENTER_STAFF', 'CENTER_ADMIN', 'SUPER_ADMIN'] },
+    { label: 'Contact Us', path: '/contact', icon: 'envelope' },
   ];
 
   protected readonly activeRole = computed(() => {

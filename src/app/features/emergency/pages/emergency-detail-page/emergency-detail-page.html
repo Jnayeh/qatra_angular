@@ -34,15 +34,29 @@
       </p-card>
     </div>
 
-    @if (authStore.isDonor()) {
+    @if (authStore.isDonor() && e.status === 'OPEN') {
       <p-card styleClass="border border-primary-200">
         <ng-template pTemplate="content">
           <div class="flex gap-4">
-            <p-button label="I'm Willing" severity="primary" icon="pi pi-check" class="flex-1"></p-button>
-            <p-button label="Decline" severity="danger" styleClass="p-button-outlined" icon="pi pi-times" class="flex-1"></p-button>
+            <p-button label="I'm Willing" severity="primary" icon="pi pi-check" class="flex-1" [loading]="isResponding()" [disabled]="isResponding()" (onClick)="accept()"></p-button>
+            <p-button label="Decline" severity="danger" styleClass="p-button-outlined" icon="pi pi-times" class="flex-1" [loading]="isResponding()" [disabled]="isResponding()" (onClick)="openDeclineDialog()"></p-button>
           </div>
         </ng-template>
       </p-card>
     }
   }
 </div>
+
+<p-dialog header="Decline Emergency?" [(visible)]="showDeclineDialog" [modal]="true" [style]="{ width: '400px' }" [closable]="!isResponding()">
+  <div class="space-y-4">
+    <p class="text-sm text-gray-600">Are you sure you want to decline this emergency request?</p>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Reason (optional)</label>
+      <p-textarea [(ngModel)]="declineReason" rows="3" class="w-full" placeholder="Why are you declining?" />
+    </div>
+  </div>
+  <ng-template #footer>
+    <p-button label="Go Back" severity="secondary" styleClass="p-button-text" (click)="showDeclineDialog.set(false)" [disabled]="isResponding()" />
+    <p-button label="Yes, Decline" severity="danger" [loading]="isResponding()" [disabled]="isResponding()" (click)="confirmDecline()" />
+  </ng-template>
+</p-dialog>

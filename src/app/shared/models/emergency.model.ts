@@ -27,9 +27,11 @@ export interface Emergency {
   resolvedByUserId: number | null;
 }
 
-export interface EmergencyDetail extends Emergency {}
+export interface EmergencyDetail extends Emergency {
+  centerName?: string;
+}
 
-export interface EmergencyResponse {
+export interface DonorResponseDTO {
   id: number;
   emergencyId: number;
   donorId: number;
@@ -38,21 +40,6 @@ export interface EmergencyResponse {
   respondedAt: string;
 }
 
-export interface MatchResult {
-  id: number;
-  emergencyId: number;
-  centerId: number;
-  donorId: number;
-  radius: number;
-  bloodType: string;
-  status: MatchStatus;
-  escalationLevel: number;
-  createdAt: string;
-  respondedAt: string | null;
-}
-
-export type MatchStatus = 'PENDING' | 'RESPONDED' | 'EXPIRED';
-
 export interface EmergencyCreateRequest {
   centerId: number;
   bloodType: string;
@@ -60,21 +47,6 @@ export interface EmergencyCreateRequest {
   urgency: EmergencyUrgency;
   matchRadius: number;
   contactPhone: string;
-}
-
-export interface EmergencyRespondResult {
-  emergencyId: number;
-  status: ResponseStatus;
-  availableSlots?: SlotSummary[];
-  appointmentId?: number;
-  qrCode?: string;
-}
-
-export interface SlotSummary {
-  slotId: number;
-  startTime: string;
-  endTime: string;
-  availableCount: number;
 }
 
 export interface EmergencyNotificationSummary {

@@ -41,9 +41,11 @@ export class SlotBookingPageComponent implements OnInit {
   protected readonly error = signal('');
 
   protected readonly appointmentOptions = [
-    { value: 'REGULAR', label: 'Regular' },
-    { value: 'EMERGENCY', label: 'Emergency' },
+    { value: 'REGULAR' as const, label: 'Regular' },
+    { value: 'EMERGENCY' as const, label: 'Emergency' },
   ];
+
+  protected readonly minDate = new Date();
 
   private centerId = 0;
 
