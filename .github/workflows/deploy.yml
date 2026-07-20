@@ -16,8 +16,8 @@ jobs:
       - run: npm ci
       - run: npm run build:prod
         env:
-          API_URL: ${{ secrets.API_URL }}
-          WS_URL: ${{ secrets.WS_URL }}
+          BASE_URL: ${{ secrets.BASE_URL }}
+          WS_BASE_URL: ${{ secrets.WS_BASE_URL }}
       - uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
