@@ -15,6 +15,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build:prod
+        env:
+          API_URL: ${{ secrets.API_URL }}
+          WS_URL: ${{ secrets.WS_URL }}
       - uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
