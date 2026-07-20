@@ -35,5 +35,3 @@ const envDir = path.resolve(__dirname, '..', 'src', 'environments');
 fs.mkdirSync(envDir, { recursive: true });
 fs.writeFileSync(path.join(envDir, 'environment.ts'), devContent);
 fs.writeFileSync(path.join(envDir, 'environment.prod.ts'), prodContent);
-
-console.log('Ô£ô environment.ts and environment.prod.ts generated from .env');
