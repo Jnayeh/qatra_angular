@@ -17,7 +17,7 @@ if (fs.existsSync(envPath)) {
   }
 }
 
-const get = (key, fallback) => envConfig[key] || fallback;
+const get = (key, fallback) => process.env[key] || envConfig[key] || fallback;
 
 const devContent = `export const environment = {
   baseUrl: '${get('BASE_URL', 'http://localhost:80/')}',
