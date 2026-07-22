@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Button } from 'primeng/button';
 import { AuthStore } from '@/app/core/auth/auth.store';
 import { DonorStore } from '@/app/features/donor/donor.store';
@@ -17,7 +17,6 @@ export class DonorDashboardPageComponent implements OnInit {
   protected readonly store = inject(DonorStore);
   protected readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
   protected readonly bloodTypeNames = BLOOD_TYPE_NAMES;
   protected readonly formatDate = formatDate;
 
@@ -66,10 +65,6 @@ export class DonorDashboardPageComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    if (this.route.snapshot.queryParams['first_time'] === 'true') {
-      this.router.navigate(['/donor/onboarding'], { replaceUrl: true });
-      return;
-    }
     this.store.loadProfile();
     this.store.loadEligibility();
     this.store.loadImpact();

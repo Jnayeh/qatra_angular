@@ -58,9 +58,7 @@ export class RegisterPageComponent {
 
     this.authService.register(payload).subscribe({
       next: () => {
-        this.router.navigate(['/donor/home'], {
-          queryParams: { first_time: true },
-        });
+        this.router.navigate(['/donor/onboarding']);
       },
       error: (err) => {
         this.error.set(err.friendlyMessage ?? 'Registration failed');

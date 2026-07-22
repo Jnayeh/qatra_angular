@@ -62,7 +62,9 @@ export class OnboardingPageComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.store.loadProfile();
+    if (!this.store.loadedOnce()) {
+      this.store.loadProfile();
+    }
   }
 
   protected nextStep(): void {

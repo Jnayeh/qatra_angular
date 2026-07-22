@@ -16,14 +16,14 @@
         <div class="grid grid-cols-2 gap-3">
           <div class="flex flex-col gap-2">
             <label for="firstName" class="text-sm font-medium text-gray-700">First Name</label>
-            <input pInputText id="firstName" formControlName="firstName" placeholder="Ahmed" class="w-full" [class.ng-invalid]="form.get('firstName')?.invalid && form.get('firstName')?.touched" />
+            <input pInputText id="firstName" formControlName="firstName" placeholder="Mourad" class="w-full" [class.ng-invalid]="form.get('firstName')?.invalid && form.get('firstName')?.touched" />
             @if (form.get('firstName')?.invalid && form.get('firstName')?.touched) {
               <small class="text-red-500">First name is required</small>
             }
           </div>
           <div class="flex flex-col gap-2">
             <label for="familyName" class="text-sm font-medium text-gray-700">Family Name</label>
-            <input pInputText id="familyName" formControlName="familyName" placeholder="Benali" class="w-full" [class.ng-invalid]="form.get('familyName')?.invalid && form.get('familyName')?.touched" />
+            <input pInputText id="familyName" formControlName="familyName" placeholder="Jnayeh" class="w-full" [class.ng-invalid]="form.get('familyName')?.invalid && form.get('familyName')?.touched" />
             @if (form.get('familyName')?.invalid && form.get('familyName')?.touched) {
               <small class="text-red-500">Family name is required</small>
             }
@@ -32,7 +32,7 @@
 
         <div class="flex flex-col gap-2">
           <label for="email" class="text-sm font-medium text-gray-700">Email</label>
-          <input pInputText id="email" type="email" formControlName="email" placeholder="your@email.com" class="w-full" [class.ng-invalid]="form.get('email')?.invalid && form.get('email')?.touched" />
+          <input pInputText id="email" type="email" formControlName="email" placeholder="me@email.com" class="w-full" [class.ng-invalid]="form.get('email')?.invalid && form.get('email')?.touched" />
           @if (form.get('email')?.invalid && form.get('email')?.touched) {
             @if (form.get('email')?.hasError('email')) {
               <small class="text-red-500">Invalid email address</small>
@@ -45,7 +45,7 @@
 
         <div class="flex flex-col gap-2">
           <label for="phone" class="text-sm font-medium text-gray-700">Phone</label>
-          <input pInputText id="phone" formControlName="phone" placeholder="+21621234567" class="w-full" [class.ng-invalid]="form.get('phone')?.invalid && form.get('phone')?.touched" />
+          <input pInputText id="phone" formControlName="phone" placeholder="21 234 567" class="w-full" [class.ng-invalid]="form.get('phone')?.invalid && form.get('phone')?.touched" />
           @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
             <small class="text-red-500">Invalid phone number</small>
           }
