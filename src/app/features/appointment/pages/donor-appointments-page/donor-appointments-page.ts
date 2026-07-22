@@ -31,7 +31,7 @@ export class DonorAppointmentsPageComponent implements OnInit {
   protected readonly store = inject(AppointmentStore);
   private readonly router = inject(Router);
 
-  protected readonly bookPath = () => this.router.url.startsWith('/donor') ? '/donor/book' : '/appointments/book'; // ponytail
+  protected readonly bookPath = () => this.router.url.startsWith('/donor') ? '/donor/book' : '/appointments/book'; 
 
   protected readonly qrDialogVisible = signal(false);
   protected readonly qrCode = signal('');
@@ -58,10 +58,10 @@ export class DonorAppointmentsPageComponent implements OnInit {
   }
 
   protected bookAppointment(): void {
-    this.router.navigate([this.router.url.startsWith('/donor') ? '/donor/book' : '/appointments/book']); // ponytail
+    this.router.navigate([this.router.url.startsWith('/donor') ? '/donor/book' : '/appointments/book']); 
   }
 
   protected rescheduleAppointment(appointment: Appointment): void {
-    this.router.navigate([this.router.url.startsWith('/donor') ? `/donor/${appointment.id}/reschedule` : `/appointments/${appointment.id}/reschedule`]); // ponytail
+    this.router.navigate([this.router.url.startsWith('/donor') ? `/donor/${appointment.id}/reschedule` : `/appointments/${appointment.id}/reschedule`]); 
   }
 }

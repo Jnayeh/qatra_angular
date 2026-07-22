@@ -25,7 +25,7 @@ export class CenterDetailPageComponent implements OnInit, OnDestroy {
   private marker: maplibregl.Marker | null = null;
 
   protected readonly isDonor = () => this.router.url.startsWith('/donor');
-  protected readonly centerPrefix = () => this.isDonor() ? '/donor/centers' : '/centers'; // ponytail
+  protected readonly centerPrefix = () => this.isDonor() ? '/donor/centers' : '/centers'; 
 
   protected readonly days = [
     { key: 'monday', label: 'Monday' },

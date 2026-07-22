@@ -118,7 +118,7 @@ export class AppointmentBookingPageComponent implements OnInit {
 
   protected closeQrDialog(): void {
     this.showQrDialog.set(false);
-    this.router.navigate([this.router.url.startsWith('/donor') ? '/donor/my-appointments' : '/appointments/my-appointments']); // ponytail
+    this.router.navigate([this.router.url.startsWith('/donor') ? '/donor/my-appointments' : '/appointments/my-appointments']); 
   }
 
   protected availableSlots(): Slot[] {

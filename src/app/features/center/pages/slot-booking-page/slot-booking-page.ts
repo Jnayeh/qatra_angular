@@ -79,7 +79,7 @@ export class SlotBookingPageComponent implements OnInit {
     }).subscribe({
       next: () => {
         this.isBooking.set(false);
-        this.router.navigate([this.router.url.startsWith('/donor') ? '/donor/my-appointments' : '/appointments/my-appointments']); // ponytail
+        this.router.navigate([this.router.url.startsWith('/donor') ? '/donor/my-appointments' : '/appointments/my-appointments']); 
       },
       error: (err: any) => {
         this.isBooking.set(false);

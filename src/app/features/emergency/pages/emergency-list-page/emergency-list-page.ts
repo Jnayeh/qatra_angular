@@ -16,7 +16,7 @@ import { EmergencyStore } from '@/app/features/emergency/emergency.store';
 export class EmergencyListPageComponent implements OnInit {
   protected readonly store = inject(EmergencyStore);
   private readonly router = inject(Router);
-  protected readonly emergencyPrefix = () => this.router.url.startsWith('/donor') ? '/donor/emergencies' : '/emergencies'; // ponytail
+  protected readonly emergencyPrefix = () => this.router.url.startsWith('/donor') ? '/donor/emergencies' : '/emergencies'; 
 
   ngOnInit(): void {
     this.store.loadEmergencies({ page: 1, size: 20 });

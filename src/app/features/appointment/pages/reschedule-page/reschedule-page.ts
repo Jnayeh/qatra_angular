@@ -49,7 +49,7 @@ export class ReschedulePageComponent implements OnInit {
   protected readonly formatTime = formatTime;
   protected readonly minDate = new Date();
 
-  private myAppointmentsPath(): string { // ponytail
+  private myAppointmentsPath(): string { 
     return this.router.url.startsWith('/donor') ? '/donor/my-appointments' : '/appointments/my-appointments';
   }
 
