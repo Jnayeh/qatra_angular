@@ -10,6 +10,7 @@ interface AuthUser {
   id: number;
   displayName: string;
   roles: Role[];
+  emailVerified: boolean;
 }
 
 interface AuthState {
@@ -93,7 +94,7 @@ export const AuthStore = signalStore(
               return;
             }
 
-            const user: AuthUser = { id: data.userId, displayName: data.displayName, roles: data.roles };
+            const user: AuthUser = { id: data.userId, displayName: data.displayName, roles: data.roles, emailVerified: data.emailVerified };
             localStorage.setItem('accessToken', data.token);
             localStorage.setItem('refreshToken', data.refreshToken);
             localStorage.setItem('authUser', JSON.stringify(user));

@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { Button } from 'primeng/button';
 import { Menu } from 'primeng/menu';
 import type { MenuItem } from 'primeng/api';
+import type { Role } from '@/app/shared/models/user.model';
 import { AuthStore } from '@/app/core/auth/auth.store';
 
 @Component({
@@ -25,7 +26,12 @@ export class PublicNavbarComponent {
   protected readonly menuItems = computed<MenuItem[]>(() => [
     {
       label: this.authStore.user()?.displayName ?? 'User',
-      items: this.authStore.userRoles().map((role) => ({
+      items: this.authStore.userRoles().filter((r:Role) => {
+        if(r == "CENTER_STAFF" && this.authStore.userRoles().includes("CENTER_ADMIN")) {
+          return false;
+        }
+        return true;
+      }).map((role) => ({
         label: role === 'DONOR' ? 'Donor Home'
              : role === 'SUPER_ADMIN' ? 'Admin Dashboard'
              : 'Center Dashboard',

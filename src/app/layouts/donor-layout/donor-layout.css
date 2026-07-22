@@ -1,5 +1,5 @@
 :host { display: block; height: 100vh; }
 
-/* routerLinkActive classes must stay here — Tailwind can't handle dynamic class binding */
+
 .nav-link-active { color: var(--p-primary-600, #dc2626) !important; background: var(--p-primary-50, #fef2f2) !important; font-weight: 600; }
 .bottom-tab-active { color: var(--p-primary-600, #dc2626) !important; }

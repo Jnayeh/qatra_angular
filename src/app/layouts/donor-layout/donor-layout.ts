@@ -29,6 +29,10 @@ export class DonorLayoutComponent implements OnInit {
     return this.donorStore.loadedOnce() && !this.donorStore.profileComplete();
   });
 
+  protected readonly showEmailBanner = computed(() => {
+    return !this.authStore.user()?.emailVerified;
+  });
+
   ngOnInit(): void {
     this.donorStore.loadProfile();
   }

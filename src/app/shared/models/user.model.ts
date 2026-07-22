@@ -55,6 +55,7 @@ export interface TokenPair {
   email: string;
   displayName: string;
   roles: Role[];
+  emailVerified: boolean;
 }
 
 export interface TokenRefreshRequest {

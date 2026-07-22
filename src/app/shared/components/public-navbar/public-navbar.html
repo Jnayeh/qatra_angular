@@ -6,7 +6,9 @@
 
       @if (authStore.isAuthenticated()) {
         <p-menu #userMenu [model]="menuItems()" [popup]="true" />
-        <button pButton type="button" class="!w-9 !h-9 !rounded-full" icon="pi pi-user" (click)="userMenu.toggle($event)" ariaLabel="User menu" title="User menu"></button>
+        <button pButton type="button" class="w-9 h-9 rounded-full bg-red-500 text-white" (click)="userMenu.toggle($event)" ariaLabel="User menu">
+            <i class="pi pi-user"></i>
+        </button>
       } @else {
         <a class="px-3 py-2 rounded-full bg-red-500 text-white" routerLink="/auth/login" ariaLabel="Sign In"><i class="pi pi-sign-in"></i></a>
         <a class="px-3 py-2 rounded-full bg-gray-200" routerLink="/auth/register" ariaLabel="Sign Up"><i class="pi pi-user-plus"></i></a>
