@@ -1,60 +1,25 @@
 <div class="min-h-screen bg-gradient-to-br from-primary-700 to-primary-500 flex items-center justify-center p-4">
   <div class="w-full max-w-lg">
-
     <div class="flex items-center justify-between mb-6 px-2">
-      @for (s of [1, 2, 3, 4]; track s) {
+      @for (s of [1, 2, 3]; track s) {
         <div class="flex items-center gap-2">
           <span
             class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all"
-            [class.bg-white]="step() >= s"
-            [class.text-primary-600]="step() >= s"
-            [class.text-white]="step() >= s"
-            [class.bg-white/20]="step() < s"
-            [class.text-white/60]="step() < s"
+            [class.bg-white/80]="step() >= s" [class.text-primary-600]="step() >= s"
+            [class.bg-white/20]="step() < s" [class.text-white/60]="step() < s"
           >{{ s }}</span>
-          @if (s < 4) {
-            <div class="h-0.5 w-8 sm:w-12" [class.bg-white]="step() > s" [class.bg-white/20]="step() <= s"></div>
-          }
         </div>
       }
     </div>
-
-
     <p class="text-center text-white/80 text-sm mb-4 font-medium">
       @switch (step()) {
-        @case (1) { Blood Type }
-        @case (2) { Health Screening }
-        @case (3) { Your Location }
-        @case (4) { Notification Preferences }
+        @case (1) { Health Screening }
+        @case (2) { Blood Type & Location }
+        @case (3) { Notification Preferences }
       }
     </p>
-
-
     <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-
       @if (step() === 1) {
-        <div class="p-6 sm:p-8">
-          <h2 class="text-xl font-bold text-gray-900 mb-1">What's your blood type?</h2>
-          <p class="text-sm text-gray-500 mb-6">Select your blood type or choose "I don't know" if unsure.</p>
-          <div class="grid grid-cols-3 gap-3">
-            @for (bt of bloodTypes; track bt.value) {
-              <button
-                type="button"
-                class="rounded-xl border-2 p-4 text-center transition-all hover:border-primary-400 hover:shadow-sm"
-                [class.border-primary-500]="selectedBloodType() === bt.value"
-                [class.bg-primary-50]="selectedBloodType() === bt.value"
-                [class.border-gray-200]="selectedBloodType() !== bt.value"
-                (click)="selectBloodType(bt.value)"
-              >
-                <span class="text-lg font-bold text-gray-900">{{ bt.label }}</span>
-              </button>
-            }
-          </div>
-        </div>
-      }
-
-
-      @if (step() === 2) {
         <div class="p-6 sm:p-8">
           <h2 class="text-xl font-bold text-gray-900 mb-1">Health Screening</h2>
           <p class="text-sm text-gray-500 mb-6">Help us ensure your safety during donation.</p>
@@ -101,39 +66,63 @@
         </div>
       }
 
+      @if (step() === 2) {
+        <div class="p-6 sm:p-8 flex flex-col gap-6">
+          <div>
+            <h2 class="text-xl font-bold text-gray-900 mb-1">Blood Type</h2>
+            <p class="text-sm text-gray-500 mb-4">Tell us your blood type if you know it.</p>
+            <div class="flex flex-col gap-3" [formGroup]="bloodTypeForm">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium text-gray-700">I don't know my blood type</span>
+              <p-toggleswitch formControlName="unknown" />
+            </div>
+            @if (!bloodTypeForm.value.unknown) {
+              <div class="flex flex-col gap-1.5">
+                <label class="text-sm font-medium text-gray-700">Select your blood type</label>
+                <select formControlName="type" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+                  <option [ngValue]="null" disabled>Select blood type</option>
+                  @for (bt of bloodTypes; track bt.value) {
+                    <option [ngValue]="bt.value">{{ bt.label }}</option>
+                  }
+                </select>
+              </div>
+            }
+          </div>
+          </div>
 
-      @if (step() === 3) {
-        <div class="p-6 sm:p-8">
-          <h2 class="text-xl font-bold text-gray-900 mb-1">Your Location</h2>
-          <p class="text-sm text-gray-500 mb-6">We'll use this to find donation centers near you. Click on the map to set your location.</p>
-          <form [formGroup]="locationForm" class="flex flex-col gap-4">
-            <div class="bg-gray-100 rounded-xl overflow-hidden border border-gray-200">
-              <div #mapContainer class="w-full h-56"></div>
-              <div class="p-3 flex items-center gap-2 text-sm bg-white border-t border-gray-200">
-                <i class="pi pi-map-marker text-primary-500"></i>
-                @if (selectedLat() !== null && selectedLng() !== null) {
-                  <span class="text-gray-700 font-medium">{{ selectedLat()!.toFixed(4) }}, {{ selectedLng()!.toFixed(4) }}</span>
-                } @else {
-                  <span class="text-gray-400">Click on the map to select a location</span>
-                }
+          <p-divider />
+
+          <div>
+            <h2 class="text-xl font-bold text-gray-900 mb-1">Your Location</h2>
+            <p class="text-sm text-gray-500 mb-4">Click on the map to find donation centers near you.</p>
+            <form [formGroup]="locationForm" class="flex flex-col gap-4">
+              <div class="bg-gray-100 rounded-xl overflow-hidden border border-gray-200">
+                <div #mapContainer class="w-full h-56"></div>
+                <div class="p-3 flex items-center gap-2 text-sm bg-white border-t border-gray-200">
+                  <i class="pi pi-map-marker text-primary-500"></i>
+                  @if (selectedLat() !== null && selectedLng() !== null) {
+                    <span class="text-gray-700 font-medium">{{ selectedLat()!.toFixed(4) }}, {{ selectedLng()!.toFixed(4) }}</span>
+                  } @else {
+                    <span class="text-gray-400">Click on the map to select a location</span>
+                  }
+                </div>
               </div>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div class="flex flex-col gap-1.5">
-                <label class="text-sm font-medium text-gray-700">City</label>
-                <input type="text" formControlName="city" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. Tunis" />
+              <div class="grid grid-cols-2 gap-3">
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-sm font-medium text-gray-700">City</label>
+                  <input type="text" formControlName="city" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. Tunis" />
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-sm font-medium text-gray-700">Country</label>
+                  <input type="text" formControlName="country" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
+                </div>
               </div>
-              <div class="flex flex-col gap-1.5">
-                <label class="text-sm font-medium text-gray-700">Country</label>
-                <input type="text" formControlName="country" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
-              </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       }
 
-
-      @if (step() === 4) {
+      @if (step() === 3) {
         <div class="p-6 sm:p-8">
           <h2 class="text-xl font-bold text-gray-900 mb-1">Notification Preferences</h2>
           <p class="text-sm text-gray-500 mb-6">Choose how you'd like to be notified about emergencies.</p>
@@ -154,7 +143,6 @@
           </form>
         </div>
       }
-
 
       <div class="px-6 sm:px-8 pb-6 sm:pb-8 flex items-center justify-between">
         @if (step() > 1) {

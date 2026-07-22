@@ -29,10 +29,13 @@ export class OnboardingPageComponent implements OnInit {
   protected readonly selectedLat = signal<number | null>(null);
   protected readonly selectedLng = signal<number | null>(null);
   protected readonly step = signal(1);
-  protected readonly totalSteps = 4;
+  protected readonly totalSteps = 3;
   protected readonly isLoading = signal(false);
 
-  protected readonly selectedBloodType = signal<string | null>(null);
+  protected readonly bloodTypeForm = new FormGroup({
+    unknown: new FormControl(true, { nonNullable: true }),
+    type: new FormControl<string | null>(null),
+  });
 
   protected readonly bloodTypes = [
     { value: 'A_POSITIVE', label: 'A+' },
@@ -43,7 +46,6 @@ export class OnboardingPageComponent implements OnInit {
     { value: 'AB_NEGATIVE', label: 'AB-' },
     { value: 'O_POSITIVE', label: 'O+' },
     { value: 'O_NEGATIVE', label: 'O-' },
-    { value: 'UNKNOWN', label: "I don't know" },
   ];
 
   protected readonly healthForm = new FormGroup({
@@ -68,7 +70,7 @@ export class OnboardingPageComponent implements OnInit {
 
   constructor() {
     effect(() => {
-      if (this.step() === 3) {
+      if (this.step() === 2) {
         setTimeout(() => this.initMap(), 0);
       }
     });
@@ -80,7 +82,7 @@ export class OnboardingPageComponent implements OnInit {
 
   private initMap(): void {
     const el = this.mapContainer();
-    if (!el) return;
+    if (!el || this.map) return;
 
     const lat = this.selectedLat() ?? 36.8065;
     const lng = this.selectedLng() ?? 10.1815;
@@ -120,10 +122,6 @@ export class OnboardingPageComponent implements OnInit {
       .addTo(this.map);
   }
 
-  protected selectBloodType(type: string): void {
-    this.selectedBloodType.set(type);
-  }
-
   protected nextStep(): void {
     if (this.step() < this.totalSteps) {
       this.step.update((s) => s + 1);
@@ -143,8 +141,8 @@ export class OnboardingPageComponent implements OnInit {
   protected finish(): void {
     this.isLoading.set(true);
 
-    if (this.selectedBloodType()) {
-      this.store.updateBloodType(this.selectedBloodType()!);
+    if (!this.bloodTypeForm.value.unknown && this.bloodTypeForm.value.type) {
+      this.store.updateBloodType(this.bloodTypeForm.value.type);
     }
 
     this.store.updateHealthQuestionnaire({
