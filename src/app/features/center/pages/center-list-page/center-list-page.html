@@ -1,5 +1,5 @@
 <div class="space-y-4">
-  <!-- Header -->
+
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
     <div>
       <h1 class="text-2xl font-bold text-gray-900">Donation Centers</h1>
@@ -33,7 +33,7 @@
     </div>
   </div>
 
-  <!-- MAP VIEW -->
+
   @if (viewMode() === 'map') {
     @defer (on viewport) {
       <div class="relative">
@@ -57,12 +57,12 @@
     }
   }
 
-  <!-- LIST VIEW -->
+
   @if (viewMode() === 'list') {
-    <!-- Filters -->
+
     <div class="bg-white rounded-xl border border-gray-200 p-5">
       <div class="flex flex-col gap-4">
-        <!-- City search -->
+
         <div class="flex items-center gap-2">
           <input
             pInputText
@@ -74,7 +74,7 @@
           <p-button label="Search" icon="pi pi-search" (onClick)="onCitySearch()" />
         </div>
 
-        <!-- Distance slider -->
+
         <div class="space-y-2">
           <div class="flex items-center justify-between">
             <label class="text-sm font-medium text-gray-700">Max distance</label>
@@ -96,7 +96,7 @@
       </div>
     </div>
 
-    <!-- Results -->
+
     @if (isLoading()) {
       <app-loading-spinner />
     } @else if (listCenters().length === 0) {
@@ -121,7 +121,7 @@
         }
       </div>
 
-      <!-- Pagination -->
+
       @if (listTotalPages() > 1) {
         <div class="flex items-center justify-center gap-2 pt-4">
           <p-button

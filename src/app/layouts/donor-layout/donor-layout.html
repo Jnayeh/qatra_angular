@@ -1,8 +1,8 @@
 <div class="flex flex-col h-full">
-  <!-- Top Navbar -->
+
   <header class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
     <div class="max-w-[1400px] mx-auto flex items-center justify-between px-4 h-14">
-      <!-- Logo -->
+
       <a routerLink="/donor/home" class="flex items-center gap-2 shrink-0">
         <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
           <span class="text-white font-bold text-sm">Q</span>
@@ -10,7 +10,7 @@
         <span class="text-lg font-bold text-gray-900 hidden sm:inline">Qatra</span>
       </a>
 
-      <!-- Desktop Nav Links -->
+
       <nav class="hidden lg:flex items-center gap-1">
         @for (link of navLinks; track link.path) {
           <a
@@ -25,7 +25,7 @@
         }
       </nav>
 
-      <!-- Right Actions -->
+
       <div class="flex items-center gap-2">
         <app-notification-bell />
         <p-menu #userMenu [model]="menuItems()" [popup]="true" styleClass="donor-user-menu" />
@@ -47,7 +47,7 @@
     </div>
   </header>
 
-  <!-- Profile Completion Banner -->
+
   @if (showProfileBanner()) {
     <a routerLink="/donor/onboarding" class="sticky top-0 z-40 flex items-center justify-center gap-3 px-4 py-2 bg-amber-50 border-b border-amber-200 hover:bg-amber-100 cursor-pointer">
       <i class="pi pi-info-circle text-amber-600"></i>
@@ -56,12 +56,12 @@
     </a>
   }
 
-  <!-- Content Area -->
+
   <main class="flex-1 overflow-y-auto pb-20 bg-gray-50 mx-auto w-full lg:pb-6">
     <router-outlet />
   </main>
 
-  <!-- Mobile Bottom Tab Bar -->
+
   <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around h-14 bg-white border-t border-gray-200 shadow-sm pb-[env(safe-area-inset-bottom)]">
     @for (link of navLinks; track link.path; let i = $index) {
       @if (i < 5) {
