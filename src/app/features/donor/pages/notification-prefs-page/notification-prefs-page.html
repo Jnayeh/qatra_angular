@@ -6,7 +6,7 @@
 
   <div class="bg-white rounded-xl border border-gray-200 p-5">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-2">
         <label for="frequency" class="text-sm font-medium text-gray-700">Notification Frequency</label>
         <p-select formControlName="frequency" [options]="frequencyOptions" optionLabel="label" optionValue="value" styleClass="w-full" />
       </div>
@@ -18,11 +18,11 @@
 
       @if (form.get('enableQuietHours')?.value) {
         <div class="grid grid-cols-2 gap-4">
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="quietStart" class="text-sm font-medium text-gray-700">Start</label>
             <input type="time" id="quietStart" formControlName="quietStart" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500" />
           </div>
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="quietEnd" class="text-sm font-medium text-gray-700">End</label>
             <input type="time" id="quietEnd" formControlName="quietEnd" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500" />
           </div>
@@ -34,7 +34,7 @@
         <p-toggleswitch formControlName="allowEmergencyNotifications" />
       </div>
 
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-2">
         <label for="maxDist" class="text-sm font-medium text-gray-700">Max Notification Distance (km)</label>
         <p-inputnumber formControlName="maxNotificationDistanceKm" inputId="maxDist" mode="decimal" [min]="0" [max]="1000" styleClass="w-full" />
       </div>

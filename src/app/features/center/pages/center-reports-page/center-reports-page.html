@@ -6,15 +6,15 @@
 
   <div class="bg-white rounded-xl border border-gray-200 p-5">
     <div class="flex flex-wrap items-center gap-4">
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-2">
         <label for="fromDp" class="text-sm font-medium text-gray-700">From</label>
         <p-datepicker [(ngModel)]="dateFrom" inputId="fromDp" class="w-36" />
       </div>
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-2">
         <label for="toDp" class="text-sm font-medium text-gray-700">To</label>
         <p-datepicker [(ngModel)]="dateTo" inputId="toDp" class="w-36" />
       </div>
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-2">
         <label for="reportType" class="text-sm font-medium text-gray-700">Report Type</label>
         <p-select [(ngModel)]="reportType" inputId="reportType" [options]="reportTypeOptions" optionValue="value" optionLabel="label" class="w-44" />
       </div>

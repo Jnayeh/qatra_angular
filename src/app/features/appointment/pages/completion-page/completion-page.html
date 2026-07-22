@@ -7,12 +7,12 @@
   <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
     <div class="bg-white rounded-xl border border-gray-200 p-5">
       <div class="space-y-4">
-        <div class="flex flex-col gap-1.5">
+        <div class="flex flex-col gap-2">
           <label for="outcome" class="text-sm font-medium text-gray-700">Outcome</label>
           <p-select formControlName="outcome" [options]="outcomeOptions" optionLabel="label" optionValue="value" class="w-full" />
         </div>
 
-        <div class="flex flex-col gap-1.5">
+        <div class="flex flex-col gap-2">
           <label for="mlCollected" class="text-sm font-medium text-gray-700">ML Collected</label>
           <p-inputNumber formControlName="mlCollected" inputId="mlCollected" placeholder="450" class="w-full" [min]="1" />
           @if (form.get('mlCollected')?.invalid && form.get('mlCollected')?.touched) {
@@ -21,7 +21,7 @@
           }
         </div>
 
-        <div class="flex flex-col gap-1.5">
+        <div class="flex flex-col gap-2">
           <label for="notes" class="text-sm font-medium text-gray-700">Notes</label>
           <textarea pTextarea id="notes" formControlName="notes" rows="3" placeholder="Optional notes..." class="w-full"></textarea>
         </div>

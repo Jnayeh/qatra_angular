@@ -4,37 +4,10 @@
     <p class="text-sm text-gray-500 mt-1">Click on the map to set your location, or use your current location.</p>
   </div>
 
-  <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-    <div #mapContainer class="w-full h-72"></div>
-    <div class="p-5 space-y-4">
-      <div class="flex items-center gap-2 text-sm">
-        <i class="pi pi-map-marker text-primary-500"></i>
-        @if (selectedLat() !== null && selectedLng() !== null) {
-          <span class="text-gray-700 font-medium">{{ selectedLat()!.toFixed(4) }}, {{ selectedLng()!.toFixed(4) }}</span>
-        } @else {
-          <span class="text-gray-400">Click on the map to select a location</span>
-        }
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <div class="flex flex-col gap-1.5">
-          <label for="city" class="text-sm font-medium text-gray-700">City</label>
-          <input pInputText id="city" [formControl]="form.controls.city" placeholder="e.g. Tunis" class="w-full" />
-        </div>
-        <div class="flex flex-col gap-1.5">
-          <label for="country" class="text-sm font-medium text-gray-700">Country</label>
-          <input pInputText id="country" [formControl]="form.controls.country" placeholder="e.g. Tunisia" class="w-full" />
-        </div>
-      </div>
-
-      @if (error()) {
-        <p-message severity="error" variant="simple" size="small">{{ error() }}</p-message>
-      }
-
-      <div class="flex flex-wrap gap-2">
-        <p-button severity="secondary" icon="pi pi-location" (onClick)="useMyLocation()">Use My Location</p-button>
-        <p-button severity="primary" (onClick)="saveLocation()" [disabled]="selectedLat() === null || selectedLng() === null">Save Location</p-button>
-      </div>
+  <div class="bg-white rounded-xl border border-gray-200 p-5">
+    <app-location-picker [locationForm]="form" />
+    <div class="mt-4">
+      <p-button label="Save Location" (onClick)="saveLocation()" [disabled]="form.value.latitude === null || form.value.longitude === null" />
     </div>
   </div>
 </div>

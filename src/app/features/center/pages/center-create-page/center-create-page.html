@@ -7,7 +7,7 @@
   <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
     <div class="bg-white rounded-xl border border-gray-200 p-5">
       <div class="space-y-4">
-        <div class="flex flex-col gap-1.5">
+        <div class="flex flex-col gap-2">
           <label for="name" class="text-sm font-medium text-gray-700">Center Name</label>
           <input pInputText id="name" formControlName="name" placeholder="e.g. Tunis Blood Bank" class="w-full" />
           @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
@@ -15,7 +15,7 @@
           }
         </div>
 
-        <div class="flex flex-col gap-1.5">
+        <div class="flex flex-col gap-2">
           <label for="facilityType" class="text-sm font-medium text-gray-700">Facility Type</label>
           <p-select formControlName="facilityType" id="facilityType" class="w-full" [options]="facilityTypeOptions" optionLabel="label" optionValue="value" placeholder="Select facility type" />
           @if (form.get('facilityType')?.hasError('required') && form.get('facilityType')?.touched) {
@@ -23,7 +23,7 @@
           }
         </div>
 
-        <div class="flex flex-col gap-1.5">
+        <div class="flex flex-col gap-2">
           <label for="address" class="text-sm font-medium text-gray-700">Address</label>
           <input pInputText id="address" formControlName="address" placeholder="Street address" class="w-full" />
           @if (form.get('address')?.hasError('required') && form.get('address')?.touched) {
@@ -32,7 +32,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="city" class="text-sm font-medium text-gray-700">City</label>
             <input pInputText id="city" formControlName="city" placeholder="e.g. Tunis" class="w-full" />
             @if (form.get('city')?.hasError('required') && form.get('city')?.touched) {
@@ -40,19 +40,19 @@
             }
           </div>
 
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="country" class="text-sm font-medium text-gray-700">Country</label>
             <input pInputText id="country" formControlName="country" class="w-full" />
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="phone" class="text-sm font-medium text-gray-700">Phone</label>
             <input pInputText id="phone" formControlName="phone" placeholder="+216 XX XXX XXX" class="w-full" />
           </div>
 
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="email" class="text-sm font-medium text-gray-700">Email</label>
             <input pInputText id="email" formControlName="email" type="email" placeholder="center@example.com" class="w-full" />
           </div>
@@ -78,17 +78,17 @@
         <h2 class="text-lg font-semibold text-gray-900">Capacity &amp; Scheduling</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="totalCapacity" class="text-sm font-medium text-gray-700">Total Capacity</label>
             <input pInputText id="totalCapacity" formControlName="totalCapacity" type="number" min="0" class="w-full" />
           </div>
 
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="maxRegular" class="text-sm font-medium text-gray-700">Max Regular / Slot</label>
             <input pInputText id="maxRegular" formControlName="maxRegular" type="number" min="0" class="w-full" />
           </div>
 
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="slotPeriod" class="text-sm font-medium text-gray-700">Slot Period (min)</label>
             <input pInputText id="slotPeriod" formControlName="slotPeriod" type="number" min="5" class="w-full" />
           </div>

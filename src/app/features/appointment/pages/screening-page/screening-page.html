@@ -8,7 +8,7 @@
     <div class="bg-white rounded-xl border border-gray-200 p-5">
       <div class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="temperature" class="text-sm font-medium text-gray-700">Temperature (┬░C)</label>
             <p-inputNumber formControlName="temperature" inputId="temperature" placeholder="36.5" class="w-full" [step]="0.1" [min]="34" [max]="42" />
             @if (form.get('temperature')?.invalid && form.get('temperature')?.touched) {
@@ -17,7 +17,7 @@
             }
           </div>
 
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="hemoglobin" class="text-sm font-medium text-gray-700">Hemoglobin (g/dL)</label>
             <p-inputNumber formControlName="hemoglobin" inputId="hemoglobin" placeholder="13.5" class="w-full" [step]="0.1" [min]="5" [max]="20" />
             @if (form.get('hemoglobin')?.invalid && form.get('hemoglobin')?.touched) {
@@ -28,7 +28,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="bloodPressure" class="text-sm font-medium text-gray-700">Blood Pressure</label>
             <input pInputText id="bloodPressure" formControlName="bloodPressure" placeholder="120/80" class="w-full" />
             @if (form.get('bloodPressure')?.invalid && form.get('bloodPressure')?.touched) {
@@ -36,7 +36,7 @@
             }
           </div>
 
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="weight" class="text-sm font-medium text-gray-700">Weight (kg)</label>
             <p-inputNumber formControlName="weight" inputId="weight" placeholder="70" class="w-full" [min]="30" [max]="200" />
             @if (form.get('weight')?.invalid && form.get('weight')?.touched) {
@@ -51,7 +51,7 @@
           <p-toggleSwitch formControlName="eligible" inputId="eligible" />
         </div>
 
-        <div class="flex flex-col gap-1.5">
+        <div class="flex flex-col gap-2">
           <label for="notes" class="text-sm font-medium text-gray-700">Notes</label>
           <textarea pTextarea id="notes" formControlName="notes" rows="3" placeholder="Optional notes..." class="w-full"></textarea>
         </div>

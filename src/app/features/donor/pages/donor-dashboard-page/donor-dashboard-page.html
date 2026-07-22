@@ -40,7 +40,7 @@
                 <i class="pi pi-clock text-amber-500 text-2xl"></i>
                 <div>
                     <p class="text-sm font-semibold text-amber-800">Not eligible yet</p>
-                    <p class="text-sm text-amber-600 mt-0.5">You can donate again on <strong>{{ formatDate(store.eligibility()!.eligibleFromDate!) }}</strong></p>
+                    @if (store.eligibility()?.eligibleFromDate) {<p class="text-sm text-amber-600 mt-0.5">You can donate again on <strong>{{ formatDate(store.eligibility()!.eligibleFromDate!) }}</strong></p>}
                 </div>
             </div>
         }

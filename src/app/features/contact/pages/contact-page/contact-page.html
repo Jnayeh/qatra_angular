@@ -25,27 +25,27 @@
 
           <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="flex flex-col gap-1.5">
+              <div class="flex flex-col gap-2">
                 <label for="name" class="text-sm font-medium text-gray-700">Full Name *</label>
                 <input pInputText id="name" formControlName="name" placeholder="Your name" class="w-full" />
               </div>
-              <div class="flex flex-col gap-1.5">
+              <div class="flex flex-col gap-2">
                 <label for="email" class="text-sm font-medium text-gray-700">Email *</label>
                 <input pInputText id="email" formControlName="email" type="email" placeholder="you@example.com" class="w-full" />
               </div>
             </div>
 
-            <div class="flex flex-col gap-1.5">
+            <div class="flex flex-col gap-2">
               <label for="organization" class="text-sm font-medium text-gray-700">Organization / Center Name</label>
               <input pInputText id="organization" formControlName="organization" placeholder="e.g. Blood Bank Tunis" class="w-full" />
             </div>
 
-            <div class="flex flex-col gap-1.5">
+            <div class="flex flex-col gap-2">
               <label for="subject" class="text-sm font-medium text-gray-700">Subject *</label>
               <p-select formControlName="subject" [options]="subjectOptions" optionLabel="label" optionValue="value" styleClass="w-full" />
             </div>
 
-            <div class="flex flex-col gap-1.5">
+            <div class="flex flex-col gap-2">
               <label for="message" class="text-sm font-medium text-gray-700">Message *</label>
               <textarea pTextarea id="message" formControlName="message" rows="5" class="w-full" placeholder="Tell us how we can help..."></textarea>
             </div>

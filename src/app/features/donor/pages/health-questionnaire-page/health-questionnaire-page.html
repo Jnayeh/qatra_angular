@@ -12,7 +12,7 @@
       </div>
 
       @if (form.get('hasChronicIllness')?.value) {
-        <div class="flex flex-col gap-1.5">
+        <div class="flex flex-col gap-2">
           <label for="medicalConditionsDetails" class="text-sm font-medium text-gray-700">Medical Conditions Details</label>
           <textarea pTextarea formControlName="medicalConditionsDetails" rows="3" class="w-full"></textarea>
         </div>
@@ -26,7 +26,7 @@
       </div>
 
       @if (form.get('onMedication')?.value) {
-        <div class="flex flex-col gap-1.5">
+        <div class="flex flex-col gap-2">
           <label for="medicationDetails" class="text-sm font-medium text-gray-700">Medication Details</label>
           <textarea pTextarea formControlName="medicationDetails" rows="3" placeholder="List your medications..." class="w-full"></textarea>
           @if (form.get('medicationDetails')?.invalid && form.get('medicationDetails')?.touched) {
@@ -37,17 +37,17 @@
 
       <p-divider />
 
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-2">
         <label for="lastSurgeryAt" class="text-sm font-medium text-gray-700">When did you last have surgery?</label>
         <input pInputText type="date" formControlName="lastSurgeryAt" class="w-full" />
       </div>
 
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-2">
         <label for="lastTravelAt" class="text-sm font-medium text-gray-700">When did you last travel?</label>
         <input pInputText type="date" formControlName="lastTravelAt" class="w-full" />
       </div>
 
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-2">
         <label for="lastTattooOrPiercingAt" class="text-sm font-medium text-gray-700">When did you last get a tattoo or piercing?</label>
         <input pInputText type="date" formControlName="lastTattooOrPiercingAt" class="w-full" />
       </div>

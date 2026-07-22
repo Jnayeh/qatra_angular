@@ -10,7 +10,7 @@
     <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
       <div class="bg-white rounded-xl border border-gray-200 p-5">
         <div class="space-y-4">
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="centerId" class="text-sm font-medium text-gray-700">Center</label>
             <p-select formControlName="centerId" id="centerId" class="w-full" [options]="centerStore.centers()" optionLabel="name" optionValue="id" />
             @if (form.get('centerId')?.hasError('required') && form.get('centerId')?.touched) {
@@ -19,7 +19,7 @@
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="flex flex-col gap-1.5">
+            <div class="flex flex-col gap-2">
               <label for="bloodType" class="text-sm font-medium text-gray-700">Blood Type</label>
               <p-select formControlName="bloodType" id="bloodType" class="w-full" [options]="bloodTypeOptions" optionLabel="label" optionValue="value" />
               @if (form.get('bloodType')?.hasError('required') && form.get('bloodType')?.touched) {
@@ -27,7 +27,7 @@
               }
             </div>
 
-            <div class="flex flex-col gap-1.5">
+            <div class="flex flex-col gap-2">
               <label for="unitsNeeded" class="text-sm font-medium text-gray-700">Units Needed</label>
               <input pInputText id="unitsNeeded" type="number" min="1" formControlName="unitsNeeded" class="w-full" />
               @if (form.get('unitsNeeded')?.hasError('required') && form.get('unitsNeeded')?.touched) {
@@ -52,7 +52,7 @@
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="flex flex-col gap-1.5">
+            <div class="flex flex-col gap-2">
               <label for="contactPhone" class="text-sm font-medium text-gray-700">Contact Phone</label>
               <input pInputText id="contactPhone" formControlName="contactPhone" placeholder="+216 XX XXX XXX" class="w-full" />
               @if (form.get('contactPhone')?.hasError('required') && form.get('contactPhone')?.touched) {
@@ -63,7 +63,7 @@
               }
             </div>
 
-            <div class="flex flex-col gap-1.5">
+            <div class="flex flex-col gap-2">
               <label for="matchRadius" class="text-sm font-medium text-gray-700">Match Radius (km)</label>
               <input pInputText id="matchRadius" type="number" min="1" formControlName="matchRadius" class="w-full" />
               @if (form.get('matchRadius')?.hasError('required') && form.get('matchRadius')?.touched) {

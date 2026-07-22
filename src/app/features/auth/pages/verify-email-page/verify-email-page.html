@@ -3,7 +3,7 @@
   <div class="w-full max-w-md rounded-2xl bg-white overflow-hidden auth-card-donor">
     <div class="px-6 pt-4 pb-2 text-center">
       <p class="text-3xl font-bold text-primary-600 mb-1">Qatra</p>
-      <p class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full mb-4 bg-primary-50 text-primary-700">
+      <p class="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1 rounded-full mb-4 bg-primary-50 text-primary-700">
         <i class="pi pi-envelope text-xs"></i>
         Email Verification
       </p>
@@ -14,7 +14,7 @@
     <div class="px-6 pb-8 pt-4">
       @if (!verified()) {
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-2">
             <label for="token" class="text-sm font-medium text-gray-700">Verification Token</label>
             <input pInputText id="token" formControlName="token" placeholder="Enter token" class="w-full" [class.ng-invalid]="form.get('token')?.invalid && form.get('token')?.touched" />
             @if (form.get('token')?.invalid && form.get('token')?.touched) {

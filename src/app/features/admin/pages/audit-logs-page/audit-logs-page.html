@@ -6,7 +6,7 @@
 
   <div class="bg-white rounded-xl border border-gray-200 p-5">
     <div class="flex flex-wrap items-end gap-4 mb-6">
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-gray-700">Action</label>
         <p-select
           [options]="actionOptions"
@@ -18,11 +18,11 @@
           styleClass="w-64"
         />
       </div>
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-2">
         <label for="dateFrom" class="text-sm font-medium text-gray-700">From</label>
         <p-datepicker [(ngModel)]="dateFrom" inputId="dateFrom" [showIcon]="true" styleClass="w-44" />
       </div>
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-2">
         <label for="dateTo" class="text-sm font-medium text-gray-700">To</label>
         <p-datepicker [(ngModel)]="dateTo" inputId="dateTo" [showIcon]="true" styleClass="w-44" />
       </div>

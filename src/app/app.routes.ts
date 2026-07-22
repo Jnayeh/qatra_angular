@@ -52,6 +52,11 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'donor/onboarding',
+    canActivate: [authGuard],
+    loadComponent: () => import('@/app/features/donor/pages/onboarding-page/onboarding-page').then((m) => m.OnboardingPageComponent),
+  },
+  {
     path: '',
     canActivate: [authGuard],
     loadComponent: () => import('@/app/layouts/donor-layout/donor-layout').then((m) => m.DonorLayoutComponent),
