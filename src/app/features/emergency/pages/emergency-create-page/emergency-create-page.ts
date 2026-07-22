@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
@@ -18,7 +17,6 @@ import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    Card,
     Button,
     InputText,
     Select,

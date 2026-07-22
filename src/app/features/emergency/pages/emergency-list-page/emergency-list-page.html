@@ -2,9 +2,11 @@
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
     <div>
       <h1 class="text-2xl font-bold text-gray-900">Emergencies</h1>
-      <p class="text-sm text-gray-500 mt-1">View and manage blood donation emergency requests.</p>
+      <p class="text-sm text-gray-500 mt-1">{{ store.totalElements() }} emergency request{{ store.totalElements() !== 1 ? 's' : '' }}</p>
     </div>
-    <p-button label="New Emergency" severity="primary" routerLink="/emergencies/create" icon="pi pi-plus"></p-button>
+    @if (!emergencyPrefix().startsWith('/donor')) {
+      <p-button label="New Emergency" severity="primary" [routerLink]="emergencyPrefix() + '/create'" icon="pi pi-plus"></p-button>
+    }
   </div>
 
   @if (store.isLoading()) {
@@ -12,23 +14,44 @@
   } @else if (store.emergencies().length === 0) {
     <app-empty-state icon="exclamation-triangle" title="No emergencies" message="There are no active emergencies at this time." />
   } @else {
-    <div class="grid gap-4">
+    <div class="grid gap-4 cols-1 md:cols-2 xl:cols-3">
       @for (e of store.emergencies(); track e.id) {
-        <p-card class="cursor-pointer hover:shadow-md transition-all" [routerLink]="['/emergencies', e.id]">
-          <ng-template pTemplate="content">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-4">
-                <i class="pi pi-exclamation-triangle text-red-500 text-3xl"></i>
-                <div>
-                  <p class="text-gray-900 font-semibold">Blood {{ e.bloodType }} ÔÇô {{ e.unitsNeeded }} units needed</p>
-                  <p class="text-sm text-gray-500">Center #{{ e.centerId }} ┬À Urgency: {{ e.urgency }}</p>
-                </div>
+        <div
+          class="bg-white rounded-2xl p-5 shadow-md cursor-pointer hover:shadow-lg transition-all border border-gray-100"
+          [routerLink]="[emergencyPrefix(), e.id]"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <i class="pi pi-exclamation-triangle text-red-500 text-3xl"></i>
+              <div>
+                <p class="text-gray-900 font-semibold">Blood {{ e.bloodType }} – {{ e.unitsNeeded }} units needed</p>
+                <p class="text-sm text-gray-500">Center #{{ e.centerId }} · Urgency: {{ e.urgency }}</p>
               </div>
-              <app-status-badge [status]="e.status" />
             </div>
-          </ng-template>
-        </p-card>
+            <app-status-badge [status]="e.status" />
+          </div>
+        </div>
       }
     </div>
+
+    @if (store.totalPages() > 1) {
+      <div class="flex items-center justify-center gap-2 pt-4">
+        <p-button
+          icon="pi pi-chevron-left"
+          [rounded]="true"
+          [text]="true"
+          [disabled]="store.currentPage() <= 1"
+          (onClick)="store.goToPage(store.currentPage() - 1)"
+        />
+        <span class="text-sm text-gray-500">Page {{ store.currentPage() }} of {{ store.totalPages() }}</span>
+        <p-button
+          icon="pi pi-chevron-right"
+          [rounded]="true"
+          [text]="true"
+          [disabled]="!store.hasMorePages()"
+          (onClick)="store.goToPage(store.currentPage() + 1)"
+        />
+      </div>
+    }
   }
 </div>

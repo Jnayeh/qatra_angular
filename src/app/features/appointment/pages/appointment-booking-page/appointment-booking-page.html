@@ -35,9 +35,11 @@
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <div class="lg:col-span-2 space-y-4">
       @if (step() === 1) {
-        <p-card>
-          <ng-template pTemplate="title">Select a Donation Center</ng-template>
-          <ng-template pTemplate="content">
+        <div class="bg-white rounded-xl border border-gray-200">
+          <div class="px-5 py-4 border-b border-gray-100">
+            <h3 class="text-lg font-semibold text-gray-900">Select a Donation Center</h3>
+          </div>
+          <div class="p-5">
             <div class="flex flex-col sm:flex-row gap-2 mb-4">
               <input pInputText [formControl]="searchControl" placeholder="Search by city..." class="flex-1" />
               <p-button label="Search" icon="pi pi-search" (onClick)="searchCenters()" />
@@ -70,15 +72,17 @@
                 }
               </div>
             }
-          </ng-template>
-        </p-card>
+          </div>
+        </div>
       }
 
       @if (step() === 2) {
-        <p-card>
-          <ng-template pTemplate="title">Select a Date</ng-template>
-          <ng-template pTemplate="subtitle">{{ selectedCenter()?.name }}</ng-template>
-          <ng-template pTemplate="content">
+        <div class="bg-white rounded-xl border border-gray-200">
+          <div class="px-5 py-4 border-b border-gray-100 space-y-1">
+            <h3 class="text-lg font-semibold text-gray-900">Select a Date</h3>
+            <p class="text-sm text-gray-500">{{ selectedCenter()?.name }}</p>
+          </div>
+          <div class="p-5">
             <div class="flex flex-col items-center gap-4">
               <p-datepicker
                 (onSelect)="onDateChange($event)"
@@ -90,15 +94,17 @@
                 <p-button label="Continue to Time Slots" icon="pi pi-arrow-right" iconPos="right" (onClick)="step.set(3)" />
               }
             </div>
-          </ng-template>
-        </p-card>
+          </div>
+        </div>
       }
 
       @if (step() === 3) {
-        <p-card>
-          <ng-template pTemplate="title">Select a Time Slot</ng-template>
-          <ng-template pTemplate="subtitle">{{ formatDate(selectedDate()!.toISOString().split('T')[0]) }}</ng-template>
-          <ng-template pTemplate="content">
+        <div class="bg-white rounded-xl border border-gray-200">
+          <div class="px-5 py-4 border-b border-gray-100 space-y-1">
+            <h3 class="text-lg font-semibold text-gray-900">Select a Time Slot</h3>
+            <p class="text-sm text-gray-500">{{ formatDate(selectedDate()!.toISOString().split('T')[0]) }}</p>
+          </div>
+          <div class="p-5">
             @if (centerStore.isLoading()) {
               <app-loading-spinner />
             } @else if (availableSlots().length === 0) {
@@ -120,14 +126,16 @@
                 }
               </div>
             }
-          </ng-template>
-        </p-card>
+          </div>
+        </div>
       }
 
       @if (step() === 4) {
-        <p-card>
-          <ng-template pTemplate="title">Confirm Your Booking</ng-template>
-          <ng-template pTemplate="content">
+        <div class="bg-white rounded-xl border border-gray-200">
+          <div class="px-5 py-4 border-b border-gray-100">
+            <h3 class="text-lg font-semibold text-gray-900">Confirm Your Booking</h3>
+          </div>
+          <div class="p-5">
             <dl class="space-y-3 text-sm">
               <div class="flex justify-between"><dt class="text-gray-500">Center</dt><dd class="font-medium text-gray-900">{{ selectedCenter()?.name }}</dd></div>
               <div class="flex justify-between"><dt class="text-gray-500">Date</dt><dd class="font-medium text-gray-900">{{ formatDate(selectedDate()!.toISOString().split('T')[0]) }}</dd></div>
@@ -149,23 +157,21 @@
                 class="flex-1"
               />
             </div>
-          </ng-template>
-        </p-card>
+          </div>
+        </div>
       }
     </div>
 
     <!-- Summary panel -->
     <div class="hidden lg:block">
-      <p-card styleClass="sticky top-24">
-        <ng-template pTemplate="title">Your Selection</ng-template>
-        <ng-template pTemplate="content">
-          <dl class="space-y-2 text-sm">
-            <div><dt class="text-gray-400">Center</dt><dd class="font-medium">{{ selectedCenter()?.name ?? 'ÔÇö' }}</dd></div>
-            <div><dt class="text-gray-400">Date</dt><dd class="font-medium">{{ selectedDate() ? formatDate(selectedDate()!.toISOString().split('T')[0]) : 'ÔÇö' }}</dd></div>
-            <div><dt class="text-gray-400">Time</dt><dd class="font-medium">{{ selectedSlot() ? formatTime(selectedSlot()!.startTime) + ' ÔÇô ' + formatTime(selectedSlot()!.endTime) : 'ÔÇö' }}</dd></div>
-          </dl>
-        </ng-template>
-      </p-card>
+      <div class="bg-white rounded-xl border border-gray-200 p-5 sticky top-24">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Your Selection</h3>
+        <dl class="space-y-2 text-sm">
+          <div><dt class="text-gray-400">Center</dt><dd class="font-medium">{{ selectedCenter()?.name ?? 'ÔÇö' }}</dd></div>
+          <div><dt class="text-gray-400">Date</dt><dd class="font-medium">{{ selectedDate() ? formatDate(selectedDate()!.toISOString().split('T')[0]) : 'ÔÇö' }}</dd></div>
+          <div><dt class="text-gray-400">Time</dt><dd class="font-medium">{{ selectedSlot() ? formatTime(selectedSlot()!.startTime) + ' ÔÇô ' + formatTime(selectedSlot()!.endTime) : 'ÔÇö' }}</dd></div>
+        </dl>
+      </div>
     </div>
   </div>
 </div>

@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
-import { InputText } from 'primeng/inputtext';
 import { InputNumber } from 'primeng/inputnumber';
 import { Select } from 'primeng/select';
 import { ToggleSwitch } from 'primeng/toggleswitch';
@@ -12,7 +10,7 @@ import { DonorStore } from '@/app/features/donor/donor.store';
 @Component({
   selector: 'app-notification-prefs-page',
   standalone: true,
-  imports: [ReactiveFormsModule, Card, Button, InputText, InputNumber, Select, ToggleSwitch],
+  imports: [ReactiveFormsModule, Button, InputNumber, Select, ToggleSwitch],
   templateUrl: './notification-prefs-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

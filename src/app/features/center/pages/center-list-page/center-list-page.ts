@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, OnInit, afterNextRender, signal, viewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Slider } from 'primeng/slider';
@@ -20,7 +19,6 @@ import { initMapLibre } from '@/app/shared/utils/map-init';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    Card,
     Button,
     InputText,
     Slider,
@@ -36,6 +34,9 @@ import { initMapLibre } from '@/app/shared/utils/map-init';
 export class CenterListPageComponent implements OnInit, OnDestroy {
   private readonly centerService = inject(CenterService);
   private readonly router = inject(Router);
+
+  protected readonly isDonor = () => this.router.url.startsWith('/donor');
+  protected readonly centerPrefix = () => this.isDonor() ? '/donor/centers' : '/centers'; // ponytail
 
   protected readonly viewMode = signal<'map' | 'list'>('map');
   protected readonly isLoading = signal(false);
@@ -104,27 +105,33 @@ export class CenterListPageComponent implements OnInit, OnDestroy {
       const popup = new maplibregl.Popup({ offset: 15 }).setHTML(
         `<div style="min-width:140px"><b>${c.name}</b><br/><span style="color:#6b7280;font-size:12px">${c.city}</span>` +
         `<br/><span style="color:#6b7280;font-size:12px">${c.status}</span>` +
-        `<a href="/centers/${c.id}" style="display:block;margin-top:4px;color:#cc0000;font-size:12px">View details</a></div>`,
+        `<a href="${this.router.url.startsWith('/donor') ? '/donor/centers' : '/centers'}/${c.id}" style="display:block;margin-top:4px;color:#cc0000;font-size:12px">View details</a></div>`, // ponytail
       );
       const marker = new maplibregl.Marker({ element: el })
         .setLngLat([c.longitude!, c.latitude!])
         .setPopup(popup)
         .addTo(this.map!);
-      el.addEventListener('click', () => this.router.navigate(['/centers', c.id]));
+      el.addEventListener('click', () => this.router.navigate([this.centerPrefix(), c.id]));
       this.markers.push(marker);
     }
   }
 
   private loadMapCenters(): void {
     this.isLoading.set(true);
-    this.centerService.getCenters({ page: 1, size: 1000 }).subscribe({
-      next: (res) => {
-        this.mapCenters.set(res.data);
-        this.isLoading.set(false);
-        afterNextRender(() => this.addMarkers());
-      },
-      error: () => this.isLoading.set(false),
-    });
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          this.centerService.getPublicCenters(pos.coords.latitude, pos.coords.longitude)
+            .subscribe({ next: (res) => { this.mapCenters.set(res.data); this.isLoading.set(false); afterNextRender(() => this.addMarkers()); }, error: () => this.isLoading.set(false) });
+        },
+        () => {
+          this.centerService.getPublicCenters().subscribe({ next: (res) => { this.mapCenters.set(res.data); this.isLoading.set(false); afterNextRender(() => this.addMarkers()); }, error: () => this.isLoading.set(false) });
+        },
+        { timeout: 5000, maximumAge: 600000 },
+      );
+    } else {
+      this.centerService.getPublicCenters().subscribe({ next: (res) => { this.mapCenters.set(res.data); this.isLoading.set(false); afterNextRender(() => this.addMarkers()); }, error: () => this.isLoading.set(false) });
+    }
   }
 
   protected loadListPage(page: number): void {

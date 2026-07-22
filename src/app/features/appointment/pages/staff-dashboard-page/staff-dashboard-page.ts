@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { RouterLink } from '@angular/router';
 import { StaffStore } from '@/app/features/appointment/staff.store';
@@ -9,7 +8,7 @@ import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner
 @Component({
   selector: 'app-staff-dashboard-page',
   standalone: true,
-  imports: [Card, Button, RouterLink, LoadingSpinnerComponent],
+  imports: [Button, RouterLink, LoadingSpinnerComponent],
   templateUrl: './staff-dashboard-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

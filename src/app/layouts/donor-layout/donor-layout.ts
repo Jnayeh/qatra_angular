@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Menu } from 'primeng/menu';
 import { Avatar } from 'primeng/avatar';
@@ -24,11 +24,9 @@ import { NotificationBellComponent } from '@/app/shared/components/notification-
 export class DonorLayoutComponent implements OnInit {
   readonly authStore = inject(AuthStore);
   private readonly donorStore = inject(DonorStore);
-  protected readonly mobileMenuOpen = signal(false);
 
   protected readonly showProfileBanner = computed(() => {
-    const profile = this.donorStore.profile();
-    return profile != null && !profile.profileComplete;
+    return this.donorStore.loadedOnce() && !this.donorStore.profileComplete();
   });
 
   ngOnInit(): void {
@@ -37,11 +35,11 @@ export class DonorLayoutComponent implements OnInit {
 
   protected readonly navLinks = [
     { path: '/donor/home', label: 'Home', icon: 'pi pi-home' },
-    { path: '/appointments/my-appointments', label: 'Appointments', icon: 'pi pi-calendar' },
-    { path: '/appointments/donation-history', label: 'History', icon: 'pi pi-history' },
-    { path: '/emergencies/list', label: 'Emergencies', icon: 'pi pi-bolt' },
+    { path: '/donor/my-appointments', label: 'Appointments', icon: 'pi pi-calendar' },
+    { path: '/donor/donation-history', label: 'History', icon: 'pi pi-history' },
+    { path: '/donor/emergencies', label: 'Emergencies', icon: 'pi pi-bolt' },
     { path: '/donor/impact', label: 'Impact', icon: 'pi pi-star' },
-    { path: '/centers/list', label: 'Centers', icon: 'pi pi-map-marker' },
+    { path: '/donor/centers', label: 'Centers', icon: 'pi pi-map-marker' },
   ];
 
   protected readonly menuItems = computed(() => [
@@ -68,10 +66,6 @@ export class DonorLayoutComponent implements OnInit {
       command: () => this.authStore.logout(),
     },
   ]);
-
-  protected toggleMobileMenu(): void {
-    this.mobileMenuOpen.update((v) => !v);
-  }
 
   protected getInitials(): string {
     const name = this.authStore.user()?.displayName ?? 'D';

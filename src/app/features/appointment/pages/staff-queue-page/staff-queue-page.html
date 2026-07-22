@@ -18,8 +18,7 @@
       <p-tabpanel value="0">
         <div class="space-y-3 mt-4">
           @for (item of filtered('CHECKED_IN'); track item.id) {
-            <p-card>
-              <ng-template pTemplate="content">
+            <div class="bg-white rounded-xl border border-gray-200 p-5">
                 <div class="flex items-center justify-between">
                   <div>
                     <p class="text-gray-900 font-medium">Donor #{{ item.donorId }}</p>
@@ -30,8 +29,7 @@
                     <p-button label="Screen" severity="info" (click)="goToScreening(item.id)" />
                   </div>
                 </div>
-              </ng-template>
-            </p-card>
+              </div>
           }
           @if (filtered('CHECKED_IN').length === 0) {
             <p class="text-gray-400 text-center py-4">No checked-in appointments</p>
@@ -41,8 +39,7 @@
       <p-tabpanel value="1">
         <div class="space-y-3 mt-4">
           @for (item of filtered('SCHEDULED', 'IN_SCREENING'); track item.id) {
-            <p-card>
-              <ng-template pTemplate="content">
+            <div class="bg-white rounded-xl border border-gray-200 p-5">
                 <div class="flex items-center justify-between">
                   <div>
                     <p class="text-gray-900 font-medium cursor-pointer hover:text-primary-500" (click)="viewDonorProfile(item.donorId)">Donor #{{ item.donorId }}</p>
@@ -54,8 +51,7 @@
                     <p-button label="No Show" severity="danger" [outlined]="true" (click)="markAsNoShow(item.id)" />
                   </div>
                 </div>
-              </ng-template>
-            </p-card>
+              </div>
           }
           @if (filtered('SCHEDULED', 'IN_SCREENING').length === 0) {
             <p class="text-gray-400 text-center py-4">No scheduled appointments</p>
@@ -65,8 +61,7 @@
       <p-tabpanel value="2">
         <div class="space-y-3 mt-4">
           @for (item of filtered('COMPLETED'); track item.id) {
-            <p-card styleClass="opacity-70">
-              <ng-template pTemplate="content">
+            <div class="bg-white rounded-xl border border-gray-200 p-5 opacity-70">
                 <div class="flex items-center justify-between">
                   <div>
                     <p class="text-gray-900 font-medium">Donor #{{ item.donorId }}</p>
@@ -75,8 +70,7 @@
                   </div>
                   <p-button label="Complete" severity="secondary" [outlined]="true" (click)="goToComplete(item.id)" />
                 </div>
-              </ng-template>
-            </p-card>
+              </div>
           }
           @if (filtered('COMPLETED').length === 0) {
             <p class="text-gray-400 text-center py-4">No completed appointments</p>

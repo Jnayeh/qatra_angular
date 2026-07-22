@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { Message } from 'primeng/message';
 import type { BloodType } from '@/app/shared/models/donor.model';
@@ -15,7 +14,7 @@ const ALL_BLOOD_TYPES: BloodType[] = [
 @Component({
   selector: 'app-blood-type-page',
   standalone: true,
-  imports: [Card, Button, RouterLink, Message],
+  imports: [Button, RouterLink, Message],
   templateUrl: './blood-type-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

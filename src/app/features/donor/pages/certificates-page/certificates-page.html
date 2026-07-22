@@ -14,7 +14,7 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     @for (cert of store.certificates(); track cert.donationDate) {
-      <p-card>
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
         <div class="flex items-start justify-between">
           <div>
             <p class="font-medium text-gray-900">{{ cert.centerName }}</p>
@@ -25,7 +25,7 @@
             <p-button icon="pi pi-download" severity="primary" variant="outlined" />
           </a>
         </div>
-      </p-card>
+      </div>
     }
   </div>
 </div>

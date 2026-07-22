@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
@@ -17,7 +16,6 @@ interface DonationRecord {
   selector: 'app-donation-history-page',
   standalone: true,
   imports: [
-    Card,
     Button,
     TableModule,
     LoadingSpinnerComponent,

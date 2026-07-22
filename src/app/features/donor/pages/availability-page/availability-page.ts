@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { DonorService } from '@/app/features/donor/donor.service';
 import { DonorStore } from '@/app/features/donor/donor.store';
@@ -7,7 +6,7 @@ import { DonorStore } from '@/app/features/donor/donor.store';
 @Component({
   selector: 'app-availability-page',
   standalone: true,
-  imports: [Card, Button],
+  imports: [Button],
   templateUrl: './availability-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

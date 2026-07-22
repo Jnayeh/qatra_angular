@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, OnDestroy, AfterViewInit, signal, computed, viewChild } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { Tag } from 'primeng/tag';
@@ -22,7 +21,7 @@ import { formatTime } from '@/app/shared/utils/date-utils';
 @Component({
   selector: 'app-notification-center-page',
   standalone: true,
-  imports: [DecimalPipe, FormsModule, Card, Button, Dialog, Tag, Textarea, ProgressSpinner, EmptyStateComponent, StatusBadgeComponent],
+  imports: [DecimalPipe, FormsModule, Button, Dialog, Tag, Textarea, ProgressSpinner, EmptyStateComponent, StatusBadgeComponent],
   templateUrl: './notification-center-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

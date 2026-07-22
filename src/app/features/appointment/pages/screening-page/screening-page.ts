@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { InputNumber } from 'primeng/inputnumber';
@@ -16,7 +15,6 @@ import { AppointmentService } from '@/app/features/appointment/appointment.servi
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    Card,
     Button,
     InputText,
     InputNumber,

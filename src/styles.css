@@ -15,7 +15,7 @@
   --color-primary-900: #5c0000;
 }
 
-@import "primeicons/primeicons.css" layer(primeng);
+@import "primeicons/primeicons.css";
 
 body {
   margin: 0;

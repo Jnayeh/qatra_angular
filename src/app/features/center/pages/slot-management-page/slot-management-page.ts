@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { DatePicker } from 'primeng/datepicker';
 import { Tag } from 'primeng/tag';
@@ -17,7 +16,7 @@ import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-s
 @Component({
   selector: 'app-slot-management-page',
   standalone: true,
-  imports: [FormsModule, Card, Button, DatePicker, Tag, Dialog, Textarea, LoadingSpinnerComponent, EmptyStateComponent],
+  imports: [FormsModule, Button, DatePicker, Tag, Dialog, Textarea, LoadingSpinnerComponent, EmptyStateComponent],
   templateUrl: './slot-management-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

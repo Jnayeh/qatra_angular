@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { ProgressSpinner } from 'primeng/progressspinner';
@@ -13,7 +12,6 @@ import { AppointmentService } from '@/app/features/appointment/appointment.servi
   standalone: true,
   imports: [
     FormsModule,
-    Card,
     Button,
     InputText,
     ProgressSpinner,

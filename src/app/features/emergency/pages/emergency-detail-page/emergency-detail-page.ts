@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { Textarea } from 'primeng/textarea';
@@ -13,7 +12,7 @@ import { EmergencyStore } from '@/app/features/emergency/emergency.store';
 @Component({
   selector: 'app-emergency-detail-page',
   standalone: true,
-  imports: [FormsModule, Card, Button, Dialog, Textarea, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [FormsModule, Button, Dialog, Textarea, LoadingSpinnerComponent, StatusBadgeComponent],
   templateUrl: './emergency-detail-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

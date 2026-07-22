@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
@@ -12,7 +11,7 @@ import { CenterService } from '@/app/features/center/center.service';
 @Component({
   selector: 'app-center-reports-page',
   standalone: true,
-  imports: [FormsModule, Card, Button, Select, DatePicker, TableModule, ProgressSpinner],
+  imports: [FormsModule, Button, Select, DatePicker, TableModule, ProgressSpinner],
   templateUrl: './center-reports-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

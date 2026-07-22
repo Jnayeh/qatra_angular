@@ -7,10 +7,12 @@
   @if (store.isLoading()) {
     <app-loading-spinner />
   } @else if (store.selectedCenter(); as c) {
-    <p-card>
-      <ng-template pTemplate="title">{{ c.name }}</ng-template>
-      <ng-template pTemplate="subtitle">Center ID: {{ c.id }}</ng-template>
-      <ng-template pTemplate="content">
+    <div class="bg-white rounded-xl border border-gray-200">
+      <div class="px-5 py-4 border-b border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-900">{{ c.name }}</h3>
+        <p class="text-sm text-gray-500 mt-0.5">Center ID: {{ c.id }}</p>
+      </div>
+      <div class="p-5">
         <div class="space-y-4">
           <div class="flex items-center justify-between">
             <span class="text-gray-500">Status</span>
@@ -34,7 +36,7 @@
             <p-button label="Back" severity="secondary" styleClass="p-button-outlined" routerLink="/centers"></p-button>
           </div>
         </div>
-      </ng-template>
-    </p-card>
+      </div>
+    </div>
   }
 </div>

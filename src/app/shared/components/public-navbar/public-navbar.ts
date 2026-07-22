@@ -1,13 +1,45 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Button } from 'primeng/button';
+import { Menu } from 'primeng/menu';
+import type { MenuItem } from 'primeng/api';
+import { AuthStore } from '@/app/core/auth/auth.store';
 
 @Component({
   selector: 'app-public-navbar',
   standalone: true,
-  imports: [RouterLink, Button],
+  imports: [RouterLink, Button, Menu],
   templateUrl: './public-navbar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PublicNavbarComponent {
+  protected readonly authStore = inject(AuthStore);
+
+  private readonly roleRouteMap: Record<string, string> = {
+    DONOR: '/donor/home',
+    CENTER_STAFF: '/centers/dashboard',
+    CENTER_ADMIN: '/centers/dashboard',
+    SUPER_ADMIN: '/admin/dashboard',
+  };
+
+  protected readonly menuItems = computed<MenuItem[]>(() => [
+    {
+      label: this.authStore.user()?.displayName ?? 'User',
+      items: this.authStore.userRoles().map((role) => ({
+        label: role === 'DONOR' ? 'Donor Home'
+             : role === 'SUPER_ADMIN' ? 'Admin Dashboard'
+             : 'Center Dashboard',
+        icon: role === 'DONOR' ? 'pi pi-heart'
+            : role === 'SUPER_ADMIN' ? 'pi pi-shield'
+            : 'pi pi-building',
+        routerLink: this.roleRouteMap[role],
+      })),
+    },
+    { separator: true },
+    {
+      label: 'Logout',
+      icon: 'pi pi-sign-out',
+      command: () => this.authStore.logout(),
+    },
+  ]);
 }

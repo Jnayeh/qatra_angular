@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
@@ -14,7 +13,6 @@ import { AdminService } from '@/app/features/admin/admin.service';
   standalone: true,
   imports: [
     FormsModule,
-    Card,
     Select,
     Button,
     DatePicker,

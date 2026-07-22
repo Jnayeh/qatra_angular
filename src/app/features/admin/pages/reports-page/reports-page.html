@@ -4,36 +4,36 @@
     <p class="text-sm text-gray-500 mt-1">Generate and export system reports for analysis.</p>
   </div>
 
-  <p-card>
-    <ng-template pTemplate="content">
-      <div class="flex flex-wrap items-center gap-4">
-        <div class="flex flex-col gap-1.5">
-          <label for="fromDp" class="text-sm font-medium text-gray-700">From</label>
-          <p-datepicker [(ngModel)]="dateFrom" inputId="fromDp" class="w-36" />
-        </div>
-        <div class="flex flex-col gap-1.5">
-          <label for="toDp" class="text-sm font-medium text-gray-700">To</label>
-          <p-datepicker [(ngModel)]="dateTo" inputId="toDp" class="w-36" />
-        </div>
-        <div class="flex flex-col gap-1.5">
-          <label for="reportType" class="text-sm font-medium text-gray-700">Report Type</label>
-          <p-select [(ngModel)]="reportType" inputId="reportType" [options]="reportTypeOptions" optionValue="value" optionLabel="label" class="w-44" />
-        </div>
-        <p-button severity="primary" (click)="generate()" [disabled]="generating()" class="mt-5">
-          @if (generating()) {
-            <p-progressSpinner styleClass="w-5 h-5" strokeWidth="4" />
-          } @else {
-            Generate
-          }
-        </p-button>
+  <div class="bg-white rounded-xl border border-gray-200 p-5">
+    <div class="flex flex-wrap items-center gap-4">
+      <div class="flex flex-col gap-1.5">
+        <label for="fromDp" class="text-sm font-medium text-gray-700">From</label>
+        <p-datepicker [(ngModel)]="dateFrom" inputId="fromDp" class="w-36" />
       </div>
-    </ng-template>
-  </p-card>
+      <div class="flex flex-col gap-1.5">
+        <label for="toDp" class="text-sm font-medium text-gray-700">To</label>
+        <p-datepicker [(ngModel)]="dateTo" inputId="toDp" class="w-36" />
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label for="reportType" class="text-sm font-medium text-gray-700">Report Type</label>
+        <p-select [(ngModel)]="reportType" inputId="reportType" [options]="reportTypeOptions" optionValue="value" optionLabel="label" class="w-44" />
+      </div>
+      <p-button severity="primary" (click)="generate()" [disabled]="generating()" class="mt-5">
+        @if (generating()) {
+          <p-progressSpinner styleClass="w-5 h-5" strokeWidth="4" />
+        } @else {
+          Generate
+        }
+      </p-button>
+    </div>
+  </div>
 
   @if (reportData().length > 0) {
-    <p-card styleClass="overflow-hidden">
-      <ng-template pTemplate="title">Results</ng-template>
-      <ng-template pTemplate="content">
+    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div class="px-5 py-4 border-b border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-900">Results</h3>
+      </div>
+      <div class="p-5">
         <p-table [value]="reportData()" [tableStyle]="{'min-width': '50rem'}">
           <ng-template pTemplate="header">
             <tr>
@@ -50,12 +50,12 @@
             </tr>
           </ng-template>
         </p-table>
-      </ng-template>
-      <ng-template pTemplate="footer">
+      </div>
+      <div class="px-5 py-3 border-t border-gray-100">
         <div class="flex justify-end">
           <p-button label="Export CSV" icon="pi pi-download" severity="secondary" styleClass="p-button-outlined" (click)="exportCsv()" />
         </div>
-      </ng-template>
-    </p-card>
+      </div>
+    </div>
   }
 </div>

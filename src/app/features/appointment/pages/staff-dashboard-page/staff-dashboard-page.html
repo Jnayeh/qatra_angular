@@ -8,58 +8,50 @@
     <app-loading-spinner />
   } @else {
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      <p-card styleClass="!shadow-sm">
-        <ng-template pTemplate="content">
-          <div class="text-center py-2">
-            <p class="text-3xl font-bold text-primary-500">{{ todayDonations() }}</p>
-            <p class="text-sm text-gray-500 mt-1">Today's Donations</p>
-          </div>
-        </ng-template>
-      </p-card>
+      <div class="bg-white rounded-xl border border-gray-200 p-5 !shadow-sm">
+        <div class="text-center py-2">
+          <p class="text-3xl font-bold text-primary-500">{{ todayDonations() }}</p>
+          <p class="text-sm text-gray-500 mt-1">Today's Donations</p>
+        </div>
+      </div>
 
-      <p-card styleClass="!shadow-sm">
-        <ng-template pTemplate="content">
-          <div class="text-center py-2">
-            <p class="text-3xl font-bold text-primary-500">{{ mlCollectedToday() }} ml</p>
-            <p class="text-sm text-gray-500 mt-1">ML Collected Today</p>
-          </div>
-        </ng-template>
-      </p-card>
+      <div class="bg-white rounded-xl border border-gray-200 p-5 !shadow-sm">
+        <div class="text-center py-2">
+          <p class="text-3xl font-bold text-primary-500">{{ mlCollectedToday() }} ml</p>
+          <p class="text-sm text-gray-500 mt-1">ML Collected Today</p>
+        </div>
+      </div>
 
-      <p-card styleClass="!shadow-sm">
-        <ng-template pTemplate="content">
-          <div class="text-center py-2">
-            <p class="text-3xl font-bold text-primary-500">{{ activeEmergencies() }}</p>
-            <p class="text-sm text-gray-500 mt-1">Active Emergencies</p>
-          </div>
-        </ng-template>
-      </p-card>
+      <div class="bg-white rounded-xl border border-gray-200 p-5 !shadow-sm">
+        <div class="text-center py-2">
+          <p class="text-3xl font-bold text-primary-500">{{ activeEmergencies() }}</p>
+          <p class="text-sm text-gray-500 mt-1">Active Emergencies</p>
+        </div>
+      </div>
 
-      <p-card styleClass="!shadow-sm">
-        <ng-template pTemplate="content">
-          <div class="text-center py-2">
-            @if (nextAppointment(); as next) {
-              <p class="text-lg font-bold text-primary-500">{{ next.slotTime }}</p>
-              <p class="text-sm text-gray-500 mt-1">Next: {{ next.donor }}</p>
-            } @else {
-              <p class="text-lg font-bold text-gray-400">None</p>
-              <p class="text-sm text-gray-500 mt-1">No upcoming</p>
-            }
-          </div>
-        </ng-template>
-      </p-card>
+      <div class="bg-white rounded-xl border border-gray-200 p-5 !shadow-sm">
+        <div class="text-center py-2">
+          @if (nextAppointment(); as next) {
+            <p class="text-lg font-bold text-primary-500">{{ next.slotTime }}</p>
+            <p class="text-sm text-gray-500 mt-1">Next: {{ next.donor }}</p>
+          } @else {
+            <p class="text-lg font-bold text-gray-400">None</p>
+            <p class="text-sm text-gray-500 mt-1">No upcoming</p>
+          }
+        </div>
+      </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-2">
-        <p-card styleClass="!shadow-sm">
-          <ng-template pTemplate="title">
+        <div class="bg-white rounded-xl border border-gray-200 !shadow-sm">
+          <div class="px-5 py-4 border-b border-gray-100">
             <div class="flex items-center justify-between">
               <span class="text-gray-900 font-semibold">Today's Queue</span>
               <span class="text-sm text-gray-500">{{ queue().length }} appointments</span>
             </div>
-          </ng-template>
-          <ng-template pTemplate="content">
+          </div>
+          <div class="p-5">
             @if (queue().length === 0) {
               <p class="text-center text-gray-400 py-8">No appointments in queue today.</p>
             } @else {
@@ -77,23 +69,23 @@
                 }
               </div>
             }
-          </ng-template>
-        </p-card>
+          </div>
+        </div>
       </div>
 
       <div>
-        <p-card styleClass="!shadow-sm">
-          <ng-template pTemplate="title">
+        <div class="bg-white rounded-xl border border-gray-200 !shadow-sm">
+          <div class="px-5 py-4 border-b border-gray-100">
             <span class="text-gray-900 font-semibold">Quick Actions</span>
-          </ng-template>
-          <ng-template pTemplate="content">
+          </div>
+          <div class="p-5">
             <div class="flex flex-col gap-3">
               <a pButton label="Check-In Donor" icon="pi pi-qrcode" class="p-button-outlined w-full" routerLink="/appointments/checkin"></a>
               <a pButton label="Create Emergency" icon="pi pi-exclamation-triangle" class="p-button-outlined w-full" routerLink="/emergencies/create"></a>
               <a pButton label="View Emergencies" icon="pi pi-list" class="p-button-outlined w-full" routerLink="/emergencies/list"></a>
             </div>
-          </ng-template>
-        </p-card>
+          </div>
+        </div>
       </div>
     </div>
   }

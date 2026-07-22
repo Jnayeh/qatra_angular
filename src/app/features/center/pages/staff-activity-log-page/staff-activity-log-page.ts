@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { AdminService } from '@/app/features/admin/admin.service';
@@ -11,7 +10,7 @@ import type { AuditLogEntry } from '@/app/shared/models/analytics.model';
 @Component({
   selector: 'app-staff-activity-log-page',
   standalone: true,
-  imports: [Card, Button, TableModule, LoadingSpinnerComponent, EmptyStateComponent],
+  imports: [Button, TableModule, LoadingSpinnerComponent, EmptyStateComponent],
   templateUrl: './staff-activity-log-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

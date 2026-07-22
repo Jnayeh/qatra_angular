@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
@@ -12,7 +11,7 @@ import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-s
 @Component({
   selector: 'app-staff-management-page',
   standalone: true,
-  imports: [FormsModule, Card, Button, Dialog, InputText, LoadingSpinnerComponent, EmptyStateComponent],
+  imports: [FormsModule, Button, Dialog, InputText, LoadingSpinnerComponent, EmptyStateComponent],
   templateUrl: './staff-management-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -70,7 +70,6 @@ export class SidebarComponent {
     { label: 'Health Restrictions', path: '/admin/health-restrictions', icon: 'pi-shield', roles: ['SUPER_ADMIN'] },
     { label: 'System Health', path: '/admin/system-health', icon: 'pi-heart', roles: ['SUPER_ADMIN'] },
     { label: 'Reports', path: '/admin/reports', icon: 'chart', roles: ['SUPER_ADMIN'] },
-    { label: 'Forecasts', path: '/admin/forecasts', icon: 'pi-chart-line', roles: ['SUPER_ADMIN'] },
     { label: 'Audit Logs', path: '/admin/audit-logs', icon: 'history', roles: ['SUPER_ADMIN'] },
     { label: 'Notifications', path: '/notifications/list', icon: 'notifications', roles: ['DONOR', 'CENTER_STAFF', 'CENTER_ADMIN', 'SUPER_ADMIN'] },
     { label: 'Contact Us', path: '/contact', icon: 'envelope' },

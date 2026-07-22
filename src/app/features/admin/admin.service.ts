@@ -3,8 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import type { Observable } from 'rxjs';
 import type { ApiResponse } from '@/app/shared/models/api-response.model';
 import type { UserDetail } from '@/app/shared/models/user.model';
-import type { AuditLogEntry, MetricsResponse, CenterMetrics, DemandForecast, SystemHealth } from '@/app/shared/models/analytics.model';
-import type { DataDeletionRequest, SystemConfigEntry, FeatureFlag } from '@/app/shared/models/config.model';
+import type { AuditLogEntry, MetricsResponse, CenterMetrics, SystemHealth } from '@/app/shared/models/analytics.model';
+import type { DataDeletionRequest, SystemConfigEntry } from '@/app/shared/models/config.model';
 import { ApiService } from '@/app/core/http/api.service';
 import { environment } from '@/environments/environment';
 
@@ -81,18 +81,6 @@ export class AdminService {
 
   getConfig(): Observable<ApiResponse<SystemConfigEntry[]>> {
     return this.api.get('/api/v1/admin/config');
-  }
-
-  getFeatureFlags(): Observable<ApiResponse<FeatureFlag[]>> {
-    return this.api.get('/api/v1/admin/feature-flags');
-  }
-
-  updateFeatureFlag(featureName: string, enabled: boolean, rules: Record<string, unknown>): Observable<ApiResponse<FeatureFlag>> {
-    return this.api.put(`/api/v1/admin/feature-flags/${featureName}`, { enabled, rules });
-  }
-
-  getForecasts(): Observable<ApiResponse<DemandForecast[]>> {
-    return this.api.get('/api/v1/analytics/forecasts');
   }
 
   getReports(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<Record<string, unknown>>> {

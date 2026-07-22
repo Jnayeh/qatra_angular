@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { DatePicker } from 'primeng/datepicker';
 import { RadioButton } from 'primeng/radiobutton';
@@ -17,7 +16,6 @@ import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-s
   standalone: true,
   imports: [
     FormsModule,
-    Card,
     Button,
     DatePicker,
     RadioButton,
@@ -81,7 +79,7 @@ export class SlotBookingPageComponent implements OnInit {
     }).subscribe({
       next: () => {
         this.isBooking.set(false);
-        this.router.navigate(['/appointments', 'my-appointments']);
+        this.router.navigate([this.router.url.startsWith('/donor') ? '/donor/my-appointments' : '/appointments/my-appointments']); // ponytail
       },
       error: (err: any) => {
         this.isBooking.set(false);

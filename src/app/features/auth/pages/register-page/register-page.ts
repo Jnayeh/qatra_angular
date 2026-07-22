@@ -58,8 +58,8 @@ export class RegisterPageComponent {
 
     this.authService.register(payload).subscribe({
       next: () => {
-        this.router.navigate(['/auth/login'], {
-          queryParams: { registered: true },
+        this.router.navigate(['/donor/home'], {
+          queryParams: { first_time: true },
         });
       },
       error: (err) => {

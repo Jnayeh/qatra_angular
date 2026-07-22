@@ -1,7 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import maplibregl from 'maplibre-gl';
-import { CenterStore } from '@/app/features/center/center.store';
+import { CenterService } from '@/app/features/center/center.service';
+import type { CenterSummary } from '@/app/shared/models/center.model';
 import { PublicNavbarComponent } from '@/app/shared/components/public-navbar/public-navbar';
 import { initMapLibre } from '@/app/shared/utils/map-init';
 
@@ -54,8 +55,8 @@ interface CampaignItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LandingPageComponent implements OnInit, AfterViewInit {
-  private readonly centerStore = inject(CenterStore);
-  protected readonly centers = this.centerStore.centers;
+  private readonly centerService = inject(CenterService);
+  protected readonly centers = signal<CenterSummary[]>([]);
 
   /* ── Group 1: Intro ── */
   protected readonly stats = signal<StatItem[]>([
@@ -111,7 +112,20 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
   private map: maplibregl.Map | null = null;
 
   ngOnInit(): void {
-    this.centerStore.loadCenters({ page: 0, size: 10, status: 'ACTIVE' });
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          this.centerService.getPublicCenters(pos.coords.latitude, pos.coords.longitude)
+            .subscribe((res) => this.centers.set(res.data));
+        },
+        () => {
+          this.centerService.getPublicCenters().subscribe((res) => this.centers.set(res.data));
+        },
+        { timeout: 5000, maximumAge: 600000 },
+      );
+    } else {
+      this.centerService.getPublicCenters().subscribe((res) => this.centers.set(res.data));
+    }
   }
 
   ngAfterViewInit(): void {

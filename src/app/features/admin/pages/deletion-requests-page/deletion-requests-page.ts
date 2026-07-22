@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge';
 import type { DataDeletionRequest } from '@/app/shared/models/config.model';
@@ -8,26 +7,24 @@ import { AdminService } from '@/app/features/admin/admin.service';
 @Component({
   selector: 'app-deletion-requests-page',
   standalone: true,
-  imports: [Card, Button, StatusBadgeComponent],
+  imports: [Button, StatusBadgeComponent],
   template: `
     <div class="space-y-6">
       <h1 class="text-2xl font-bold text-white">Deletion Requests</h1>
       @for (req of requests(); track req.id) {
-        <p-card class="bg-surface-card">
-          <ng-template pTemplate="content">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-white">User #{{ req.userId }}</p>
-                <app-status-badge [status]="req.status" />
-                <p class="text-xs text-gray-500">{{ req.requestedAt }}</p>
-              </div>
-              <div class="flex gap-2">
-                <p-button label="Approve" severity="primary" (click)="process(req.id, true)" />
-                <p-button label="Reject" severity="danger" styleClass="p-button-outlined" (click)="process(req.id, false)" />
-              </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-white">User #{{ req.userId }}</p>
+              <app-status-badge [status]="req.status" />
+              <p class="text-xs text-gray-500">{{ req.requestedAt }}</p>
             </div>
-          </ng-template>
-        </p-card>
+            <div class="flex gap-2">
+              <p-button label="Approve" severity="primary" (click)="process(req.id, true)" />
+              <p-button label="Reject" severity="danger" styleClass="p-button-outlined" (click)="process(req.id, false)" />
+            </div>
+          </div>
+        </div>
       }
     </div>
   `,

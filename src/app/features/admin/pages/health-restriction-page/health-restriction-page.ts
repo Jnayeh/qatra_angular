@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
@@ -10,7 +9,7 @@ import type { RestrictedUser } from '@/app/shared/models/analytics.model';
 @Component({
   selector: 'app-health-restriction-page',
   standalone: true,
-  imports: [FormsModule, Card, Button, Dialog, InputText],
+  imports: [FormsModule, Button, Dialog, InputText],
   templateUrl: './health-restriction-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

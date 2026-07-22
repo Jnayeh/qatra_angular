@@ -4,7 +4,7 @@
     <p class="text-sm text-gray-500 mt-1">Manage your personal information and account settings.</p>
   </div>
 
-  <p-card>
+  <div class="bg-white rounded-xl border border-gray-200 p-5">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
       <div class="flex flex-col gap-1.5">
         <label for="displayName" class="text-sm font-medium text-gray-700">Display Name</label>
@@ -27,11 +27,13 @@
         <p-button severity="secondary" variant="outlined" routerLink="/donor/home">Cancel</p-button>
       </div>
     </form>
-  </p-card>
+  </div>
 
-  <p-card>
-    <ng-template pTemplate="title"><span class="text-gray-900 font-semibold">Change Password</span></ng-template>
-    <ng-template pTemplate="content">
+  <div class="bg-white rounded-xl border border-gray-200">
+    <div class="px-5 py-4 border-b border-gray-100">
+      <h3 class="text-lg font-semibold text-gray-900">Change Password</h3>
+    </div>
+    <div class="p-5">
       <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="flex flex-col gap-4">
         <div class="flex flex-col gap-1.5">
           <label for="currentPassword" class="text-sm font-medium text-gray-700">Current Password</label>
@@ -62,14 +64,16 @@
           <p-button severity="primary" type="submit" [disabled]="passwordForm.invalid || isChangingPassword()" label="Change Password" />
         </div>
       </form>
-    </ng-template>
-  </p-card>
+    </div>
+  </div>
 
-  <p-card styleClass="border border-red-200">
-    <ng-template pTemplate="title"><span class="text-red-600">Danger Zone</span></ng-template>
-    <ng-template pTemplate="content">
+  <div class="bg-white rounded-xl border border-gray-200 border border-red-200">
+    <div class="px-5 py-4 border-b border-gray-100">
+      <h3 class="text-lg font-semibold text-red-600">Danger Zone</h3>
+    </div>
+    <div class="p-5">
       <p class="text-sm text-gray-500 mb-4">Request permanent deletion of your account and all associated data (GDPR).</p>
       <p-button severity="danger" (click)="requestDeletion()">Request Account Deletion</p-button>
-    </ng-template>
-  </p-card>
+    </div>
+  </div>
 </div>

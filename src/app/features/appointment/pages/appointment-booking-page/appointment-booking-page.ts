@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Button } from 'primeng/button';
-import { Card } from 'primeng/card';
 import { DatePicker } from 'primeng/datepicker';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
@@ -23,7 +22,6 @@ import { formatDate, formatTime } from '@/app/shared/utils/date-utils';
     FormsModule,
     ReactiveFormsModule,
     Button,
-    Card,
     DatePicker,
     Dialog,
     InputText,
@@ -120,7 +118,7 @@ export class AppointmentBookingPageComponent implements OnInit {
 
   protected closeQrDialog(): void {
     this.showQrDialog.set(false);
-    this.router.navigate(['/appointments/my-appointments']);
+    this.router.navigate([this.router.url.startsWith('/donor') ? '/donor/my-appointments' : '/appointments/my-appointments']); // ponytail
   }
 
   protected availableSlots(): Slot[] {

@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { Card } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { RouterLink } from '@angular/router';
@@ -10,7 +9,7 @@ import { AdminService } from '@/app/features/admin/admin.service';
 @Component({
   selector: 'app-user-management-page',
   standalone: true,
-  imports: [Card, TableModule, Button, RouterLink, StatusBadgeComponent],
+  imports: [TableModule, Button, RouterLink, StatusBadgeComponent],
   templateUrl: './user-management-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

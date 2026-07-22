@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { Button } from 'primeng/button';
-import { Card } from 'primeng/card';
 import type { Appointment } from '@/app/shared/models/appointment.model';
 import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge';
 import { formatDate, formatTime } from '@/app/shared/utils/date-utils';
@@ -8,7 +7,7 @@ import { formatDate, formatTime } from '@/app/shared/utils/date-utils';
 @Component({
   selector: 'app-appointment-card',
   standalone: true,
-  imports: [Card, Button, StatusBadgeComponent],
+  imports: [Button, StatusBadgeComponent],
   templateUrl: './appointment-card.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

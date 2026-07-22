@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
@@ -51,7 +50,7 @@ const AUDIT_ACTIONS = [
 @Component({
   selector: 'app-audit-logs-page',
   standalone: true,
-  imports: [DatePipe, FormsModule, Card, TableModule, Button, Select, DatePicker, LoadingSpinnerComponent, EmptyStateComponent],
+  imports: [DatePipe, FormsModule, TableModule, Button, Select, DatePicker, LoadingSpinnerComponent, EmptyStateComponent],
   templateUrl: './audit-logs-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

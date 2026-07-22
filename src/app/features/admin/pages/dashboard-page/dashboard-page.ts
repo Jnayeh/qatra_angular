@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { Chart, registerables } from 'chart.js';
 import { AdminService } from '@/app/features/admin/admin.service';
@@ -13,7 +12,7 @@ Chart.register(...registerables);
 @Component({
   selector: 'app-dashboard-page',
   standalone: true,
-  imports: [Card, Button, RouterLink, DecimalPipe],
+  imports: [Button, RouterLink, DecimalPipe],
   templateUrl: './dashboard-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

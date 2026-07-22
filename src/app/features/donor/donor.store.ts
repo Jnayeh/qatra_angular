@@ -12,6 +12,7 @@ interface DonorState {
   impact: ImpactSummary | null;
   certificates: Certificate[];
   isLoading: boolean;
+  loadedOnce: boolean;
   error: string | null;
 }
 
@@ -22,6 +23,7 @@ const initialState: DonorState = {
   impact: null,
   certificates: [],
   isLoading: false,
+  loadedOnce: false,
   error: null,
 };
 
@@ -40,7 +42,7 @@ export const DonorStore = signalStore(
         switchMap(() =>
           donorService.getMyProfile().pipe(
             tap({
-              next: (res) => patchState(store, { profile: res.data, isLoading: false }),
+              next: (res) => patchState(store, { profile: res.data, isLoading: false, loadedOnce: true }),
               error: () => patchState(store, { isLoading: false, error: 'Failed to load profile' }),
             }),
           ),

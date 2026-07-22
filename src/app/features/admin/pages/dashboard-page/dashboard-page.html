@@ -65,9 +65,11 @@
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
     @defer (on viewport) {
-      <p-card styleClass="shadow-sm">
-        <ng-template pTemplate="title">Metrics Overview</ng-template>
-        <ng-template pTemplate="content">
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+        <div class="px-5 py-4 border-b border-gray-100">
+          <h3 class="text-lg font-semibold text-gray-900">Metrics Overview</h3>
+        </div>
+        <div class="p-5">
           @if (metrics().length) {
             <canvas #barChart></canvas>
           } @else {
@@ -76,12 +78,14 @@
               <p class="text-sm">No data available</p>
             </div>
           }
-        </ng-template>
-      </p-card>
+        </div>
+      </div>
 
-      <p-card styleClass="shadow-sm">
-        <ng-template pTemplate="title">Appointment Completion Rate</ng-template>
-        <ng-template pTemplate="content">
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+        <div class="px-5 py-4 border-b border-gray-100">
+          <h3 class="text-lg font-semibold text-gray-900">Appointment Completion Rate</h3>
+        </div>
+        <div class="p-5">
           <canvas #pieChart></canvas>
           <div class="text-center mt-4">
             @let completed = getMetric('completed_appointments');
@@ -89,8 +93,8 @@
             <p class="text-3xl font-bold text-gray-900">{{ total && total.total > 0 ? ((completed?.total ?? 0) * 100 / total.total | number:'1.0-0') : 0 }}%</p>
             <p class="text-sm text-gray-500">Appointment completion rate</p>
           </div>
-        </ng-template>
-      </p-card>
+        </div>
+      </div>
     } @placeholder {
       <div class="col-span-2 flex items-center justify-center py-12 bg-gray-50 rounded-2xl">
         <p class="text-sm text-gray-400">Loading charts...</p>

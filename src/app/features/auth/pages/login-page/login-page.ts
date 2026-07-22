@@ -105,16 +105,26 @@ export class LoginPageComponent {
       next: () => {
         if (this.authStore.error()) return;
 
-        if (this.authStore.isSuperAdmin()) {
-          this.router.navigate(['/admin/dashboard']);
-        } else if (this.authStore.isCenterAdmin()) {
-          this.router.navigate(['/centers/list']);
-        } else if (this.authStore.isCenterStaff()) {
-          this.router.navigate(['/appointments/staff-queue']);
-        } else if (this.authStore.isDonor()) {
-          this.router.navigate(['/donor/home']);
-        } else {
-          this.router.navigate(['/']);
+        switch (this.intendedRole) {
+          case 'ADMIN':
+            this.router.navigate(['/admin/dashboard']);
+            break;
+          case 'CENTER':
+            this.router.navigate(['/centers/dashboard']);
+            break;
+          case 'DONOR':
+            this.router.navigate(['/donor/home']);
+            break;
+          default:
+            if (this.authStore.isSuperAdmin()) {
+              this.router.navigate(['/admin/dashboard']);
+            } else if (this.authStore.isCenterAdmin()) {
+              this.router.navigate(['/centers/list']);
+            } else if (this.authStore.isCenterStaff()) {
+              this.router.navigate(['/appointments/staff-queue']);
+            } else {
+              this.router.navigate(['/donor/home']);
+            }
         }
       },
       error: () => {

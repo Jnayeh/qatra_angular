@@ -15,9 +15,11 @@
   @if (isLoadingAppointment()) {
     <app-loading-spinner />
   } @else if (appointment()) {
-    <p-card>
-      <ng-template pTemplate="title">Current Appointment</ng-template>
-      <ng-template pTemplate="content">
+    <div class="bg-white rounded-xl border border-gray-200">
+      <div class="px-5 py-4 border-b border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-900">Current Appointment</h3>
+      </div>
+      <div class="p-5">
         <dl class="space-y-2 text-sm">
           <div class="flex justify-between">
             <dt class="text-gray-500">Appointment ID</dt>
@@ -32,12 +34,14 @@
             <dd class="font-medium text-gray-900">{{ appointment()!.appointmentType }}</dd>
           </div>
         </dl>
-      </ng-template>
-    </p-card>
+      </div>
+    </div>
 
-    <p-card>
-      <ng-template pTemplate="title">Select New Date</ng-template>
-      <ng-template pTemplate="content">
+    <div class="bg-white rounded-xl border border-gray-200">
+      <div class="px-5 py-4 border-b border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-900">Select New Date</h3>
+      </div>
+      <div class="p-5">
         <div class="flex justify-center">
           <p-datepicker
             [formControl]="dateControl"
@@ -47,13 +51,15 @@
             inline
           />
         </div>
-      </ng-template>
-    </p-card>
+      </div>
+    </div>
 
     @if (selectedDate()) {
-      <p-card>
-        <ng-template pTemplate="title">Available Time Slots</ng-template>
-        <ng-template pTemplate="content">
+      <div class="bg-white rounded-xl border border-gray-200">
+        <div class="px-5 py-4 border-b border-gray-100">
+          <h3 class="text-lg font-semibold text-gray-900">Available Time Slots</h3>
+        </div>
+        <div class="p-5">
           @if (isLoadingSlots()) {
             <app-loading-spinner />
           } @else if (slots().length === 0) {
@@ -85,14 +91,16 @@
               }
             </div>
           }
-        </ng-template>
-      </p-card>
+        </div>
+      </div>
     }
 
     @if (selectedSlot()) {
-      <p-card>
-        <ng-template pTemplate="title">Confirm Reschedule</ng-template>
-        <ng-template pTemplate="content">
+      <div class="bg-white rounded-xl border border-gray-200">
+        <div class="px-5 py-4 border-b border-gray-100">
+          <h3 class="text-lg font-semibold text-gray-900">Confirm Reschedule</h3>
+        </div>
+        <div class="p-5">
           <dl class="space-y-3 text-sm">
             <div class="flex justify-between">
               <dt class="text-gray-500">New Date</dt>
@@ -121,8 +129,8 @@
               class="flex-1"
             />
           </div>
-        </ng-template>
-      </p-card>
+        </div>
+      </div>
     }
   } @else if (!errorMessage()) {
     <app-empty-state

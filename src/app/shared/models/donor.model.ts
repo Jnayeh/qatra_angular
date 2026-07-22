@@ -54,6 +54,7 @@ export interface DonorProfile {
   latitude: number | null;
   longitude: number | null;
   city: string | null;
+  country: string | null;
   eligibleFromDate: string | null;
   notificationPreferences: NotificationPreferences;
   createdAt: string;

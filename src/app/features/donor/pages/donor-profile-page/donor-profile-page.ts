@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
@@ -14,7 +13,7 @@ import { AuthStore } from '@/app/core/auth/auth.store';
 @Component({
   selector: 'app-donor-profile-page',
   standalone: true,
-  imports: [ReactiveFormsModule, Card, Button, InputText, Password, Message, RouterLink],
+  imports: [ReactiveFormsModule, Button, InputText, Password, Message, RouterLink],
   templateUrl: './donor-profile-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

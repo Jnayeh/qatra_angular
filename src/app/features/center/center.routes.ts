@@ -8,6 +8,11 @@ export default [
     loadComponent: () => import('@/app/features/center/pages/center-list-page/center-list-page').then((m) => m.CenterListPageComponent),
   },
   {
+    path: 'dashboard',
+    canActivate: [roleGuard('CENTER_ADMIN', 'CENTER_STAFF')],
+    loadComponent: () => import('@/app/features/center/pages/center-dashboard-page/center-dashboard-page').then((m) => m.CenterDashboardPageComponent),
+  },
+  {
     path: ':id',
     loadComponent: () => import('@/app/features/center/pages/center-detail-page/center-detail-page').then((m) => m.CenterDetailPageComponent),
   },

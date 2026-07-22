@@ -17,24 +17,22 @@
       <h2 class="text-lg font-semibold text-gray-900 mb-3">Services</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         @for (service of health()!.services; track service.name) {
-          <p-card styleClass="!mb-0">
+          <div class="bg-white rounded-xl border border-gray-200 p-5 !mb-0">
             <div class="flex items-center justify-between">
               <span class="text-gray-900 font-medium">{{ service.name }}</span>
               <app-status-badge [status]="service.status" />
             </div>
-          </p-card>
+          </div>
         }
       </div>
     </div>
 
-    <p-card>
-      <ng-template pTemplate="header">
-        <div class="px-6 pt-5">
-          <h2 class="text-lg font-semibold text-gray-900">Error Rates</h2>
-          <p class="text-sm text-gray-500 mt-1">Total errors: {{ health()!.errorRates.total }}</p>
-        </div>
-      </ng-template>
-      <ng-template pTemplate="content">
+    <div class="bg-white rounded-xl border border-gray-200">
+      <div class="px-5 py-4 border-b border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-900">Error Rates</h3>
+        <p class="text-sm text-gray-500 mt-1">Total errors: {{ health()!.errorRates.total }}</p>
+      </div>
+      <div class="p-5">
         @if (errorRateEntries().length > 0) {
           <p-table [value]="errorRateEntries()" [tableStyle]="{ 'min-width': '40rem' }">
             <ng-template pTemplate="header">
@@ -53,16 +51,14 @@
         } @else {
           <p class="text-sm text-gray-500">No errors recorded.</p>
         }
-      </ng-template>
-    </p-card>
+      </div>
+    </div>
 
-    <p-card>
-      <ng-template pTemplate="header">
-        <div class="px-6 pt-5">
-          <h2 class="text-lg font-semibold text-gray-900">API Usage</h2>
-        </div>
-      </ng-template>
-      <ng-template pTemplate="content">
+    <div class="bg-white rounded-xl border border-gray-200">
+      <div class="px-5 py-4 border-b border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-900">API Usage</h3>
+      </div>
+      <div class="p-5">
         <div class="mb-4">
           <span class="text-sm text-gray-500">Requests per minute</span>
           <p class="text-2xl font-bold text-gray-900">{{ health()!.apiUsage.requestsPerMinute }}</p>
@@ -75,16 +71,14 @@
             }
           </ul>
         }
-      </ng-template>
-    </p-card>
+      </div>
+    </div>
 
-    <p-card>
-      <ng-template pTemplate="header">
-        <div class="px-6 pt-5">
-          <h2 class="text-lg font-semibold text-gray-900">Database Connection Pool</h2>
-        </div>
-      </ng-template>
-      <ng-template pTemplate="content">
+    <div class="bg-white rounded-xl border border-gray-200">
+      <div class="px-5 py-4 border-b border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-900">Database Connection Pool</h3>
+      </div>
+      <div class="p-5">
         <div class="space-y-4">
           <div>
             <div class="flex justify-between text-sm mb-1">
@@ -111,7 +105,7 @@
             </div>
           </div>
         </div>
-      </ng-template>
-    </p-card>
+      </div>
+    </div>
   }
 </div>

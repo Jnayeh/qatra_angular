@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, effect, inject, OnDestroy, OnInit, viewChild } from '@angular/core';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import maplibregl from 'maplibre-gl';
 import { AuthStore } from '@/app/core/auth/auth.store';
 import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
@@ -12,7 +11,7 @@ import { initMapLibre } from '@/app/shared/utils/map-init';
 @Component({
   selector: 'app-center-detail-page',
   standalone: true,
-  imports: [Card, Button, RouterLink, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [Button, RouterLink, LoadingSpinnerComponent, StatusBadgeComponent],
   templateUrl: './center-detail-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -20,9 +19,13 @@ export class CenterDetailPageComponent implements OnInit, OnDestroy {
   protected readonly store = inject(CenterStore);
   protected readonly authStore = inject(AuthStore);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   protected readonly mapEl = viewChild<ElementRef<HTMLDivElement>>('mapDetail');
   private map: maplibregl.Map | null = null;
   private marker: maplibregl.Marker | null = null;
+
+  protected readonly isDonor = () => this.router.url.startsWith('/donor');
+  protected readonly centerPrefix = () => this.isDonor() ? '/donor/centers' : '/centers'; // ponytail
 
   protected readonly days = [
     { key: 'monday', label: 'Monday' },

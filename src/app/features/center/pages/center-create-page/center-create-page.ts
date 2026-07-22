@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
@@ -8,13 +7,14 @@ import { Router, RouterLink } from '@angular/router';
 import { CenterService } from '@/app/features/center/center.service';
 import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
 import type { FacilityType } from '@/app/shared/models/center.model';
+import maplibregl from 'maplibre-gl';
+import { initMapLibre } from '@/app/shared/utils/map-init';
 
 @Component({
   selector: 'app-center-create-page',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    Card,
     Button,
     InputText,
     Select,
@@ -24,11 +24,18 @@ import type { FacilityType } from '@/app/shared/models/center.model';
   templateUrl: './center-create-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CenterCreatePageComponent {
+export class CenterCreatePageComponent implements AfterViewInit {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly centerService = inject(CenterService);
 
+  private map: maplibregl.Map | null = null;
+  private marker: maplibregl.Marker | null = null;
+
+  readonly mapContainer = viewChild.required<ElementRef<HTMLElement>>('mapContainer');
+
+  protected readonly selectedLat = signal<number | null>(null);
+  protected readonly selectedLng = signal<number | null>(null);
   protected readonly submitting = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
 
@@ -53,6 +60,36 @@ export class CenterCreatePageComponent {
     slotPeriod: [30],
   });
 
+  ngAfterViewInit(): void {
+    initMapLibre();
+    this.map = new maplibregl.Map({
+      container: this.mapContainer().nativeElement,
+      style: 'https://demotiles.maplibre.org/style.json',
+      center: [10.1815, 36.8065],
+      zoom: 6,
+    });
+
+    this.map.on('click', (e) => {
+      this.selectedLat.set(e.lngLat.lat);
+      this.selectedLng.set(e.lngLat.lng);
+      this.syncMarker();
+    });
+  }
+
+  private syncMarker(): void {
+    const lat = this.selectedLat();
+    const lng = this.selectedLng();
+    if (lat === null || lng === null || !this.map) return;
+
+    this.marker?.remove();
+    const el = document.createElement('div');
+    el.className = 'w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white text-sm shadow-lg border-2 border-white';
+    el.innerHTML = '<i class="pi pi-map-marker text-sm"></i>';
+    this.marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
+      .setLngLat([lng, lat])
+      .addTo(this.map);
+  }
+
   protected submit(): void {
     if (this.form.invalid) return;
     this.submitting.set(true);
@@ -70,8 +107,8 @@ export class CenterCreatePageComponent {
       totalCapacity: formValue.totalCapacity ?? 0,
       maxRegular: formValue.maxRegular ?? 0,
       slotPeriod: formValue.slotPeriod ?? 30,
-      latitude: 0,
-      longitude: 0,
+      latitude: this.selectedLat() ?? 0,
+      longitude: this.selectedLng() ?? 0,
     };
 
     this.centerService.createCenter(payload).subscribe({

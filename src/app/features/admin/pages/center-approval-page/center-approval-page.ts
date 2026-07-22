@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge';
 import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-state';
@@ -9,7 +8,7 @@ import { CenterService } from '@/app/features/center/center.service';
 @Component({
   selector: 'app-center-approval-page',
   standalone: true,
-  imports: [Card, Button, StatusBadgeComponent, EmptyStateComponent],
+  imports: [Button, StatusBadgeComponent, EmptyStateComponent],
   templateUrl: './center-approval-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

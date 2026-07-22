@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
 import { Select } from 'primeng/select';
 import { RouterLink } from '@angular/router';
 import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
@@ -14,7 +13,6 @@ import { formatDate } from '@/app/shared/utils/date-utils';
   standalone: true,
   imports: [
     FormsModule,
-    Card,
     Select,
     RouterLink,
     LoadingSpinnerComponent,

@@ -16,6 +16,13 @@ export class CenterService {
     return this.api.getPage('/api/v1/centers', params);
   }
 
+  getPublicCenters(lat?: number, lng?: number): Observable<ApiResponse<CenterSummary[]>> {
+    const params: Record<string, string | number | boolean | undefined> = {};
+    if (lat != null) params['lat'] = lat;
+    if (lng != null) params['lng'] = lng;
+    return this.api.get('/api/v1/centers/public', params);
+  }
+
   getCenter(id: number): Observable<ApiResponse<CenterDetail>> {
     return this.api.get(`/api/v1/centers/${id}`);
   }

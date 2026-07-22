@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, afterNextRender, viewChild } from '@angular/core';
-import { Card } from 'primeng/card';
 import { StaffStore } from '@/app/features/appointment/staff.store';
 import { AdminService } from '@/app/features/admin/admin.service';
 import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
@@ -8,7 +7,7 @@ import type { CenterMetrics, DayCount } from '@/app/shared/models/analytics.mode
 @Component({
   selector: 'app-staff-center-analytics-page',
   standalone: true,
-  imports: [Card, LoadingSpinnerComponent],
+  imports: [LoadingSpinnerComponent],
   templateUrl: './staff-center-analytics-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

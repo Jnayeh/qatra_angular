@@ -5,33 +5,33 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <p-card styleClass="text-center">
-      <ng-template pTemplate="content">
-        <i class="pi pi-heart text-5xl text-primary-500 mb-4 block"></i>
-        <p class="text-4xl font-bold text-gray-900">{{ store.impact()?.totalDonations ?? 0 }}</p>
-        <p class="text-sm text-gray-500 mt-2">Total Donations</p>
-      </ng-template>
-    </p-card>
+    <div class="bg-white rounded-xl border border-gray-200 p-5 text-center">
+      <i class="pi pi-heart text-5xl text-primary-500 mb-4 block"></i>
+      <p class="text-4xl font-bold text-gray-900">{{ store.impact()?.totalDonations ?? 0 }}</p>
+      <p class="text-sm text-gray-500 mt-2">Total Donations</p>
+    </div>
 
-    <p-card styleClass="text-center">
-      <ng-template pTemplate="content">
-        <i class="pi pi-star-fill text-5xl text-yellow-500 mb-4 block"></i>
-        <p class="text-4xl font-bold text-gray-900">{{ store.reliabilityScore() }}</p>
-        <p class="text-sm text-gray-500 mt-2">Reliability Score</p>
-      </ng-template>
-    </p-card>
+    <div class="bg-white rounded-xl border border-gray-200 p-5 text-center">
+      <i class="pi pi-star-fill text-5xl text-yellow-500 mb-4 block"></i>
+      <p class="text-4xl font-bold text-gray-900">{{ store.reliabilityScore() }}</p>
+      <p class="text-sm text-gray-500 mt-2">Reliability Score</p>
+    </div>
   </div>
 
   @defer (on viewport) {
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <p-card>
-        <ng-template pTemplate="title">Donations by Type</ng-template>
-        <ng-template pTemplate="content"><canvas #donutChart></canvas></ng-template>
-      </p-card>
-      <p-card>
-        <ng-template pTemplate="title">Monthly Donations</ng-template>
-        <ng-template pTemplate="content"><canvas #barChart></canvas></ng-template>
-      </p-card>
+      <div class="bg-white rounded-xl border border-gray-200">
+        <div class="px-5 py-4 border-b border-gray-100">
+          <h3 class="text-lg font-semibold text-gray-900">Donations by Type</h3>
+        </div>
+        <div class="p-5"><canvas #donutChart></canvas></div>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200">
+        <div class="px-5 py-4 border-b border-gray-100">
+          <h3 class="text-lg font-semibold text-gray-900">Monthly Donations</h3>
+        </div>
+        <div class="p-5"><canvas #barChart></canvas></div>
+      </div>
     </div>
   } @placeholder {
     <div class="flex items-center justify-center py-12 bg-gray-50 rounded-2xl">
@@ -40,9 +40,11 @@
   }
 
   @if (store.impact()?.milestones?.length) {
-    <p-card>
-      <ng-template pTemplate="title">Milestones</ng-template>
-      <ng-template pTemplate="content">
+    <div class="bg-white rounded-xl border border-gray-200">
+      <div class="px-5 py-4 border-b border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-900">Milestones</h3>
+      </div>
+      <div class="p-5">
         <div class="space-y-3">
           @for (m of store.impact()!.milestones; track m) {
             <div class="flex items-center gap-3">
@@ -51,7 +53,7 @@
             </div>
           }
         </div>
-      </ng-template>
-    </p-card>
+      </div>
+    </div>
   }
 </div>

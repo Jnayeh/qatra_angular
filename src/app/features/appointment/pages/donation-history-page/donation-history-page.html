@@ -9,8 +9,8 @@
   } @else if (donations().length === 0) {
     <app-empty-state icon="history" title="No donations yet" message="Your donation history will appear here." />
   } @else {
-    <p-card styleClass="overflow-hidden">
-      <ng-template pTemplate="content">
+    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div class="p-5">
         <p-table [value]="donations()" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [showCurrentPageReport]="true">
           <ng-template pTemplate="header">
             <tr>
@@ -33,7 +33,7 @@
             </tr>
           </ng-template>
         </p-table>
-      </ng-template>
-    </p-card>
+      </div>
+    </div>
   }
 </div>

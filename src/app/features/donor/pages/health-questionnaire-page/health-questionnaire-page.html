@@ -4,7 +4,7 @@
     <p class="text-sm text-gray-500 mt-1">Complete your health screening before booking a donation appointment.</p>
   </div>
 
-  <p-card>
+  <div class="bg-white rounded-xl border border-gray-200 p-5">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
       <div class="flex items-center justify-between">
         <span class="text-sm font-medium text-gray-700">Have a chronic illness?</span>
@@ -61,5 +61,5 @@
         <p-button severity="secondary" variant="outlined" routerLink="/donor/home">Cancel</p-button>
       </div>
     </form>
-  </p-card>
+  </div>
 </div>

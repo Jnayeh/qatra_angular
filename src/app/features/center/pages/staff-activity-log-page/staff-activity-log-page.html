@@ -13,8 +13,8 @@
       message="There are no audit log entries for this center yet."
     />
   } @else {
-    <p-card>
-      <ng-template pTemplate="content">
+    <div class="bg-white rounded-xl border border-gray-200">
+      <div class="p-5">
         <p-table [value]="logs()" [tableStyle]="{ 'min-width': '50rem' }">
           <ng-template pTemplate="header">
             <tr>
@@ -33,8 +33,8 @@
             </tr>
           </ng-template>
         </p-table>
-      </ng-template>
-      <ng-template pTemplate="footer">
+      </div>
+      <div class="px-5 py-3 border-t border-gray-100">
         <div class="flex items-center justify-between">
           <p-button
             icon="pi pi-chevron-left"
@@ -52,7 +52,7 @@
             (click)="nextPage()"
           />
         </div>
-      </ng-template>
-    </p-card>
+      </div>
+    </div>
   }
 </div>

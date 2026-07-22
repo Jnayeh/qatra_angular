@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Card } from 'primeng/card';
 import { Chart, registerables } from 'chart.js';
 import { AdminService } from '@/app/features/admin/admin.service';
 import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
@@ -11,7 +10,7 @@ Chart.register(...registerables);
 @Component({
   selector: 'app-center-analytics-page',
   standalone: true,
-  imports: [Card, LoadingSpinnerComponent],
+  imports: [LoadingSpinnerComponent],
   templateUrl: './center-analytics-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -18,23 +18,25 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error) => {
-      if (error.status === 401 && !req.url.includes('/auth/refresh')) {
-        const refreshToken = authStore.refreshToken() ?? localStorage.getItem('refreshToken');
-        if (refreshToken) {
-          return authService.refreshToken(refreshToken).pipe(
-            switchMap((res) => {
-              const data = res.data;
-              authStore.refreshTokens(data.token, data.refreshToken);
-              const retryReq = req.clone({
-                setHeaders: { Authorization: `Bearer ${data.token}` },
-              });
-              return next(retryReq);
-            }),
-            catchError(() => {
-              authStore.clearAuth();
-              return throwError(() => error);
-            }),
-          );
+      if ((error.status === 401 || error.status === 403) && !req.url.includes('/auth/refresh') && !req.url.includes('/auth/login')) {
+        if (error.status === 401) {
+          const refreshToken = authStore.refreshToken() ?? localStorage.getItem('refreshToken');
+          if (refreshToken) {
+            return authService.refreshToken(refreshToken).pipe(
+              switchMap((res) => {
+                const data = res.data;
+                authStore.refreshTokens(data.token, data.refreshToken);
+                const retryReq = req.clone({
+                  setHeaders: { Authorization: `Bearer ${data.token}` },
+                });
+                return next(retryReq);
+              }),
+              catchError(() => {
+                authStore.clearAuth();
+                return throwError(() => error);
+              }),
+            );
+          }
         }
         authStore.clearAuth();
       }

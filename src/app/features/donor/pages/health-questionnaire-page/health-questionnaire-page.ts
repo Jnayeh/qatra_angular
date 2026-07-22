@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
@@ -13,7 +12,7 @@ import { DonorStore } from '@/app/features/donor/donor.store';
 @Component({
   selector: 'app-health-questionnaire-page',
   standalone: true,
-  imports: [ReactiveFormsModule, Card, Button, InputText, Textarea, ToggleSwitch, Divider, Message, RouterLink],
+  imports: [ReactiveFormsModule, Button, InputText, Textarea, ToggleSwitch, Divider, Message, RouterLink],
   templateUrl: './health-questionnaire-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
-import { Card } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
 import { EmptyStateComponent } from '@/app/shared/components/empty-state/empty-state';
@@ -10,7 +9,7 @@ import type { SystemHealth } from '@/app/shared/models/analytics.model';
 @Component({
   selector: 'app-system-health-page',
   standalone: true,
-  imports: [Card, TableModule, LoadingSpinnerComponent, EmptyStateComponent, StatusBadgeComponent],
+  imports: [TableModule, LoadingSpinnerComponent, EmptyStateComponent, StatusBadgeComponent],
   templateUrl: './system-health-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

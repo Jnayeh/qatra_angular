@@ -52,16 +52,6 @@ export interface RestrictedUser {
   restrictionReason: string | null;
 }
 
-export interface DemandForecast {
-  id: number;
-  bloodType: string;
-  region: string;
-  forecastedUnits: number;
-  forecastDate: string;
-  validUntil: string;
-  basedOnEmergencyCount: number;
-}
-
 export interface SystemHealth {
   services: { name: string; status: string; details?: string }[];
   errorRates: { total: number; byEndpoint: Record<string, number> };

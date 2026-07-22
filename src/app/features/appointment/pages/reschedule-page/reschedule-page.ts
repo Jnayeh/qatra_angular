@@ -3,7 +3,6 @@ import { DatePipe } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Button } from 'primeng/button';
-import { Card } from 'primeng/card';
 import { DatePicker } from 'primeng/datepicker';
 import { Message } from 'primeng/message';
 import { AppointmentService } from '@/app/features/appointment/appointment.service';
@@ -21,7 +20,6 @@ import type { Slot } from '@/app/shared/models/center.model';
     FormsModule,
     ReactiveFormsModule,
     Button,
-    Card,
     DatePicker,
     Message,
     LoadingSpinnerComponent,
@@ -51,10 +49,14 @@ export class ReschedulePageComponent implements OnInit {
   protected readonly formatTime = formatTime;
   protected readonly minDate = new Date();
 
+  private myAppointmentsPath(): string { // ponytail
+    return this.router.url.startsWith('/donor') ? '/donor/my-appointments' : '/appointments/my-appointments';
+  }
+
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (!id) {
-      this.router.navigate(['/appointments/my-appointments']);
+      this.router.navigate([this.myAppointmentsPath()]);
       return;
     }
 
@@ -112,7 +114,7 @@ export class ReschedulePageComponent implements OnInit {
       next: () => {
         this.isRescheduling.set(false);
         this.successMessage.set('Appointment rescheduled successfully!');
-        setTimeout(() => this.router.navigate(['/appointments/my-appointments']), 1500);
+        setTimeout(() => this.router.navigate([this.myAppointmentsPath()]), 1500);
       },
       error: (err: { friendlyMessage?: string }) => {
         this.isRescheduling.set(false);
@@ -122,6 +124,6 @@ export class ReschedulePageComponent implements OnInit {
   }
 
   protected goBack(): void {
-    this.router.navigate(['/appointments/my-appointments']);
+    this.router.navigate([this.myAppointmentsPath()]);
   }
 }

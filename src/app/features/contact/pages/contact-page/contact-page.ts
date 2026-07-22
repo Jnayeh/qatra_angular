@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
@@ -11,7 +10,7 @@ import { Message } from 'primeng/message';
 @Component({
   selector: 'app-contact-page',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, Card, Button, InputText, Textarea, Select, Message],
+  imports: [ReactiveFormsModule, RouterLink, Button, InputText, Textarea, Select, Message],
   templateUrl: './contact-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

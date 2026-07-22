@@ -105,24 +105,27 @@
       @if (step() === 3) {
         <div class="p-6 sm:p-8">
           <h2 class="text-xl font-bold text-gray-900 mb-1">Your Location</h2>
-          <p class="text-sm text-gray-500 mb-6">We'll use this to find donation centers near you.</p>
+          <p class="text-sm text-gray-500 mb-6">We'll use this to find donation centers near you. Click on the map to set your location.</p>
           <form [formGroup]="locationForm" class="flex flex-col gap-4">
-            <div class="flex flex-col gap-1.5">
-              <label class="text-sm font-medium text-gray-700">City</label>
-              <input type="text" formControlName="city" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. Tunis" />
-            </div>
-            <div class="flex flex-col gap-1.5">
-              <label class="text-sm font-medium text-gray-700">Country</label>
-              <input type="text" formControlName="country" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
+            <div class="bg-gray-100 rounded-xl overflow-hidden border border-gray-200">
+              <div #mapContainer class="w-full h-56"></div>
+              <div class="p-3 flex items-center gap-2 text-sm bg-white border-t border-gray-200">
+                <i class="pi pi-map-marker text-primary-500"></i>
+                @if (selectedLat() !== null && selectedLng() !== null) {
+                  <span class="text-gray-700 font-medium">{{ selectedLat()!.toFixed(4) }}, {{ selectedLng()!.toFixed(4) }}</span>
+                } @else {
+                  <span class="text-gray-400">Click on the map to select a location</span>
+                }
+              </div>
             </div>
             <div class="grid grid-cols-2 gap-3">
               <div class="flex flex-col gap-1.5">
-                <label class="text-sm font-medium text-gray-700">Latitude</label>
-                <input type="number" formControlName="latitude" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" step="any" />
+                <label class="text-sm font-medium text-gray-700">City</label>
+                <input type="text" formControlName="city" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. Tunis" />
               </div>
               <div class="flex flex-col gap-1.5">
-                <label class="text-sm font-medium text-gray-700">Longitude</label>
-                <input type="number" formControlName="longitude" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" step="any" />
+                <label class="text-sm font-medium text-gray-700">Country</label>
+                <input type="text" formControlName="country" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
               </div>
             </div>
           </form>

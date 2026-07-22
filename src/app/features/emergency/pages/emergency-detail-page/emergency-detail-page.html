@@ -11,38 +11,32 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <p-card>
-        <ng-template pTemplate="content">
-          <div class="space-y-3">
-            <div class="flex justify-between"><span class="text-gray-500">Blood Type</span><span class="text-gray-900 font-bold">{{ e.bloodType }}</span></div>
-            <div class="flex justify-between"><span class="text-gray-500">Units Needed</span><span class="text-gray-900 font-medium">{{ e.unitsNeeded }}</span></div>
-            <div class="flex justify-between"><span class="text-gray-500">Urgency</span><app-status-badge [status]="e.urgency" /></div>
-            <div class="flex justify-between"><span class="text-gray-500">Center</span><span class="text-gray-900 font-medium">#{{ e.centerId }}</span></div>
-          </div>
-        </ng-template>
-      </p-card>
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="space-y-3">
+          <div class="flex justify-between"><span class="text-gray-500">Blood Type</span><span class="text-gray-900 font-bold">{{ e.bloodType }}</span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Units Needed</span><span class="text-gray-900 font-medium">{{ e.unitsNeeded }}</span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Urgency</span><app-status-badge [status]="e.urgency" /></div>
+          <div class="flex justify-between"><span class="text-gray-500">Center</span><span class="text-gray-900 font-medium">#{{ e.centerId }}</span></div>
+        </div>
+      </div>
 
-      <p-card>
-        <ng-template pTemplate="content">
-          <div class="space-y-3">
-            <div class="flex justify-between"><span class="text-gray-500">Status</span><app-status-badge [status]="e.status" /></div>
-            <div class="flex justify-between"><span class="text-gray-500">Match Radius</span><span class="text-gray-900 font-medium">{{ e.matchRadius }} km</span></div>
-            <div class="flex justify-between"><span class="text-gray-500">Escalation Level</span><span class="text-gray-900 font-medium">{{ e.escalationLevel }}</span></div>
-            <div class="flex justify-between"><span class="text-gray-500">Expires At</span><span class="text-gray-900 font-medium">{{ e.expiresAt }}</span></div>
-          </div>
-        </ng-template>
-      </p-card>
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="space-y-3">
+          <div class="flex justify-between"><span class="text-gray-500">Status</span><app-status-badge [status]="e.status" /></div>
+          <div class="flex justify-between"><span class="text-gray-500">Match Radius</span><span class="text-gray-900 font-medium">{{ e.matchRadius }} km</span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Escalation Level</span><span class="text-gray-900 font-medium">{{ e.escalationLevel }}</span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Expires At</span><span class="text-gray-900 font-medium">{{ e.expiresAt }}</span></div>
+        </div>
+      </div>
     </div>
 
     @if (authStore.isDonor() && e.status === 'OPEN') {
-      <p-card styleClass="border border-primary-200">
-        <ng-template pTemplate="content">
-          <div class="flex gap-4">
-            <p-button label="I'm Willing" severity="primary" icon="pi pi-check" class="flex-1" [loading]="isResponding()" [disabled]="isResponding()" (onClick)="accept()"></p-button>
-            <p-button label="Decline" severity="danger" styleClass="p-button-outlined" icon="pi pi-times" class="flex-1" [loading]="isResponding()" [disabled]="isResponding()" (onClick)="openDeclineDialog()"></p-button>
-          </div>
-        </ng-template>
-      </p-card>
+      <div class="bg-white rounded-xl border border-primary-200 p-5">
+        <div class="flex gap-4">
+          <p-button label="I'm Willing" severity="primary" icon="pi pi-check" class="flex-1" [loading]="isResponding()" [disabled]="isResponding()" (onClick)="accept()"></p-button>
+          <p-button label="Decline" severity="danger" styleClass="p-button-outlined" icon="pi pi-times" class="flex-1" [loading]="isResponding()" [disabled]="isResponding()" (onClick)="openDeclineDialog()"></p-button>
+        </div>
+      </div>
     }
   }
 </div>

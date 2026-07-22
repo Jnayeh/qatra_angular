@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { Divider } from 'primeng/divider';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -10,7 +9,7 @@ import { CenterStore } from '@/app/features/center/center.store';
 @Component({
   selector: 'app-center-manage-page',
   standalone: true,
-  imports: [Card, Button, Divider, RouterLink, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [Button, Divider, RouterLink, LoadingSpinnerComponent, StatusBadgeComponent],
   templateUrl: './center-manage-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

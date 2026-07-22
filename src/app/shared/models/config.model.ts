@@ -15,8 +15,4 @@ export interface SystemConfigEntry {
   description: string;
 }
 
-export interface FeatureFlag {
-  featureName: string;
-  enabled: boolean;
-  rules: Record<string, unknown>;
-}
+

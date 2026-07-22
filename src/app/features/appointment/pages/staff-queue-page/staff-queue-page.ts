@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { Tabs, TabList, Tab, TabPanel } from 'primeng/tabs';
 import { LoadingSpinnerComponent } from '@/app/shared/components/loading-spinner/loading-spinner';
@@ -13,7 +12,6 @@ import type { Appointment } from '@/app/shared/models/appointment.model';
   selector: 'app-staff-queue-page',
   standalone: true,
   imports: [
-    Card,
     Button,
     Tabs,
     TabList,

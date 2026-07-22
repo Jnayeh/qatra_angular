@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge';
@@ -9,7 +8,7 @@ import { AdminService } from '@/app/features/admin/admin.service';
 @Component({
   selector: 'app-user-detail-page',
   standalone: true,
-  imports: [Card, Button, RouterLink, StatusBadgeComponent],
+  imports: [Button, RouterLink, StatusBadgeComponent],
   template: `
     <div class="max-w-2xl mx-auto space-y-6">
       @if (user(); as u) {
@@ -18,16 +17,14 @@ import { AdminService } from '@/app/features/admin/admin.service';
           <app-status-badge [status]="u.status" />
         </div>
 
-        <p-card class="bg-surface-card">
-          <ng-template pTemplate="content">
-            <div class="space-y-3">
-              <div class="flex justify-between"><span class="text-gray-400">Email</span><span class="text-white">{{ u.email }}</span></div>
-              <div class="flex justify-between"><span class="text-gray-400">Roles</span><span class="text-white">{{ u.roles.join(', ') }}</span></div>
-              <div class="flex justify-between"><span class="text-gray-400">Email Verified</span><i class="pi" [class.pi-check-circle]="u.emailVerified" [class.pi-times-circle]="!u.emailVerified" [class.text-green-400]="u.emailVerified" [class.text-gray-600]="!u.emailVerified"></i></div>
-              <div class="flex justify-between"><span class="text-gray-400">Created</span><span class="text-white">{{ u.createdAt }}</span></div>
-            </div>
-          </ng-template>
-        </p-card>
+        <div class="bg-white rounded-xl border border-gray-200 p-5">
+          <div class="space-y-3">
+            <div class="flex justify-between"><span class="text-gray-400">Email</span><span class="text-white">{{ u.email }}</span></div>
+            <div class="flex justify-between"><span class="text-gray-400">Roles</span><span class="text-white">{{ u.roles.join(', ') }}</span></div>
+            <div class="flex justify-between"><span class="text-gray-400">Email Verified</span><i class="pi" [class.pi-check-circle]="u.emailVerified" [class.pi-times-circle]="!u.emailVerified" [class.text-green-400]="u.emailVerified" [class.text-gray-600]="!u.emailVerified"></i></div>
+            <div class="flex justify-between"><span class="text-gray-400">Created</span><span class="text-white">{{ u.createdAt }}</span></div>
+          </div>
+        </div>
       }
       <a pButton label="Back to Users" severity="secondary" styleClass="p-button-outlined" routerLink="/admin/users"></a>
     </div>

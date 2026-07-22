@@ -6,73 +6,71 @@
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <div class="lg:col-span-2 space-y-4">
-      <p-card styleClass="!shadow-sm">
-        <ng-template pTemplate="content">
-          <div class="mb-4">
-            <label class="text-sm font-medium text-gray-700 mb-1 block">Select Date</label>
-            <p-datepicker
-              [(ngModel)]="selectedDate"
-              (onSelect)="onDateChange($event)"
-              dateFormat="yy-mm-dd"
-              styleClass="w-full"
-              placeholder="Pick a date"
-              [minDate]="minDate"
-            />
-          </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+        <div class="mb-4">
+          <label class="text-sm font-medium text-gray-700 mb-1 block">Select Date</label>
+          <p-datepicker
+            [(ngModel)]="selectedDate"
+            (onSelect)="onDateChange($event)"
+            dateFormat="yy-mm-dd"
+            styleClass="w-full"
+            placeholder="Pick a date"
+            [minDate]="minDate"
+          />
+        </div>
 
-          @if (selectedDate()) {
-            @if (store.isLoading()) {
-              <app-loading-spinner />
-            } @else if (store.slots().length === 0) {
-              <app-empty-state icon="calendar-times" title="No available slots" message="No slots available for this date. Try another day." />
-            } @else {
-              <div class="space-y-2">
-                @for (slot of store.slots(); track slot.id) {
-                  <button
-                    type="button"
-                    class="w-full flex items-center justify-between p-3 rounded-xl border text-left transition-all"
-                    [class.border-green-500]="selectedSlotId() === slot.id"
-                    [class.bg-green-50]="selectedSlotId() === slot.id"
-                    [class.border-gray-200]="selectedSlotId() !== slot.id"
-                    [class.hover:border-gray-300]="selectedSlotId() !== slot.id"
-                    [class.opacity-50]="slot.isBlocked || slot.bookedCount >= slot.maxBookings"
-                    [disabled]="slot.isBlocked || slot.bookedCount >= slot.maxBookings"
-                    (click)="selectSlot(slot.id)"
-                  >
-                    <div class="flex-1 min-w-0">
-                      <p class="text-sm font-medium text-gray-900">{{ formatTime(slot.startTime) }} – {{ formatTime(slot.endTime) }}</p>
-                      <p class="text-xs text-gray-500 mt-0.5">
-                        {{ slot.bookedCount }}/{{ slot.maxBookings }} booked
-                      </p>
-                    </div>
-                    @if (selectedSlotId() === slot.id) {
-                      <i class="pi pi-check-circle text-green-600"></i>
-                    } @else if (slot.isBlocked) {
-                      <span class="text-xs text-red-500 font-medium">Blocked</span>
-                    } @else if (slot.bookedCount >= slot.maxBookings) {
-                      <span class="text-xs text-gray-400 font-medium">Full</span>
-                    }
-                  </button>
-                }
-              </div>
-            }
+        @if (selectedDate()) {
+          @if (store.isLoading()) {
+            <app-loading-spinner />
+          } @else if (store.slots().length === 0) {
+            <app-empty-state icon="calendar-times" title="No available slots" message="No slots available for this date. Try another day." />
           } @else {
-            <div class="text-center py-8">
-              <i class="pi pi-calendar text-4xl text-gray-300 mb-2 block"></i>
-              <p class="text-sm text-gray-400">Pick a date to see available slots.</p>
+            <div class="space-y-2">
+              @for (slot of store.slots(); track slot.id) {
+                <button
+                  type="button"
+                  class="w-full flex items-center justify-between p-3 rounded-xl border text-left transition-all"
+                  [class.border-green-500]="selectedSlotId() === slot.id"
+                  [class.bg-green-50]="selectedSlotId() === slot.id"
+                  [class.border-gray-200]="selectedSlotId() !== slot.id"
+                  [class.hover:border-gray-300]="selectedSlotId() !== slot.id"
+                  [class.opacity-50]="slot.isBlocked || slot.bookedCount >= slot.maxBookings"
+                  [disabled]="slot.isBlocked || slot.bookedCount >= slot.maxBookings"
+                  (click)="selectSlot(slot.id)"
+                >
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-900">{{ formatTime(slot.startTime) }} – {{ formatTime(slot.endTime) }}</p>
+                    <p class="text-xs text-gray-500 mt-0.5">
+                      {{ slot.bookedCount }}/{{ slot.maxBookings }} booked
+                    </p>
+                  </div>
+                  @if (selectedSlotId() === slot.id) {
+                    <i class="pi pi-check-circle text-green-600"></i>
+                  } @else if (slot.isBlocked) {
+                    <span class="text-xs text-red-500 font-medium">Blocked</span>
+                  } @else if (slot.bookedCount >= slot.maxBookings) {
+                    <span class="text-xs text-gray-400 font-medium">Full</span>
+                  }
+                </button>
+              }
             </div>
           }
-        </ng-template>
-      </p-card>
+        } @else {
+          <div class="text-center py-8">
+            <i class="pi pi-calendar text-4xl text-gray-300 mb-2 block"></i>
+            <p class="text-sm text-gray-400">Pick a date to see available slots.</p>
+          </div>
+        }
+      </div>
     </div>
 
     <div class="space-y-4">
       @if (store.selectedCenter(); as c) {
-        <p-card styleClass="!shadow-sm">
-          <ng-template pTemplate="title">
-            <span class="text-gray-900 font-semibold">{{ c.name }}</span>
-          </ng-template>
-          <ng-template pTemplate="content">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+          <div class="px-5 py-4 border-b border-gray-100">
+            <h3 class="text-lg font-semibold text-gray-900">{{ c.name }}</h3>
+          </div>
+          <div class="p-5">
             <div class="space-y-2 text-sm">
               <p class="text-gray-500"><i class="pi pi-map-marker mr-1"></i>{{ c.city }}, {{ c.country }}</p>
               <div class="flex justify-between">
@@ -84,15 +82,15 @@
                 <span class="text-gray-900 font-medium">{{ c.slotPeriod }} min</span>
               </div>
             </div>
-          </ng-template>
-        </p-card>
+          </div>
+        </div>
       }
 
-      <p-card styleClass="!shadow-sm">
-        <ng-template pTemplate="title">
-          <span class="text-gray-900 font-semibold">Appointment Type</span>
-        </ng-template>
-        <ng-template pTemplate="content">
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+        <div class="px-5 py-4 border-b border-gray-100">
+          <h3 class="text-lg font-semibold text-gray-900">Appointment Type</h3>
+        </div>
+        <div class="p-5">
           <div class="flex flex-col gap-2">
             @for (opt of appointmentOptions; track opt.value) {
               <label
@@ -113,8 +111,8 @@
               </label>
             }
           </div>
-        </ng-template>
-      </p-card>
+        </div>
+      </div>
 
       @if (error()) {
         <div class="p-3 rounded-xl bg-red-50 border border-red-100">
