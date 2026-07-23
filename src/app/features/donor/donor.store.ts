@@ -106,17 +106,19 @@ export const DonorStore = signalStore(
       ),
     ),
 
-    updateBloodType(bloodType: string): void {
-      donorService.updateBloodType(bloodType).subscribe({
-        next: (res) => {
-          if (store.profile()) {
-            patchState(store, {
-              profile: { ...store.profile()!, bloodType: res.data.bloodType as any, bloodTypeVerified: res.data.bloodTypeVerified },
-            });
-          }
-        },
-        error: (err) => patchState(store, { error: err.friendlyMessage }),
-      });
+    updateBloodType(bloodType: string) {
+      return donorService.updateBloodType(bloodType).pipe(
+        tap({
+          next: (res) => {
+            if (store.profile()) {
+              patchState(store, {
+                profile: { ...store.profile()!, bloodType: res.data.bloodType as any, bloodTypeVerified: res.data.bloodTypeVerified },
+              });
+            }
+          },
+          error: (err) => patchState(store, { error: err.friendlyMessage }),
+        }),
+      );
     },
 
     updateHealthQuestionnaire(data: Partial<HealthQuestionnaire>): void {

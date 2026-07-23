@@ -6,7 +6,7 @@
   <div #mapContainer class="w-full h-44"></div>
   <div class="p-3 space-y-3">
     <div class="flex items-center gap-2 text-sm">
-      <i class="pi pi-map-marker text-primary-500"></i>
+      <svg class="w-4 h-4 text-primary-500" viewBox="0 0 48 48" fill="none"><path d="M24 6a12 12 0 0 0-12 12c0 8 12 24 12 24s12-16 12-24A12 12 0 0 0 24 6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M24 13c0 0-4 4.5-4 7a4 4 0 0 0 8 0C28 17.5 24 13 24 13Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
       @if (selectedLat() !== null && selectedLng() !== null) {
         <span class="text-gray-700 font-medium">{{ selectedLat()!.toFixed(4) }}, {{ selectedLng()!.toFixed(4) }}</span>
       } @else {

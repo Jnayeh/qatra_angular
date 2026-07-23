@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { signalStore, withState, withComputed, withMethods, withHooks, patchState } from '@ngrx/signals';
 import { tap } from 'rxjs';
 import type { ApiResponse } from '@/app/shared/models/api-response.model';
-import type { TokenPair, Role } from '@/app/shared/models/user.model';
+import type { TokenPair, Role, RegisterRequest } from '@/app/shared/models/user.model';
 import { AuthService } from '@/app/core/auth/auth.service';
 
 interface AuthUser {
@@ -110,6 +110,34 @@ export const AuthStore = signalStore(
             patchState(store, {
               isLoading: false,
               error: err.error?.message ?? err.friendlyMessage ?? 'Login failed',
+            });
+          },
+        }),
+      );
+    },
+
+    register(req: RegisterRequest) {
+      patchState(store, { isLoading: true, error: null });
+      return authService.register(req).pipe(
+        tap({
+          next: (res: ApiResponse<TokenPair>) => {
+            const data = res.data;
+            const user: AuthUser = { id: data.userId, displayName: data.displayName, roles: data.roles, emailVerified: data.emailVerified };
+            localStorage.setItem('accessToken', data.token);
+            localStorage.setItem('refreshToken', data.refreshToken);
+            localStorage.setItem('authUser', JSON.stringify(user));
+            patchState(store, {
+              user,
+              accessToken: data.token,
+              refreshToken: data.refreshToken,
+              isAuthenticated: true,
+              isLoading: false,
+            });
+          },
+          error: (err: { error?: { message?: string }; friendlyMessage?: string }) => {
+            patchState(store, {
+              isLoading: false,
+              error: err.error?.message ?? err.friendlyMessage ?? 'Registration failed',
             });
           },
         }),

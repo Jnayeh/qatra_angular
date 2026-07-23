@@ -43,4 +43,8 @@ export class AuthService {
   changePassword(currentPassword: string, newPassword: string): Observable<ApiResponse<void>> {
     return this.api.post('/api/v1/auth/change-password', { currentPassword, newPassword });
   }
+
+  requestVerification(): Observable<ApiResponse<{ message: string }>> {
+    return this.api.post('/api/v1/auth/request-verification');
+  }
 }

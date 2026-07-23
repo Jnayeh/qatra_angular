@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Menu } from 'primeng/menu';
 import { Avatar } from 'primeng/avatar';
 import { AuthStore } from '@/app/core/auth/auth.store';
+import { AuthService } from '@/app/core/auth/auth.service';
 import { DonorStore } from '@/app/features/donor/donor.store';
 import { NotificationBellComponent } from '@/app/shared/components/notification-bell/notification-bell';
 
@@ -24,6 +25,10 @@ import { NotificationBellComponent } from '@/app/shared/components/notification-
 export class DonorLayoutComponent implements OnInit {
   readonly authStore = inject(AuthStore);
   private readonly donorStore = inject(DonorStore);
+  private readonly authService = inject(AuthService);
+
+  protected readonly verificationSent = signal(false);
+  protected readonly isSendingVerification = signal(false);
 
   protected readonly showProfileBanner = computed(() => {
     return this.donorStore.loadedOnce() && !this.donorStore.profileComplete();
@@ -74,5 +79,18 @@ export class DonorLayoutComponent implements OnInit {
   protected getInitials(): string {
     const name = this.authStore.user()?.displayName ?? 'D';
     return name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2);
+  }
+
+  protected requestVerification(): void {
+    this.isSendingVerification.set(true);
+    this.authService.requestVerification().subscribe({
+      next: () => {
+        this.verificationSent.set(true);
+        this.isSendingVerification.set(false);
+      },
+      error: () => {
+        this.isSendingVerification.set(false);
+      },
+    });
   }
 }

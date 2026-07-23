@@ -10,7 +10,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const accessToken = authStore.accessToken() ?? localStorage.getItem('accessToken');
 
   let authReq = req;
-  if (accessToken && !req.url.includes('/auth/')) {
+  if (accessToken) {
     authReq = req.clone({
       setHeaders: { Authorization: `Bearer ${accessToken}` },
     });
@@ -32,13 +32,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                 return next(retryReq);
               }),
               catchError(() => {
-                authStore.clearAuth();
                 return throwError(() => error);
               }),
             );
           }
         }
-        authStore.clearAuth();
       }
       return throwError(() => error);
     }),

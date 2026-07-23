@@ -7,35 +7,54 @@
   <div class="bg-white rounded-xl border border-gray-200 p-5">
     @if (store.bloodTypeVerified()) {
       <div class="flex items-center gap-3 p-4 bg-green-50 rounded-lg mb-4">
-        <i class="pi pi-verified text-green-600 text-xl"></i>
+        <svg class="w-5 h-5 text-green-600" viewBox="0 0 48 48" fill="none"><path d="M24 6l14 5v10c0 9-6 16-14 19C16 37 10 30 10 21V11L24 6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M24 19v10M19 24h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <div>
           <p class="text-green-700 font-medium">Blood Type Verified</p>
-          <p class="text-sm text-gray-500">Your blood type ({{ store.profile()?.bloodType }}) has been verified and cannot be changed.</p>
+          <p class="text-sm text-gray-500">Your blood type ({{ formatBloodType(store.profile()!.bloodType) }}) has been verified and cannot be changed.</p>
         </div>
       </div>
-    }
-
-    <div class="grid grid-cols-3 gap-2 mb-4">
-      @for (type of bloodTypes; track type) {
-        <p-button
-          [variant]="selectedType() === type ? undefined : 'outlined'"
-          [severity]="selectedType() === type ? 'primary' : 'secondary'"
+    } @else {
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="font-medium text-gray-900">I don't know my blood type</p>
+          <p class="text-sm text-gray-500">Toggle off to select your blood type</p>
+        </div>
+        <p-toggleswitch
+          [ngModel]="dontKnowType()"
+          (onChange)="onToggleChange($event)"
           [disabled]="store.bloodTypeVerified()"
-          styleClass="p-3 w-full"
-          (click)="selectedType.set(type)"
-        >
-          {{ formatBloodType(type) }}
-        </p-button>
+        />
+      </div>
+
+      @if (!dontKnowType()) {
+        <div class="mb-4">
+          <p-select
+            [ngModel]="selectedType()"
+            (ngModelChange)="selectedType.set($event)"
+            [options]="bloodTypeOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select blood type"
+            styleClass="w-full"
+          />
+        </div>
       }
-    </div>
 
-    @if (error()) {
-      <p-message severity="error" variant="simple" size="small" class="block mb-4">{{ error() }}</p-message>
+      @if (error()) {
+        <p-message severity="error" variant="simple" size="small" class="block mb-4">{{ error() }}</p-message>
+      }
+
+      <div class="flex gap-4">
+        <p-button
+          severity="primary"
+          [disabled]="dontKnowType() || !selectedType() || store.bloodTypeVerified()"
+          [loading]="isSaving()"
+          (click)="save()"
+        >
+          Confirm Blood Type
+        </p-button>
+        <p-button severity="secondary" variant="outlined" routerLink="/donor/home">Back</p-button>
+      </div>
     }
-
-    <div class="flex gap-4">
-      <p-button severity="primary" [disabled]="!selectedType() || store.bloodTypeVerified()" (click)="save()">Save Blood Type</p-button>
-      <p-button severity="secondary" variant="outlined" routerLink="/donor/home">Back</p-button>
-    </div>
   </div>
 </div>

@@ -5,7 +5,7 @@ import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Message } from 'primeng/message';
 import { Password } from 'primeng/password';
-import { AuthService } from '@/app/core/auth/auth.service';
+import { AuthStore } from '@/app/core/auth/auth.store';
 import type { RegisterRequest } from '@/app/shared/models/user.model';
 import { PublicNavbarComponent } from '@/app/shared/components/public-navbar/public-navbar';
 
@@ -18,7 +18,7 @@ import { PublicNavbarComponent } from '@/app/shared/components/public-navbar/pub
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterPageComponent {
-  private readonly authService = inject(AuthService);
+  private readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
 
   protected readonly error = signal<string | null>(null);
@@ -56,7 +56,7 @@ export class RegisterPageComponent {
       password: this.form.value.password!,
     };
 
-    this.authService.register(payload).subscribe({
+    this.authStore.register(payload).subscribe({
       next: () => {
         this.router.navigate(['/donor/onboarding']);
       },

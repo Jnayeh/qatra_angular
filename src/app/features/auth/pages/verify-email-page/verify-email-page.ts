@@ -1,52 +1,45 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { Button } from 'primeng/button';
-import { InputText } from 'primeng/inputtext';
-import { Message } from 'primeng/message';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { AuthStore } from '@/app/core/auth/auth.store';
 import { AuthService } from '@/app/core/auth/auth.service';
 import { PublicNavbarComponent } from '@/app/shared/components/public-navbar/public-navbar';
 
 @Component({
   selector: 'app-verify-email-page',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    Button,
-    InputText,
-    Message,
-    RouterLink,
-    PublicNavbarComponent,
-  ],
+  imports: [RouterLink, PublicNavbarComponent],
   templateUrl: './verify-email-page.html',
   styleUrl: '../login-page/login-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class VerifyEmailPageComponent {
+export class VerifyEmailPageComponent implements OnInit {
   private readonly authService = inject(AuthService);
+  private readonly authStore = inject(AuthStore);
+  private readonly route = inject(ActivatedRoute);
 
-  protected readonly verified = signal(false);
-  protected readonly error = signal<string | null>(null);
-  protected readonly isLoading = signal(false);
+  protected readonly status = signal<'loading' | 'success' | 'error' | 'not-authenticated'>('loading');
+  protected readonly errorMessage = signal<string | null>(null);
 
-  protected readonly form = new FormGroup({
-    token: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-  });
+  ngOnInit(): void {
+    if (!this.authStore.isAuthenticated()) {
+      this.status.set('not-authenticated');
+      return;
+    }
 
-  protected onSubmit(): void {
-    if (this.form.invalid) return;
+    const token = this.route.snapshot.queryParamMap.get('token');
+    if (!token) {
+      this.status.set('error');
+      this.errorMessage.set('No verification token provided.');
+      return;
+    }
 
-    this.isLoading.set(true);
-    this.error.set(null);
-
-    this.authService.verifyEmail(this.form.value.token!).subscribe({
+    this.authService.verifyEmail(token).subscribe({
       next: () => {
-        this.verified.set(true);
-        this.isLoading.set(false);
+        this.status.set('success');
       },
       error: (err) => {
-        this.error.set(err.friendlyMessage ?? 'Verification failed');
-        this.isLoading.set(false);
+        this.status.set('error');
+        this.errorMessage.set(err.friendlyMessage ?? 'Verification failed');
       },
     });
   }

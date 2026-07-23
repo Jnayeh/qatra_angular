@@ -8,11 +8,11 @@
     </div>
   </div>
 
-  <div class="max-w-4xl mx-auto -mt-10 px-4 sm:px-6 grid gap-6 md:grid-cols-2">
+  <div class="max-w-4xl mx-auto -mt-10 p-4 sm:px-6 grid gap-6 md:grid-cols-2">
 
     <div class="grid grid-cols-3 gap-3">
-      <div class="bg-white rounded-2xl p-4 shadow-md text-center">
-        <i class="pi pi-heart text-red-500 text-2xl"></i>
+      <div class="bg-white rounded-2xl p-4 shadow-md text-center ">
+        <svg class="w-6 h-6 text-red-500 mx-auto" viewBox="0 0 48 48" fill="none"><path d="M24 38S8 27 8 17a8 8 0 0 1 16-1.2A8 8 0 0 1 40 17c0 10-16 21-16 21Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M24 20c0 0-4 4-4 6.5a4 4 0 0 0 8 0C28 24 24 20 24 20Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
         <p class="text-2xl font-bold text-gray-900">{{ store.impact()?.totalDonations ?? 0 }}</p>
         <p class="text-xs text-gray-500 font-medium">Donations</p>
       </div>
@@ -60,7 +60,7 @@
     <div class="grid grid-cols-2 gap-3">
       <a routerLink="/donor/book" class="bg-gradient-to-br from-primary-500 to-primary-700 text-white rounded-2xl p-5 shadow-md flex flex-col items-center text-center gap-2 hover:shadow-lg transition-shadow">
         <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
-          <i class="pi pi-calendar-plus text-xl"></i>
+          <svg class="w-5 h-5 text-white" viewBox="0 0 48 48" fill="none"><rect x="6" y="12" width="36" height="30" rx="3" stroke="currentColor" stroke-width="2"/><path d="M6 20h36" stroke="currentColor" stroke-width="2"/><path d="M16 8v8M32 8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M24 26c0 0-4 4-4 6a4 4 0 0 0 8 0C28 30 24 26 24 26Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
         </div>
         <span class="font-semibold text-sm">Book Appointment</span>
       </a>
@@ -72,7 +72,7 @@
       </a>
       <a routerLink="/donor/centers" class="bg-white rounded-2xl p-5 shadow-md flex flex-col items-center text-center gap-2 hover:shadow-lg transition-shadow border border-gray-100">
         <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
-          <i class="pi pi-map-marker text-blue-500 text-xl"></i>
+          <svg class="w-5 h-5 text-blue-500" viewBox="0 0 48 48" fill="none"><path d="M24 6a12 12 0 0 0-12 12c0 8 12 24 12 24s12-16 12-24A12 12 0 0 0 24 6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M24 13c0 0-4 4.5-4 7a4 4 0 0 0 8 0C28 17.5 24 13 24 13Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
         </div>
         <span class="font-semibold text-sm text-gray-900">Find Centers</span>
       </a>
@@ -141,7 +141,7 @@
     <div class="grid grid-cols-2 md:grid-cols-4 md:col-span-2 gap-3">
       <a routerLink="/donor/my-appointments" class="bg-white rounded-2xl p-4 shadow-md flex items-center gap-3 hover:shadow-lg transition-shadow border border-gray-100">
         <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
-          <i class="pi pi-calendar text-indigo-500"></i>
+          <svg class="w-5 h-5 text-indigo-500" viewBox="0 0 48 48" fill="none"><rect x="6" y="12" width="36" height="30" rx="3" stroke="currentColor" stroke-width="2"/><path d="M6 20h36" stroke="currentColor" stroke-width="2"/><path d="M16 8v8M32 8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M24 26c0 0-4 4-4 6a4 4 0 0 0 8 0C28 30 24 26 24 26Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
         </div>
         <div class="min-w-0">
           <p class="text-sm font-semibold text-gray-900 truncate">Appointments</p>
