@@ -1,3 +1,4 @@
+<p-toast />
 <div class="max-w-4xl mx-auto space-y-6">
   <div class="flex items-center justify-between">
     <div>
@@ -48,24 +49,75 @@
     [visible]="showAddDialog()"
     (visibleChange)="showAddDialog.set($event)"
     [modal]="true"
-    [style]="{ width: '24rem' }"
+    [style]="{ width: '28rem' }"
     [draggable]="false"
     [resizable]="false"
   >
-    <div class="flex flex-col gap-2">
-      <label for="userId" class="text-sm font-medium text-gray-700">User ID</label>
-      <input
-        pInputText
-        id="userId"
-        placeholder="Enter user ID"
-        [ngModel]="newUserId()"
-        (ngModelChange)="newUserId.set($event)"
-        class="w-full"
-      />
+    <div class="flex flex-col gap-4">
+      <div class="grid grid-cols-2 gap-3">
+        <div class="flex flex-col gap-1">
+          <label for="firstName" class="text-sm font-medium text-gray-700">First Name *</label>
+          <input
+            pInputText
+            id="firstName"
+            placeholder="First name"
+            [ngModel]="newFirstName()"
+            (ngModelChange)="newFirstName.set($event)"
+            class="w-full"
+          />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label for="familyName" class="text-sm font-medium text-gray-700">Family Name *</label>
+          <input
+            pInputText
+            id="familyName"
+            placeholder="Family name"
+            [ngModel]="newFamilyName()"
+            (ngModelChange)="newFamilyName.set($event)"
+            class="w-full"
+          />
+        </div>
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="email" class="text-sm font-medium text-gray-700">Email *</label>
+        <input
+          pInputText
+          id="email"
+          type="email"
+          placeholder="user@example.com"
+          [ngModel]="newEmail()"
+          (ngModelChange)="newEmail.set($event)"
+          class="w-full"
+        />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="phone" class="text-sm font-medium text-gray-700">Phone</label>
+        <input
+          pInputText
+          id="phone"
+          placeholder="+961 71 000 000"
+          [ngModel]="newPhone()"
+          (ngModelChange)="newPhone.set($event)"
+          class="w-full"
+        />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="password" class="text-sm font-medium text-gray-700">Password *</label>
+        <p-password
+          id="password"
+          placeholder="Min 8 characters"
+          [ngModel]="newPassword()"
+          (ngModelChange)="newPassword.set($event)"
+          [feedback]="false"
+          [toggleMask]="true"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+        />
+      </div>
     </div>
     <ng-template pTemplate="footer">
       <p-button label="Cancel" severity="secondary" styleClass="p-button-text" (click)="showAddDialog.set(false)" />
-      <p-button label="Add" [loading]="adding()" (click)="addStaff()" />
+      <p-button label="Create & Add" [loading]="adding()" (click)="addStaff()" />
     </ng-template>
   </p-dialog>
 </div>

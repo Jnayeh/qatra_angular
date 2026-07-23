@@ -18,8 +18,8 @@ export class PublicNavbarComponent {
 
   private readonly roleRouteMap: Record<string, string> = {
     DONOR: '/donor/home',
-    CENTER_STAFF: '/centers/dashboard',
-    CENTER_ADMIN: '/centers/dashboard',
+    CENTER_STAFF: '/center-management/dashboard',
+    CENTER_ADMIN: '/center-management/dashboard',
     SUPER_ADMIN: '/admin/dashboard',
   };
 

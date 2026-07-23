@@ -33,21 +33,6 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="flex flex-col gap-2">
-            <label for="city" class="text-sm font-medium text-gray-700">City</label>
-            <input pInputText id="city" formControlName="city" placeholder="e.g. Tunis" class="w-full" />
-            @if (form.get('city')?.hasError('required') && form.get('city')?.touched) {
-              <small class="text-red-500">City is required</small>
-            }
-          </div>
-
-          <div class="flex flex-col gap-2">
-            <label for="country" class="text-sm font-medium text-gray-700">Country</label>
-            <input pInputText id="country" formControlName="country" class="w-full" />
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="flex flex-col gap-2">
             <label for="phone" class="text-sm font-medium text-gray-700">Phone</label>
             <input pInputText id="phone" formControlName="phone" placeholder="+216 XX XXX XXX" class="w-full" />
           </div>
@@ -59,16 +44,8 @@
         </div>
 
         <div>
-          <h3 class="text-sm font-medium text-gray-700 mb-2">Location on Map</h3>
-          <div #mapContainer class="w-full h-64 rounded-lg overflow-hidden border border-gray-200"></div>
-          <div class="flex items-center gap-2 mt-2 text-sm">
-            <i class="pi pi-map-marker text-primary-500"></i>
-            @if (selectedLat() !== null && selectedLng() !== null) {
-              <span class="text-gray-600">{{ selectedLat()!.toFixed(4) }}, {{ selectedLng()!.toFixed(4) }}</span>
-            } @else {
-              <span class="text-gray-400">Click on the map to set the center location</span>
-            }
-          </div>
+          <h3 class="text-sm font-medium text-gray-700 mb-2">Location</h3>
+          <app-location-picker [locationForm]="form" />
         </div>
       </div>
     </div>
@@ -103,7 +80,7 @@
     }
 
     <div class="flex justify-end gap-2">
-      <p-button label="Cancel" severity="secondary" styleClass="p-button-outlined" type="button" routerLink="/centers/list" />
+      <p-button label="Cancel" severity="secondary" styleClass="p-button-outlined" type="button" routerLink="/center-management/dashboard" />
       @if (submitting()) {
         <p-button [disabled]="true" icon="pi pi-spin pi-spinner" />
       } @else {

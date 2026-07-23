@@ -10,23 +10,38 @@ import { AdminService } from '@/app/features/admin/admin.service';
   standalone: true,
   imports: [Button, RouterLink, StatusBadgeComponent],
   template: `
-    <div class="max-w-2xl mx-auto space-y-6">
+    <div class="max-w-2xl mx-auto space-y-6 pb-8">
       @if (user(); as u) {
         <div class="flex items-center justify-between">
-          <h1 class="text-2xl font-bold text-white">{{ u.displayName }}</h1>
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ u.displayName }}</h1>
+            <p class="text-sm text-gray-500 mt-1">User details and account information</p>
+          </div>
           <app-status-badge [status]="u.status" />
         </div>
 
-        <div class="bg-white rounded-xl border border-gray-200 p-5">
-          <div class="space-y-3">
-            <div class="flex justify-between"><span class="text-gray-400">Email</span><span class="text-white">{{ u.email }}</span></div>
-            <div class="flex justify-between"><span class="text-gray-400">Roles</span><span class="text-white">{{ u.roles.join(', ') }}</span></div>
-            <div class="flex justify-between"><span class="text-gray-400">Email Verified</span><i class="pi" [class.pi-check-circle]="u.emailVerified" [class.pi-times-circle]="!u.emailVerified" [class.text-green-400]="u.emailVerified" [class.text-gray-600]="!u.emailVerified"></i></div>
-            <div class="flex justify-between"><span class="text-gray-400">Created</span><span class="text-white">{{ u.createdAt }}</span></div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between py-2 border-b border-gray-50">
+              <span class="text-sm text-gray-500">Email</span>
+              <span class="text-sm font-medium text-gray-900">{{ u.email }}</span>
+            </div>
+            <div class="flex items-center justify-between py-2 border-b border-gray-50">
+              <span class="text-sm text-gray-500">Roles</span>
+              <span class="text-sm font-medium text-gray-900">{{ u.roles.join(', ') }}</span>
+            </div>
+            <div class="flex items-center justify-between py-2 border-b border-gray-50">
+              <span class="text-sm text-gray-500">Email Verified</span>
+              <i class="pi" [class.pi-check-circle]="u.emailVerified" [class.pi-times-circle]="!u.emailVerified" [class.text-green-500]="u.emailVerified" [class.text-gray-400]="!u.emailVerified"></i>
+            </div>
+            <div class="flex items-center justify-between py-2">
+              <span class="text-sm text-gray-500">Created</span>
+              <span class="text-sm font-medium text-gray-900">{{ u.createdAt }}</span>
+            </div>
           </div>
         </div>
       }
-      <a pButton label="Back to Users" severity="secondary" styleClass="p-button-outlined" routerLink="/admin/users"></a>
+      <a pButton label="Back to Users" icon="pi pi-arrow-left" severity="secondary" styleClass="p-button-outlined" routerLink="/admin/users"></a>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

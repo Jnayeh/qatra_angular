@@ -110,7 +110,7 @@ export class LoginPageComponent {
             this.router.navigate(['/admin/dashboard']);
             break;
           case 'CENTER':
-            this.router.navigate(['/centers/dashboard']);
+            this.router.navigate(['/center-management/dashboard']);
             break;
           case 'DONOR':
             this.router.navigate(['/donor/home']);
@@ -119,9 +119,9 @@ export class LoginPageComponent {
             if (this.authStore.isSuperAdmin()) {
               this.router.navigate(['/admin/dashboard']);
             } else if (this.authStore.isCenterAdmin()) {
-              this.router.navigate(['/centers/list']);
+              this.router.navigate(['/center-management/dashboard']);
             } else if (this.authStore.isCenterStaff()) {
-              this.router.navigate(['/appointments/staff-queue']);
+              this.router.navigate(['/center-management/appointments/queue']);
             } else {
               this.router.navigate(['/donor/home']);
             }

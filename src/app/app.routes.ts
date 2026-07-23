@@ -29,25 +29,14 @@ export const routes: Routes = [
     loadComponent: () => import('@/app/layouts/main-layout/main-layout').then((m) => m.MainLayoutComponent),
     children: [
       {
-        path: 'centers',
-        loadChildren: () => import('@/app/features/center/center.routes'),
-      },
-      {
-        path: 'emergencies',
-        loadChildren: () => import('@/app/features/emergency/emergency.routes'),
-      },
-      {
-        path: 'appointments',
-        loadChildren: () => import('@/app/features/appointment/appointment.routes'),
+        path: 'center-management',
+        canActivate: [roleGuard('CENTER_ADMIN', 'CENTER_STAFF')],
+        loadChildren: () => import('@/app/features/center/center-management.routes'),
       },
       {
         path: 'admin',
         canActivate: [roleGuard('SUPER_ADMIN')],
         loadChildren: () => import('@/app/features/admin/admin.routes'),
-      },
-      {
-        path: 'notifications',
-        loadChildren: () => import('@/app/features/notifications/notification.routes'),
       },
     ],
   },

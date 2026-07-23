@@ -30,4 +30,8 @@ export default [
     path: 'health-restrictions',
     loadComponent: () => import('@/app/features/admin/pages/health-restriction-page/health-restriction-page').then((m) => m.HealthRestrictionPageComponent),
   },
+  {
+    path: 'notifications',
+    loadComponent: () => import('@/app/features/notifications/pages/notification-center-page/notification-center-page').then((m) => m.NotificationCenterPageComponent),
+  },
 ] as Routes;

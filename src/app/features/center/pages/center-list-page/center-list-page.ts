@@ -36,7 +36,7 @@ export class CenterListPageComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
 
   protected readonly isDonor = () => this.router.url.startsWith('/donor');
-  protected readonly centerPrefix = () => this.isDonor() ? '/donor/centers' : '/centers'; 
+  protected readonly centerPrefix = () => this.isDonor() ? '/donor/centers' : '/center-management/dashboard'; 
 
   protected readonly viewMode = signal<'map' | 'list'>('map');
   protected readonly isLoading = signal(false);
@@ -105,7 +105,7 @@ export class CenterListPageComponent implements OnInit, OnDestroy {
       const popup = new maplibregl.Popup({ offset: 15 }).setHTML(
         `<div style="min-width:140px"><b>${c.name}</b><br/><span style="color:#6b7280;font-size:12px">${c.city}</span>` +
         `<br/><span style="color:#6b7280;font-size:12px">${c.status}</span>` +
-        `<a href="${this.router.url.startsWith('/donor') ? '/donor/centers' : '/centers'}/${c.id}" style="display:block;margin-top:4px;color:#cc0000;font-size:12px">View details</a></div>`, 
+        `<a href="${this.router.url.startsWith('/donor') ? '/donor/centers' : '/center-management/dashboard'}/${c.id}" style="display:block;margin-top:4px;color:#cc0000;font-size:12px">View details</a></div>`, 
       );
       const marker = new maplibregl.Marker({ element: el })
         .setLngLat([c.longitude!, c.latitude!])

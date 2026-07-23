@@ -5,31 +5,34 @@
   </div>
 
   <div class="bg-white rounded-xl border border-gray-200 p-5">
-    <div class="flex gap-3 items-end">
-      <div class="flex flex-col gap-2">
-        <label for="donorId" class="text-sm font-medium text-gray-700">Donor ID</label>
-        <input
-          pInputText
-          id="donorId"
-          type="number"
-          [ngModel]="searchDonorId()"
-          (ngModelChange)="searchDonorId.set($event)"
-          class="w-48"
-          placeholder="Enter donor ID"
-        />
-      </div>
-      <p-button
-        label="Override Restriction"
-        icon="pi pi-check"
-        severity="warn"
-        [disabled]="!searchDonorId()"
-        (click)="searchAndOpen(searchDonorId()!)"
-      />
-    </div>
+    <p-table [value]="restrictedUsers()" [tableStyle]="{'min-width': '50rem'}">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-gray-500">Name</th>
+          <th class="text-gray-500">Email</th>
+          <th class="text-gray-500">Donor ID</th>
+          <th class="text-gray-500">Status</th>
+          <th class="text-gray-500">Restriction Reason</th>
+          <th class="text-gray-500">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td class="text-gray-900">{{ user.displayName }}</td>
+          <td class="text-gray-900">{{ user.email }}</td>
+          <td class="text-gray-900">{{ user.donorId }}</td>
+          <td><app-status-badge [status]="user.status" /></td>
+          <td class="text-gray-900">{{ user.restrictionReason || '—' }}</td>
+          <td>
+            <p-button label="Override" icon="pi pi-check" severity="warn" size="small" (click)="openOverrideDialog(user)" />
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
 
   <p-dialog
-    [header]="'Override Status'"
+    [header]="'Override Restriction'"
     [visible]="showOverrideDialog()"
     (visibleChange)="showOverrideDialog.set($event)"
     [modal]="true"
@@ -39,11 +42,18 @@
     @if (selectedUser(); as user) {
       <div class="space-y-4">
         <p class="text-sm text-gray-500">
-          Are you sure you want to override the permanent ineligibility status for donor ID
-          <span class="font-medium text-gray-900">{{ user.donorId }}</span>?
+          Are you sure you want to override the permanent ineligibility status for
+          <span class="font-medium text-gray-900">{{ user.displayName }}</span>
+          (Donor #{{ user.donorId }})?
         </p>
+        @if (user.restrictionReason) {
+          <div class="bg-gray-50 rounded-lg p-3">
+            <p class="text-xs font-medium text-gray-500 mb-1">Current Reason</p>
+            <p class="text-sm text-gray-700">{{ user.restrictionReason }}</p>
+          </div>
+        }
         <div class="flex flex-col gap-2">
-          <label for="overrideReason" class="text-sm font-medium text-gray-700">Reason (optional)</label>
+          <label for="overrideReason" class="text-sm font-medium text-gray-700">Override Reason (optional)</label>
           <input
             pInputText
             id="overrideReason"

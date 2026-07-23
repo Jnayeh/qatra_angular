@@ -1,0 +1,111 @@
+<div class="space-y-6">
+  @if (loading()) {
+    <app-loading-spinner />
+  } @else if (!hasCenter()) {
+    <div class="bg-white rounded-xl border border-gray-200 p-8 text-center space-y-4">
+      <div class="w-16 h-16 mx-auto rounded-full bg-primary-50 flex items-center justify-center">
+        <i class="pi pi-building text-2xl text-primary-600"></i>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">No Center Registered</h2>
+        <p class="text-sm text-gray-500 mt-1">You don't have a center yet. Create one to start managing donations.</p>
+      </div>
+      <a routerLink="/center-management/create" class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors no-underline">
+        <i class="pi pi-plus"></i>
+        Create Your Center
+      </a>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <a routerLink="/center-management/manage" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center">
+            <i class="pi pi-building text-primary-600"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-gray-900">Manage Center</p>
+            <p class="text-xs text-gray-500">Edit center info and capacity</p>
+          </div>
+        </div>
+      </a>
+
+      <a routerLink="/center-management/slots" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center">
+            <i class="pi pi-calendar text-primary-600"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-gray-900">Schedule & Slots</p>
+            <p class="text-xs text-gray-500">Manage appointment slots</p>
+          </div>
+        </div>
+      </a>
+
+      <a routerLink="/center-management/staff" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center">
+            <i class="pi pi-users text-primary-600"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-gray-900">Staff Management</p>
+            <p class="text-xs text-gray-500">Manage center staff</p>
+          </div>
+        </div>
+      </a>
+
+      <a routerLink="/center-management/analytics" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center">
+            <i class="pi pi-chart-bar text-primary-600"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-gray-900">Analytics</p>
+            <p class="text-xs text-gray-500">View center metrics</p>
+          </div>
+        </div>
+      </a>
+
+      <a routerLink="/center-management/emergencies" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
+            <i class="pi pi-exclamation-triangle text-red-600"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-gray-900">Emergencies</p>
+            <p class="text-xs text-gray-500">View and manage emergencies</p>
+          </div>
+        </div>
+      </a>
+
+      <a routerLink="/center-management/emergencies/create" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
+            <i class="pi pi-plus-circle text-green-600"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-gray-900">Create Emergency</p>
+            <p class="text-xs text-gray-500">Post a new emergency request</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    @if (metrics(); as m) {
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="bg-white rounded-xl border border-gray-200 p-5">
+          <h3 class="text-sm font-semibold text-gray-900 mb-4">Appointments Per Day</h3>
+          <div class="relative h-64">
+            <canvas #barChart></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 p-5">
+          <h3 class="text-sm font-semibold text-gray-900 mb-4">Today: Regular vs Emergency</h3>
+          <div class="relative h-64">
+            <canvas #pieChart></canvas>
+          </div>
+        </div>
+      </div>
+    }
+  }
+</div>

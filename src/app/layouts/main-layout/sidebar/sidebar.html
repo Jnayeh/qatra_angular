@@ -1,7 +1,7 @@
-<div class="flex flex-col h-full">
-  <div class="p-4 border-b border-primary-900">
-    <h1 class="text-xl font-bold text-primary-500">Qatra</h1>
-    <p class="text-xs text-gray-400">Blood Donation Platform</p>
+<div class="flex flex-col h-full bg-gradient-to-b from-primary-500 to-primary-700">
+  <div class="p-4 border-b border-primary-400/30">
+    <h1 class="text-xl font-bold text-white">Qatra</h1>
+    <p class="text-xs text-primary-100">Blood Donation Platform</p>
   </div>
 
   <nav class="flex-1 p-2 space-y-1">
@@ -10,7 +10,7 @@
         <a
           [routerLink]="item.path"
           routerLinkActive="bg-primary-800 text-white"
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-300 hover:bg-surface-hover transition-colors"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/80 hover:bg-primary-800 hover:text-white transition-colors"
         >
           <i class="pi text-lg {{ iconClass(item.icon) }}"></i>
           {{ item.label }}
@@ -19,7 +19,7 @@
     }
   </nav>
 
-  <div class="p-4 border-t border-primary-900">
-    <p-button label="Logout" icon="pi pi-sign-out" severity="secondary" styleClass="p-button-outlined w-full" (click)="authStore.logout()"></p-button>
+  <div class="p-4 border-t border-primary-400/30">
+    <p-button label="Logout" icon="pi pi-sign-out" severity="secondary" styleClass="p-button-outlined w-full border-white/30 text-white hover:bg-white/10" (click)="authStore.logout()"></p-button>
   </div>
 </div>
