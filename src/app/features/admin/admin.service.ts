@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import type { Observable } from 'rxjs';
 import type { ApiResponse } from '@/app/shared/models/api-response.model';
 import type { UserDetail } from '@/app/shared/models/user.model';
-import type { AuditLogEntry, MetricsResponse, CenterMetrics, SystemHealth } from '@/app/shared/models/analytics.model';
+import type { AuditLogEntry, MetricsResponse, CenterMetrics, RestrictedUser, SystemHealth } from '@/app/shared/models/analytics.model';
 import type { DataDeletionRequest, SystemConfigEntry } from '@/app/shared/models/config.model';
 import { ApiService } from '@/app/core/http/api.service';
 import { environment } from '@/environments/environment';
@@ -30,6 +30,10 @@ export class AdminService {
     return this.api.patch(`/api/v1/admin/users/${id}/status`, { status });
   }
 
+  updateUser(id: number, data: { email: string; phone: string; displayName: string; firstName?: string; familyName?: string }): Observable<ApiResponse<UserDetail>> {
+    return this.api.put(`/api/v1/admin/users/${id}`, data);
+  }
+
   assignRole(id: number, role: string): Observable<ApiResponse<void>> {
     return this.api.post(`/api/v1/admin/users/${id}/roles`, { role });
   }
@@ -40,6 +44,10 @@ export class AdminService {
 
   deleteUser(id: number): Observable<ApiResponse<string>> {
     return this.api.delete(`/api/v1/admin/users/${id}`);
+  }
+
+  createUser(data: { email: string; phone: string; password: string; firstName: string; familyName: string; displayName?: string }): Observable<ApiResponse<UserDetail>> {
+    return this.api.post('/api/v1/admin/users', data);
   }
 
   getAuditLogs(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<AuditLogEntry[]>> {
@@ -73,6 +81,10 @@ export class AdminService {
 
   overrideRestriction(donorId: number, permanentlyRestricted: boolean, restrictionReason?: string): Observable<ApiResponse<unknown>> {
     return this.api.patch(`/api/v1/donors/${donorId}/restriction`, { permanentlyRestricted, restrictionReason });
+  }
+
+  getRestrictedDonors(params?: Record<string, string | number | boolean | undefined>): Observable<ApiResponse<RestrictedUser[]>> {
+    return this.api.getPage('/api/v1/admin/donors/restricted', params);
   }
 
   getCenterMetrics(centerId: number): Observable<ApiResponse<CenterMetrics>> {

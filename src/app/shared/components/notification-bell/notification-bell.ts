@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/cor
 import { Button } from 'primeng/button';
 import { Badge } from 'primeng/badge';
 import { Router, RouterLink } from '@angular/router';
+import { AuthStore } from '@/app/core/auth/auth.store';
 import { NotificationStore } from '@/app/features/notifications/notification.store';
 import type { Notification } from '@/app/shared/models/notification.model';
 
@@ -14,6 +15,7 @@ import type { Notification } from '@/app/shared/models/notification.model';
 })
 export class NotificationBellComponent implements OnInit {
   private readonly router = inject(Router);
+  private readonly authStore = inject(AuthStore);
   protected readonly store = inject(NotificationStore);
   protected panelOpen = false;
 
@@ -26,16 +28,24 @@ export class NotificationBellComponent implements OnInit {
     this.store.loadNotifications();
   }
 
+  protected notificationsPath(): string {
+    if (this.authStore.isDonor()) return '/donor/notifications';
+    if (this.authStore.isCenterStaff() || this.authStore.isCenterAdmin()) return '/center-management/notifications';
+    return '/admin/notifications';
+  }
+
   protected openNotification(notification: Notification): void {
     if (notification.status !== 'READ') {
       this.store.markAsRead(notification.id);
     }
     if (notification.emergencyId) {
-      this.router.navigate(['/emergencies', notification.emergencyId]);
+      const prefix = this.authStore.isDonor() ? '/donor/emergencies' : '/center-management/emergencies';
+      this.router.navigate([prefix, notification.emergencyId]);
     } else if (notification.appointmentId) {
-      this.router.navigate(['/appointments/my-appointments']);
+      const prefix = this.authStore.isDonor() ? '/donor/my-appointments' : '/center-management/appointments';
+      this.router.navigate([prefix]);
     } else {
-      this.router.navigate(['/notifications']);
+      this.router.navigate([this.notificationsPath()]);
     }
   }
 

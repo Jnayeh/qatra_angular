@@ -60,7 +60,7 @@ export class ScreeningPageComponent implements OnInit {
     this.appointmentService.addScreening(this.appointmentId, parsed.data).subscribe({
       next: () => {
         this.submitting.set(false);
-        this.router.navigate(['/appointments', 'staff-queue']);
+        this.router.navigate(['/center-management/appointments/queue']);
       },
       error: (err: any) => {
         this.submitting.set(false);

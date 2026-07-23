@@ -1,31 +1,176 @@
 <div class="space-y-6">
-  <div>
-    <h1 class="text-2xl font-bold text-gray-900">User Management</h1>
-    <p class="text-sm text-gray-500 mt-1">View and manage all registered users in the system.</p>
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">User Management</h1>
+      <p class="text-sm text-gray-500 mt-1">View and manage all registered users in the system.</p>
+    </div>
+    <p-button label="Add User" icon="pi pi-plus" (click)="openAdd()" />
   </div>
 
   <div class="bg-white rounded-xl border border-gray-200 p-5">
-    <p-table [value]="users()" [tableStyle]="{'min-width': '50rem'}">
+    <p-table [value]="users()" [tableStyle]="{'min-width': '70rem'}">
       <ng-template pTemplate="header">
         <tr>
-          <th class="text-gray-500">Name</th>
-          <th class="text-gray-500">Email</th>
-          <th class="text-gray-500">Status</th>
+          <th class="text-gray-500 cursor-pointer select-none" (click)="onSort('firstName')">
+            <div class="flex items-center gap-1">
+              First Name
+              <i [class]="sortIcon('firstName') + ' text-xs'"></i>
+            </div>
+          </th>
+          <th class="text-gray-500 cursor-pointer select-none" (click)="onSort('familyName')">
+            <div class="flex items-center gap-1">
+              Last Name
+              <i [class]="sortIcon('familyName') + ' text-xs'"></i>
+            </div>
+          </th>
+          <th class="text-gray-500 cursor-pointer select-none" (click)="onSort('email')">
+            <div class="flex items-center gap-1">
+              Email
+              <i [class]="sortIcon('email') + ' text-xs'"></i>
+            </div>
+          </th>
+          <th class="text-gray-500 cursor-pointer select-none" (click)="onSort('status')">
+            <div class="flex items-center gap-1">
+              Status
+              <i [class]="sortIcon('status') + ' text-xs'"></i>
+            </div>
+          </th>
           <th class="text-gray-500">Roles</th>
           <th class="text-gray-500">Actions</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-u>
         <tr>
-          <td class="text-gray-900">{{ u.displayName }}</td>
+          <td class="text-gray-900">{{ u.firstName }}</td>
+          <td class="text-gray-900">{{ u.familyName }}</td>
           <td class="text-gray-900">{{ u.email }}</td>
           <td><app-status-badge [status]="u.status" /></td>
-          <td class="text-gray-900">{{ u.roles.join(', ') }}</td>
           <td>
-            <p-button icon="pi pi-eye" [rounded]="true" [text]="true" severity="secondary" [routerLink]="['/admin/users', u.id]" />
+            <div class="flex flex-wrap gap-1">
+              @for (role of u.roles; track role) {
+                <p-tag [value]="roleLabel(role)" [severity]="roleSeverity(role)" styleClass="text-xs" />
+              }
+            </div>
+          </td>
+          <td>
+            <div class="flex gap-1">
+              <p-button icon="pi pi-eye" [rounded]="true" [text]="true" severity="secondary" [routerLink]="['/admin/users', u.id]" />
+              <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="secondary" (click)="openEdit(u)" />
+              <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (click)="openDelete(u)" />
+            </div>
           </td>
         </tr>
       </ng-template>
     </p-table>
   </div>
+
+  <!-- Edit Dialog -->
+  <p-dialog header="Edit User" [visible]="showEditDialog()" (visibleChange)="showEditDialog.set($event)" [modal]="true" [style]="{ width: '520px' }" [closable]="true">
+    @if (selectedUser(); as user) {
+      <div class="space-y-5">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium text-gray-700">Email</label>
+            <input pInputText [ngModel]="editEmail()" (ngModelChange)="editEmail.set($event)" class="w-full" />
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium text-gray-700">Phone</label>
+            <input pInputText [ngModel]="editPhone()" (ngModelChange)="editPhone.set($event)" class="w-full" />
+          </div>
+        </div>
+
+
+          <div class="flex flex-col gap-2">
+              <label class="text-sm font-medium text-gray-700">Status</label>
+              <p-select
+                      [options]="statusOptions"
+                      [(ngModel)]="editStatus"
+                      optionLabel="label"
+                      optionValue="value"
+                      placeholder="Select status"
+                      styleClass="w-full"
+              />
+          </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium text-gray-700">Display Name</label>
+          <input pInputText [ngModel]="editDisplayName()" (ngModelChange)="editDisplayName.set($event)" class="w-full" />
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium text-gray-700">Roles</label>
+          <div class="flex flex-wrap gap-2">
+            @for (role of allRoles; track role.value) {
+              <p-tag
+                [value]="role.label"
+                [severity]="editRoles().includes(role.value) ? role.severity : 'secondary'"
+                [style]="{ cursor: 'pointer' }"
+                (click)="toggleRole(role.value)"
+              />
+            }
+          </div>
+          <p class="text-xs text-gray-400">Click to toggle role</p>
+        </div>
+      </div>
+    }
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-2">
+        <p-button label="Cancel" severity="secondary" [text]="true" (click)="showEditDialog.set(false)" />
+        <p-button label="Save" [loading]="isSaving()" (click)="saveEdit()" />
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Add Dialog -->
+  <p-dialog header="Add User" [visible]="showAddDialog()" (visibleChange)="showAddDialog.set($event)" [modal]="true" [style]="{ width: '480px' }" [closable]="true">
+    <div class="space-y-4">
+      <div class="flex flex-col gap-2">
+        <label for="add-email" class="text-sm font-medium text-gray-700">Email *</label>
+        <input pInputText id="add-email" [ngModel]="addForm().email" (ngModelChange)="updateForm('email', $event)" class="w-full" placeholder="user@example.com" />
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-2">
+          <label for="add-firstName" class="text-sm font-medium text-gray-700">First Name *</label>
+          <input pInputText id="add-firstName" [ngModel]="addForm().firstName" (ngModelChange)="updateForm('firstName', $event)" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label for="add-familyName" class="text-sm font-medium text-gray-700">Family Name *</label>
+          <input pInputText id="add-familyName" [ngModel]="addForm().familyName" (ngModelChange)="updateForm('familyName', $event)" class="w-full" />
+        </div>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="add-displayName" class="text-sm font-medium text-gray-700">Display Name</label>
+        <input pInputText id="add-displayName" [ngModel]="addForm().displayName" (ngModelChange)="updateForm('displayName', $event)" class="w-full" />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="add-phone" class="text-sm font-medium text-gray-700">Phone</label>
+        <input pInputText id="add-phone" [ngModel]="addForm().phone" (ngModelChange)="updateForm('phone', $event)" class="w-full" placeholder="+212..." />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="add-password" class="text-sm font-medium text-gray-700">Password *</label>
+        <input pInputText id="add-password" type="password" [ngModel]="addForm().password" (ngModelChange)="updateForm('password', $event)" class="w-full" placeholder="Min 8 characters" />
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-2">
+        <p-button label="Cancel" severity="secondary" [text]="true" (click)="showAddDialog.set(false)" />
+        <p-button label="Create" [loading]="isSaving()" (click)="saveAdd()" />
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Delete Confirmation Dialog -->
+  <p-dialog header="Delete User" [visible]="showDeleteDialog()" (visibleChange)="showDeleteDialog.set($event)" [modal]="true" [style]="{ width: '400px' }" [closable]="true">
+    @if (selectedUser(); as user) {
+      <p class="text-sm text-gray-600">
+        Are you sure you want to delete <span class="font-medium text-gray-900">{{ user.displayName }}</span> ({{ user.email }})?
+        This action cannot be undone.
+      </p>
+    }
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-2">
+        <p-button label="Cancel" severity="secondary" [text]="true" (click)="showDeleteDialog.set(false)" />
+        <p-button label="Delete" severity="danger" [loading]="isSaving()" (click)="confirmDelete()" />
+      </div>
+    </ng-template>
+  </p-dialog>
 </div>

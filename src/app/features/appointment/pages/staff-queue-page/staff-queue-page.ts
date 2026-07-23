@@ -43,15 +43,15 @@ export class StaffQueuePageComponent implements OnInit {
   }
 
   protected goToCheckIn(id: number): void {
-    this.router.navigate(['/appointments', 'checkin'], { queryParams: { appointmentId: id } });
+    this.router.navigate(['/center-management/appointments/checkin'], { queryParams: { appointmentId: id } });
   }
 
   protected goToScreening(id: number): void {
-    this.router.navigate(['/appointments', id, 'screening']);
+    this.router.navigate(['/center-management/appointments', id, 'screening']);
   }
 
   protected goToComplete(id: number): void {
-    this.router.navigate(['/appointments', id, 'complete']);
+    this.router.navigate(['/center-management/appointments', id, 'complete']);
   }
 
   protected markAsNoShow(id: number): void {
@@ -61,6 +61,6 @@ export class StaffQueuePageComponent implements OnInit {
   }
 
   protected viewDonorProfile(donorId: number): void {
-    this.router.navigate(['/donors', donorId]);
+    this.router.navigate(['/center-management/staff']);
   }
 }

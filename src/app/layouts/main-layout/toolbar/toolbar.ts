@@ -34,6 +34,11 @@ export class ToolbarComponent {
   protected readonly panelOpen = signal(false);
   protected readonly title = signal('Qatra');
 
+  protected notificationsPath(): string {
+    if (this.authStore.isCenterStaff() || this.authStore.isCenterAdmin()) return '/center-management/notifications';
+    return '/admin/notifications';
+  }
+
   protected readonly menuItems = computed(() => [
     {
       label: this.authStore.user()?.displayName ?? '',
@@ -75,7 +80,13 @@ export class ToolbarComponent {
           emergencies: 'Emergency Management',
           appointments: 'Appointments',
           admin: 'Admin Panel',
+          'center-management': 'Center Management',
           notifications: 'Notifications',
+          manage: 'Manage Center',
+          slots: 'Schedule & Slots',
+          staff: 'Staff Management',
+          analytics: 'Center Analytics',
+          reports: 'Center Reports',
         };
         this.title.set(titles[segment] ?? 'Qatra');
       });

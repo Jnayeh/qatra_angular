@@ -5,8 +5,8 @@ import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
 import { Message } from 'primeng/message';
+import { AdminService } from '@/app/features/admin/admin.service';
 import { DonorService } from '@/app/features/donor/donor.service';
-import { DonorStore } from '@/app/features/donor/donor.store';
 import { AuthService } from '@/app/core/auth/auth.service';
 import { AuthStore } from '@/app/core/auth/auth.store';
 
@@ -18,19 +18,25 @@ import { AuthStore } from '@/app/core/auth/auth.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DonorProfilePageComponent implements OnInit {
+  private readonly adminService = inject(AdminService);
   private readonly donorService = inject(DonorService);
-  private readonly donorStore = inject(DonorStore);
   private readonly authService = inject(AuthService);
   private readonly authStore = inject(AuthStore);
 
   protected readonly isLoading = signal(false);
+  protected readonly isSaving = signal(false);
+  protected readonly saveSuccess = signal('');
+  protected readonly saveError = signal('');
   protected readonly isChangingPassword = signal(false);
   protected readonly passwordSuccess = signal('');
   protected readonly passwordError = signal('');
 
   protected readonly form = new FormGroup({
-    displayName: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2), Validators.maxLength(100)] }),
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
     phone: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/^\+?[\d\s-]{8,15}$/)] }),
+    displayName: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2), Validators.maxLength(100)] }),
+    firstName: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(1)] }),
+    familyName: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(1)] }),
   });
 
   protected readonly passwordForm = new FormGroup({
@@ -40,21 +46,51 @@ export class DonorProfilePageComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.form.patchValue({
-      displayName: this.authStore.user()?.displayName ?? '',
+    const userId = this.authStore.user()?.id;
+    if (!userId) return;
+
+    this.isLoading.set(true);
+    this.adminService.getUser(userId).subscribe({
+      next: (res) => {
+        const u = res.data;
+        this.form.patchValue({
+          email: u.email,
+          phone: u.phone,
+          displayName: u.displayName,
+          firstName: u.firstName ?? '',
+          familyName: u.familyName ?? '',
+        });
+        this.isLoading.set(false);
+      },
+      error: () => this.isLoading.set(false),
     });
   }
 
   protected onSubmit(): void {
     if (this.form.invalid) return;
+    const userId = this.authStore.user()?.id;
+    if (!userId) return;
 
-    this.isLoading.set(true);
-    this.donorService.updateMyProfile({
-      displayName: this.form.value.displayName!,
-      phone: this.form.value.phone!,
+    this.isSaving.set(true);
+    this.saveSuccess.set('');
+    this.saveError.set('');
+
+    const v = this.form.value;
+    this.adminService.updateUser(userId, {
+      email: v.email!,
+      phone: v.phone!,
+      displayName: v.displayName!,
+      firstName: v.firstName!,
+      familyName: v.familyName!,
     }).subscribe({
-      next: () => this.isLoading.set(false),
-      error: () => this.isLoading.set(false),
+      next: () => {
+        this.isSaving.set(false);
+        this.saveSuccess.set('Profile updated successfully');
+      },
+      error: (err) => {
+        this.isSaving.set(false);
+        this.saveError.set(err.error?.message ?? 'Failed to update profile');
+      },
     });
   }
 

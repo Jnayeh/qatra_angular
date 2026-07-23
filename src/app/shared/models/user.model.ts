@@ -12,6 +12,8 @@ export interface User {
   id: number;
   email: string;
   phone: string;
+  firstName: string;
+  familyName: string;
   displayName: string;
   status: UserStatus;
   emailVerified: boolean;

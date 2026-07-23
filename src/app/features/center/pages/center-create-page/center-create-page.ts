@@ -114,7 +114,7 @@ export class CenterCreatePageComponent implements AfterViewInit {
     this.centerService.createCenter(payload).subscribe({
       next: () => {
         this.submitting.set(false);
-        this.router.navigate(['/centers/list']);
+        this.router.navigate(['/center-management/dashboard']);
       },
       error: (err) => {
         this.submitting.set(false);

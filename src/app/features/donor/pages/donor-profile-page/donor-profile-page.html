@@ -4,30 +4,66 @@
     <p class="text-sm text-gray-500 mt-1">Manage your personal information and account settings.</p>
   </div>
 
-  <div class="bg-white rounded-xl border border-gray-200 p-5">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-      <div class="flex flex-col gap-2">
-        <label for="displayName" class="text-sm font-medium text-gray-700">Display Name</label>
-        <input pInputText id="displayName" formControlName="displayName" class="w-full" />
-        @if (form.get('displayName')?.invalid && form.get('displayName')?.touched) {
-          <small class="text-red-500">Display name is required (min 2 characters)</small>
-        }
-      </div>
+  @if (isLoading()) {
+    <div class="bg-white rounded-xl border border-gray-200 p-5 text-center text-gray-500">Loading...</div>
+  } @else {
+    <div class="bg-white rounded-xl border border-gray-200 p-5">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-2">
+            <label for="firstName" class="text-sm font-medium text-gray-700">First Name</label>
+            <input pInputText id="firstName" formControlName="firstName" class="w-full" />
+            @if (form.get('firstName')?.invalid && form.get('firstName')?.touched) {
+              <small class="text-red-500">First name is required</small>
+            }
+          </div>
+          <div class="flex flex-col gap-2">
+            <label for="familyName" class="text-sm font-medium text-gray-700">Last Name</label>
+            <input pInputText id="familyName" formControlName="familyName" class="w-full" />
+            @if (form.get('familyName')?.invalid && form.get('familyName')?.touched) {
+              <small class="text-red-500">Last name is required</small>
+            }
+          </div>
+        </div>
 
-      <div class="flex flex-col gap-2">
-        <label for="phone" class="text-sm font-medium text-gray-700">Phone</label>
-        <input pInputText id="phone" formControlName="phone" class="w-full" />
-        @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
-          <small class="text-red-500">Invalid phone number</small>
-        }
-      </div>
+        <div class="flex flex-col gap-2">
+          <label for="displayName" class="text-sm font-medium text-gray-700">Display Name</label>
+          <input pInputText id="displayName" formControlName="displayName" class="w-full" />
+          @if (form.get('displayName')?.invalid && form.get('displayName')?.touched) {
+            <small class="text-red-500">Display name is required (min 2 characters)</small>
+          }
+        </div>
 
-      <div class="flex gap-4 pt-2">
-        <p-button severity="primary" type="submit" [disabled]="form.invalid || isLoading()">Save Changes</p-button>
-        <p-button severity="secondary" variant="outlined" routerLink="/donor/home">Cancel</p-button>
-      </div>
-    </form>
-  </div>
+        <div class="flex flex-col gap-2">
+          <label for="email" class="text-sm font-medium text-gray-700">Email</label>
+          <input pInputText id="email" formControlName="email" class="w-full" />
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <small class="text-red-500">Valid email is required</small>
+          }
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="phone" class="text-sm font-medium text-gray-700">Phone</label>
+          <input pInputText id="phone" formControlName="phone" class="w-full" />
+          @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
+            <small class="text-red-500">Invalid phone number</small>
+          }
+        </div>
+
+        @if (saveSuccess()) {
+          <p-message severity="success" [text]="saveSuccess()" styleClass="w-full" />
+        }
+        @if (saveError()) {
+          <p-message severity="error" [text]="saveError()" styleClass="w-full" />
+        }
+
+        <div class="flex gap-4 pt-2">
+          <p-button severity="primary" type="submit" [disabled]="form.invalid || isSaving()" [loading]="isSaving()">Save Changes</p-button>
+          <p-button severity="secondary" variant="outlined" routerLink="/donor/home">Cancel</p-button>
+        </div>
+      </form>
+    </div>
+  }
 
   <div class="bg-white rounded-xl border border-gray-200">
     <div class="px-5 py-4 border-b border-gray-100">
@@ -67,7 +103,7 @@
     </div>
   </div>
 
-  <div class="bg-white rounded-xl border border-gray-200 border border-red-200">
+  <div class="bg-white rounded-xl border border-red-200">
     <div class="px-5 py-4 border-b border-gray-100">
       <h3 class="text-lg font-semibold text-red-600">Danger Zone</h3>
     </div>

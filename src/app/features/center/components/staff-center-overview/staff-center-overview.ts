@@ -9,7 +9,7 @@ import { AuthStore } from '@/app/core/auth/auth.store';
   imports: [RouterLink, Button],
   template: `
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <a routerLink="/appointments/staff-dashboard" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
+      <a routerLink="/center-management/dashboard" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center">
             <i class="pi pi-th-large text-primary-600"></i>
@@ -21,7 +21,7 @@ import { AuthStore } from '@/app/core/auth/auth.store';
         </div>
       </a>
 
-      <a routerLink="/appointments/staff-queue" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
+      <a routerLink="/center-management/appointments/queue" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center">
             <i class="pi pi-list text-primary-600"></i>
@@ -33,7 +33,7 @@ import { AuthStore } from '@/app/core/auth/auth.store';
         </div>
       </a>
 
-      <a routerLink="/appointments/checkin" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
+      <a routerLink="/center-management/appointments/checkin" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center">
             <i class="pi pi-qrcode text-primary-600"></i>
@@ -45,7 +45,7 @@ import { AuthStore } from '@/app/core/auth/auth.store';
         </div>
       </a>
 
-      <a routerLink="/emergencies/list" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
+      <a routerLink="/center-management/emergencies" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
             <i class="pi pi-exclamation-triangle text-red-600"></i>
@@ -57,7 +57,7 @@ import { AuthStore } from '@/app/core/auth/auth.store';
         </div>
       </a>
 
-      <a routerLink="/appointments/staff-queue" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
+      <a routerLink="/center-management/appointments/queue" class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-primary-300 transition-colors no-underline">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
             <i class="pi pi-check-circle text-green-600"></i>

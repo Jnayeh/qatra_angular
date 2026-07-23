@@ -57,7 +57,7 @@ export class CompletionPageComponent implements OnInit {
     this.appointmentService.complete(this.appointmentId, payload).subscribe({
       next: () => {
         this.submitting.set(false);
-        this.router.navigate(['/appointments', 'staff-queue']);
+        this.router.navigate(['/center-management/appointments/queue']);
       },
       error: (err: any) => {
         this.submitting.set(false);

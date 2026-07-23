@@ -69,7 +69,7 @@ export class EmergencyCreatePageComponent implements OnInit {
     this.emergencyStore.createEmergency(parsed.data).subscribe({
       next: () => {
         this.submitting.set(false);
-        this.router.navigate(['/emergencies', 'list']);
+        this.router.navigate(['/center-management/emergencies']);
       },
       error: () => this.submitting.set(false),
     });

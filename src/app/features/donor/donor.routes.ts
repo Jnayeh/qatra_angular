@@ -39,6 +39,10 @@ export default [
     loadComponent: () => import('@/app/features/donor/pages/certificates-page/certificates-page').then((m) => m.CertificatesPageComponent),
   },
   {
+    path: 'notifications',
+    loadComponent: () => import('@/app/features/notifications/pages/notification-center-page/notification-center-page').then((m) => m.NotificationCenterPageComponent),
+  },
+  {
     path: 'my-appointments',
     loadComponent: () => import('@/app/features/appointment/pages/donor-appointments-page/donor-appointments-page').then((m) => m.DonorAppointmentsPageComponent),
   },

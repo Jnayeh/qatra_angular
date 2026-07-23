@@ -14,7 +14,7 @@
   } @else {
     <div class="space-y-3">
       @for (item of filtered(); track item.id) {
-        <div class="bg-white rounded-xl border border-gray-200 p-5 cursor-pointer hover:shadow-md transition-all" [routerLink]="['/emergencies', item.id]">
+        <div class="bg-white rounded-xl border border-gray-200 p-5 cursor-pointer hover:shadow-md transition-all" [routerLink]="['/center-management/emergencies', item.id]">
           <div class="flex items-center justify-between p-4">
             <div class="space-y-1">
               <p class="text-gray-900 font-semibold">{{ bloodTypeLabel(item.bloodType) }} Blood Needed</p>
