@@ -4,6 +4,11 @@ import { roleGuard } from '@/app/core/auth/guards/role.guard';
 export default [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
+    path: 'create',
+    canActivate: [roleGuard('CENTER_ADMIN')],
+    loadComponent: () => import('@/app/features/center/pages/center-create-page/center-create-page').then((m) => m.CenterCreatePageComponent),
+  },
+  {
     path: 'dashboard',
     canActivate: [roleGuard('CENTER_ADMIN', 'CENTER_STAFF')],
     loadComponent: () => import('@/app/features/center/pages/center-dashboard-page/center-dashboard-page').then((m) => m.CenterDashboardPageComponent),

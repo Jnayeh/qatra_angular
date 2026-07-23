@@ -23,6 +23,7 @@ export class AdminCenterOverviewComponent implements OnInit, AfterViewInit {
   private readonly adminService = inject(AdminService);
 
   protected readonly loading = signal(true);
+  protected readonly hasCenter = signal(false);
   protected readonly metrics = signal<CenterMetrics | null>(null);
 
   readonly barCanvas = viewChild<ElementRef<HTMLCanvasElement>>('barChart');
@@ -35,17 +36,22 @@ export class AdminCenterOverviewComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.centerService.getMyAdminProfile().subscribe({
       next: (res) => {
-        this.adminService.getCenterMetrics(res.data.centerId).subscribe({
-          next: (mRes) => {
-            this.metrics.set(mRes.data);
-            this.loading.set(false);
-            if (this.pendingInit) {
-              this.initCharts(mRes.data);
-              this.pendingInit = false;
-            }
-          },
-          error: () => this.loading.set(false),
-        });
+        if (res.data.centerId) {
+          this.hasCenter.set(true);
+          this.adminService.getCenterMetrics(res.data.centerId).subscribe({
+            next: (mRes) => {
+              this.metrics.set(mRes.data);
+              this.loading.set(false);
+              if (this.pendingInit) {
+                this.initCharts(mRes.data);
+                this.pendingInit = false;
+              }
+            },
+            error: () => this.loading.set(false),
+          });
+        } else {
+          this.loading.set(false);
+        }
       },
       error: () => this.loading.set(false),
     });
